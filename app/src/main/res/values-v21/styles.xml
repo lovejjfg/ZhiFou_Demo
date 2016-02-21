@@ -1,0 +1,30 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AppDrawerLayout" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <!-- 任务栏 color -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--底部按键-->
+        <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
+
+        <item name="android:windowSharedElementEnterTransition">
+            @android:transition/slide_left
+        </item>
+        <item name="android:windowSharedElementExitTransition">
+            @android:transition/slide_right
+        </item>
+    </style>
+</resources>
