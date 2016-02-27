@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,29 +22,31 @@ import com.lovejjfg.zhifou_demo.mvp.presenters.MainPresenterImpl;
 import com.lovejjfg.zhifou_demo.ui.recycleview.StoriesAdapter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView mRecyclerView;
     private MainPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
     private StoriesAdapter adapter;
     private String mDate;
+    private SwipeRefreshLayout mSwip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mMainPresenter = new MainPresenterImpl(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.rcv);
+        mSwip = (SwipeRefreshLayout) findViewById(R.id.srl);
         manager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
-
-
+        mSwip.setOnRefreshListener(this);
         adapter = new StoriesAdapter();
         mRecyclerView.setAdapter(adapter);
+
+        mMainPresenter = new MainPresenterImpl(this);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -145,7 +148,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void isLoading(boolean isLoading) {
+    public void isLoading(final boolean isLoading) {
+
+        mSwip.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mSwip.isRefreshing() && !isLoading) {
+                    mSwip.setRefreshing(false);
+                } else {
+                    mSwip.setRefreshing(isLoading);
+                }
+            }
+        });
 
 
     }
@@ -153,6 +167,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void isLoadingMore(boolean loading) {
 
+    }
+
+    @Override
+    public void onRefresh() {
+        mMainPresenter.onLoading();
     }
 
     private class FinishScrollListener extends RecyclerView.OnScrollListener {

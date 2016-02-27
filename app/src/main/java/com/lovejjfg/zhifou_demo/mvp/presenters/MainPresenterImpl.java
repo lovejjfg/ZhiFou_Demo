@@ -32,31 +32,9 @@ public class MainPresenterImpl implements MainPresenter, LifecycleCallbacks {
 
     public MainPresenterImpl(View view) {
         this.mView = view;
-        initData();
+        onLoading();
     }
 
-    private void initData() {
-        if (!isLoading) {
-            mView.isLoading(true);
-            isLoading = true;
-            BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
-                @Override
-                public void success(DailyStories dailyStories, Response response) {
-                    mView.onLoadMore(dailyStories);
-                    mView.isLoading(false);
-                    isLoading = false;
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    mView.onLoadError(error.toString());
-                    isLoading = false;
-                }
-            });
-
-        }
-
-    }
 
     @Override
     public void onStart() {
@@ -81,6 +59,29 @@ public class MainPresenterImpl implements MainPresenter, LifecycleCallbacks {
     @Override
     public void onRefresh() {
 
+    }
+
+    @Override
+    public void onLoading() {
+        if (!isLoading) {
+            mView.isLoading(true);
+            isLoading = true;
+            BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
+                @Override
+                public void success(DailyStories dailyStories, Response response) {
+                    mView.onLoadMore(dailyStories);
+                    mView.isLoading(false);
+                    isLoading = false;
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    mView.onLoadError(error.toString());
+                    isLoading = false;
+                }
+            });
+
+        }
     }
 
     @Override

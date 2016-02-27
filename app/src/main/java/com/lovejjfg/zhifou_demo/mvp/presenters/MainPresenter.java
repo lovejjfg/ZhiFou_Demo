@@ -27,6 +27,8 @@ public interface MainPresenter {
 
     void onRefresh();
 
+    void onLoading();
+
     void onLoadMore(String mDate);
 
     interface View extends LoadingView {
