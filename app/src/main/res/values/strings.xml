@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ZhiFou_Demo</string>
+    <string name="app_name">ZhiFou</string>
     <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -4,13 +4,13 @@
                 android:layout_height="@dimen/top_pic"
                 android:layout_marginBottom="8dp">
 
-    <com.lovejjfg.zhifou_demo.ui.widget.TopViewPager
+    <com.lovejjfg.zhifou.ui.widget.TopViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    </com.lovejjfg.zhifou_demo.ui.widget.TopViewPager>
+    </com.lovejjfg.zhifou.ui.widget.TopViewPager>
 
     <com.lovejjfg.circlepoint.SlidingCircleLayout
         android:id="@+id/scl"

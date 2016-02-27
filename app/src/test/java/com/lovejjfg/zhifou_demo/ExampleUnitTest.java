@@ -1,4 +1,4 @@
-package com.lovejjfg.zhifou_demo;
+package com.lovejjfg.zhifou;
 
 import org.junit.Test;
 
