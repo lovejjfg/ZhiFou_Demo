@@ -1,9 +1,8 @@
-package com.lovejjfg.zhifou_demo.ui;
+package com.lovejjfg.zhifou_demo.mvp.views;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,49 +15,39 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.lovejjfg.zhifou_demo.R;
-import com.lovejjfg.zhifou_demo.data.BaseDataManager;
 import com.lovejjfg.zhifou_demo.data.model.DailyStories;
+import com.lovejjfg.zhifou_demo.mvp.presenters.MainPresenter;
+import com.lovejjfg.zhifou_demo.mvp.presenters.MainPresenterImpl;
 import com.lovejjfg.zhifou_demo.ui.recycleview.StoriesAdapter;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View, View.OnClickListener {
 
     private RecyclerView mRecyclerView;
+    private MainPresenterImpl mMainPresenter;
+    private GridLayoutManager manager;
+    private StoriesAdapter adapter;
+    private String mDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mMainPresenter = new MainPresenterImpl(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.rcv);
-        GridLayoutManager manager = new GridLayoutManager(this, 1);
+        manager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(manager);
-        final StoriesAdapter adapter = new StoriesAdapter();
-        BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
-            @Override
-            public void success(DailyStories dailyStories, Response response) {
-                adapter.appendList(dailyStories);
-                mRecyclerView.setAdapter(adapter);
-            }
+        mRecyclerView.addOnScrollListener(new FinishScrollListener());
 
-            @Override
-            public void failure(RetrofitError error) {
 
-            }
-        });
+        adapter = new StoriesAdapter();
+        mRecyclerView.setAdapter(adapter);
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -125,5 +115,55 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onLoadMore(DailyStories stories) {
+        adapter.appendList(stories);
+        mDate = stories.getDate();
+    }
+
+    @Override
+    public void onLoadError(String errorCode) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mMainPresenter.onDestroy();
+    }
+
+    @Override
+    public void isLoading(boolean isLoading) {
+
+
+    }
+
+    @Override
+    public void isLoadingMore(boolean loading) {
+
+    }
+
+    private class FinishScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            int lastCompletelyVisibleItemPosition = manager.findLastCompletelyVisibleItemPosition();
+
+            if (lastCompletelyVisibleItemPosition == mRecyclerView.getAdapter().getItemCount()-1) {
+                mMainPresenter.onLoadMore(mDate);
+            }
+        }
     }
 }

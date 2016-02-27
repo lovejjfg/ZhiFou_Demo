@@ -1,1 +1,1 @@
-include ':app', 'circlepoint'
+include 'circlepoint', ':app'

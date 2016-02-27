@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by lovejjfg on 2016/2/21.
  */
-public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     public static final String TAG = StoriesAdapter.class.getSimpleName();
     protected List<Item> mItems;
     protected List<Item> mTmpItem;

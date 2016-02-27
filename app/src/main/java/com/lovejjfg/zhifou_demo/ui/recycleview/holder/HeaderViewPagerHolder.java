@@ -5,12 +5,12 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.lovejjfg.circlepoint.SlidingCircleLayout;
 import com.lovejjfg.zhifou_demo.R;
 import com.lovejjfg.zhifou_demo.data.model.Story;
+import com.lovejjfg.zhifou_demo.ui.widget.HeaderImageView;
 import com.lovejjfg.zhifou_demo.ui.widget.TopViewPager;
 import com.lovejjfg.zhifou_demo.util.ListUtils;
 
@@ -88,8 +88,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
 
         @Override
         public Object instantiateItem(final ViewGroup container, final int position) {
-            ImageView iv = new ImageView(container.getContext());
-            iv.setScaleType(ImageView.ScaleType.FIT_XY);
+            HeaderImageView iv = new HeaderImageView(container.getContext());
             final Story story = mStories.get(position);
 //            storyHeaderView.bindData(story.getTitle(), story.getImageSource(), story.getImage(), mOptions);
 //            storyHeaderView.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +97,8 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
 //                    IntentUtils.intentToStoryActivity((Activity) v.getContext(), story);
 //                }
 //            });
-            Glide.with(container.getContext()).load(story.getImage()).into(iv);
+            Glide.with(container.getContext()).load(story.getImage()).into(iv.mImageView);
+            iv.mTvTittle.setText(story.getTitle());
             container.addView(iv);
             return iv;
         }
