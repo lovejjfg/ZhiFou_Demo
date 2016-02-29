@@ -1,4 +1,4 @@
-/*
+package com.lovejjfg.zhifou.presenters;/*
  * Copyright (C) 2014 Jorge Castillo Pérez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,21 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lovejjfg.zhifou.mvp.views;
 
 /**
- * View behavior implemented to allow loading animations
- * *
- * Created by jorge on 24/01/15.
+ * Android lifecycle callbacks from activities/fragments are linked to the Presenters by this 
+ * behavior interface. Linking callbacks is declared as an optional behavior and not a need for
+ * every presenter.
+ *
+ * @author Jorge Castillo Pérez
  */
-public interface LoadingView {
-    /**
-     * 是否loading。
-     */
-    void isLoading(boolean isLoading);
-
-    /**
-     * 是否显示正在加载更多
-     */
-    void isLoadingMore(boolean isLoadingMore);
+public interface LifecycleCallbacks {
+    void onStart();
+    void onResume();
+    void onDestroy();
 }

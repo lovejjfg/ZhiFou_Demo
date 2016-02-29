@@ -16,10 +16,10 @@
  *
  */
 
-package com.lovejjfg.zhifou.mvp.presenters;
+package com.lovejjfg.zhifou.presenters;
 
 import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.mvp.views.LoadingView;
+import com.lovejjfg.zhifou.view.LoadingView;
 
 public interface MainPresenter {
 

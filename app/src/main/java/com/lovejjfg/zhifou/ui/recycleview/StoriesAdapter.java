@@ -43,7 +43,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void appendList(DailyStories dailyStories) {
         int positionStart = mItems.size();
 
-        if (positionStart == 0) {
+        if (positionStart == 0 && null != dailyStories.getTopStories()) {
             Item headerItem = new Item();
             headerItem.setType(Type.TYPE_HEADER);
             headerItem.setStories(dailyStories.getTopStories());

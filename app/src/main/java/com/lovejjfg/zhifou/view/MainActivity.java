@@ -1,4 +1,4 @@
-package com.lovejjfg.zhifou.mvp.views;
+package com.lovejjfg.zhifou.view;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,9 +17,10 @@ import android.view.View;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.mvp.presenters.MainPresenter;
-import com.lovejjfg.zhifou.mvp.presenters.MainPresenterImpl;
+import com.lovejjfg.zhifou.presenters.MainPresenter;
+import com.lovejjfg.zhifou.presenters.MainPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
+import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     private StoriesAdapter adapter;
     private String mDate;
     private SwipeRefreshLayout mSwip;
+    private String mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +177,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private class FinishScrollListener extends RecyclerView.OnScrollListener {
+
+        private int lastTitlePos = -1;
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
@@ -183,6 +188,22 @@ public class MainActivity extends AppCompatActivity
             if (lastCompletelyVisibleItemPosition == mRecyclerView.getAdapter().getItemCount()-1) {
                 mMainPresenter.onLoadMore(mDate);
             }
+            int position = manager.findFirstVisibleItemPosition();
+            if (lastTitlePos == position) {
+                return;
+            }
+            StoriesAdapter.Item item = adapter.getItem(position);
+            int type = item.getType();
+            if (type == StoriesAdapter.Type.TYPE_HEADER) {
+                mTitle = getString(R.string.title_activity_main);
+            } else if (dy > 0 && type == StoriesAdapter.Type.TYPE_DATE) {
+                mTitle = DateViewHolder.getDate(item.getDate(), MainActivity.this);
+            } else if (dy < 0) {
+                mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), MainActivity.this);
+            }
+            MainActivity.this.getSupportActionBar().setTitle(mTitle);
+            lastTitlePos = position;
+
         }
     }
 }
