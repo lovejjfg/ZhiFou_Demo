@@ -1,20 +1,27 @@
 package com.lovejjfg.zhifou.presenters;
 
 
+import android.app.Activity;
+import android.content.Intent;
+
+import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.view.DetailStory;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainPresenterImpl implements MainPresenter, LifecycleCallbacks {
+public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
     View mView;
+    Activity activity;
     boolean isLoadingMore;
     boolean isLoading;
 
-    public MainPresenterImpl(View view) {
+    public ListPresenterImpl(View view) {
         this.mView = view;
+        this.activity = (Activity) view;
         onLoading();
     }
 
@@ -30,8 +37,10 @@ public class MainPresenterImpl implements MainPresenter, LifecycleCallbacks {
     }
 
     @Override
-    public void onItemClicked(int position) {
-
+    public void onItemClicked(int id) {
+        Intent i = new Intent(activity, DetailStory.class);
+        i.putExtra(Constants.ID, id);
+        activity.startActivity(i);
     }
 
     @Override
@@ -60,6 +69,7 @@ public class MainPresenterImpl implements MainPresenter, LifecycleCallbacks {
                 @Override
                 public void failure(RetrofitError error) {
                     mView.onLoadError(error.toString());
+                    mView.isLoading(false);
                     isLoading = false;
                 }
             });

@@ -18,25 +18,18 @@
 
 package com.lovejjfg.zhifou.presenters;
 
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.view.LoadingView;
 
-public interface MainPresenter {
-
-    void onItemClicked(int position);
+public interface DetailPresenter extends LifecycleCallbacks {
 
     void onRefresh();
 
-    void onLoading();
-
-    void onLoadMore(String mDate);
+    void onLoading(int id);
 
     interface View extends LoadingView {
 
-        void onLoadMore(DailyStories stories);
+        void onBindImage(String image);
 
-        void onLoadError(String errorCode);
-
-
+        void onBindWebView(String data);
     }
 }

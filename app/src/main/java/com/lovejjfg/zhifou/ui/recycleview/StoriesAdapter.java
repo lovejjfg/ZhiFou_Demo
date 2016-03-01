@@ -19,10 +19,16 @@ import java.util.List;
 /**
  * Created by lovejjfg on 2016/2/21.
  */
-public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = StoriesAdapter.class.getSimpleName();
     protected List<Item> mItems;
     protected List<Item> mTmpItem;
+    private OnItemClickListener listener;
+
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public class Type {
         public static final int TYPE_HEADER = 0;
@@ -72,7 +78,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View itemView;
         switch (viewType) {
             case Type.TYPE_HEADER:
@@ -90,9 +96,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        Item item = mItems.get(position);
+        final Item item = mItems.get(position);
         switch (viewType) {
             case Type.TYPE_HEADER:
                 ((HeaderViewPagerHolder) holder).bindHeaderView();
@@ -102,6 +108,14 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 break;
             case Type.TYPE_STORY:
                 ((StoryViewHolder) holder).bindStoryView(item.getStory());
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (null != listener) {
+                            listener.onItemClick(Integer.valueOf(item.getStory().getId()));
+                        }
+                    }
+                });
                 break;
         }
     }
@@ -132,6 +146,21 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         //L.i(TAG, "POSITION = " + position);
         return "";
+    }
+
+    // TODO: 2016-03-01 这个方法需要重新写
+    public String getTitleAtPosition(int position) {
+        mTmpItem.clear();
+        //subList [0 , position)
+        mTmpItem.addAll(mItems.subList(0, position + 1));
+        Collections.reverse(mTmpItem);
+        for (Item item : mTmpItem) {
+            if (item.getType() == Type.TYPE_DATE) {
+                return item.getDate();
+            }
+        }
+        //L.i(TAG, "POSITION = " + position);
+        return null;
     }
 
     public static class Item {

@@ -1,5 +1,9 @@
 package com.lovejjfg.zhifou.view;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,22 +15,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.presenters.MainPresenter;
-import com.lovejjfg.zhifou.presenters.MainPresenterImpl;
+import com.lovejjfg.zhifou.presenters.ListPresenter;
+import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
+import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class ListStory extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,OnItemClickListener {
 
     private RecyclerView mRecyclerView;
-    private MainPresenterImpl mMainPresenter;
+    private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
     private StoriesAdapter adapter;
     private String mDate;
@@ -46,9 +54,10 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
         mSwip.setOnRefreshListener(this);
         adapter = new StoriesAdapter();
+        adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
-        mMainPresenter = new MainPresenterImpl(this);
+        mMainPresenter = new ListPresenterImpl(this);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -133,8 +142,18 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                Intent i = new Intent(this, DatePick.class);
+                final ActivityOptions options =
+                        ActivityOptions.makeSceneTransitionAnimation(this,
+                                Pair.create(v,
+                                        getString(R.string.date_picker)));
+                this.startActivity(i, options.toBundle());
+        }
 
     }
 
@@ -176,6 +195,11 @@ public class MainActivity extends AppCompatActivity
         mMainPresenter.onLoading();
     }
 
+    @Override
+    public void onItemClick( int id) {
+        mMainPresenter.onItemClicked(id);
+    }
+
     private class FinishScrollListener extends RecyclerView.OnScrollListener {
 
         private int lastTitlePos = -1;
@@ -185,7 +209,7 @@ public class MainActivity extends AppCompatActivity
 
             int lastCompletelyVisibleItemPosition = manager.findLastCompletelyVisibleItemPosition();
 
-            if (lastCompletelyVisibleItemPosition == mRecyclerView.getAdapter().getItemCount()-1) {
+            if (lastCompletelyVisibleItemPosition == mRecyclerView.getAdapter().getItemCount() - 1) {
                 mMainPresenter.onLoadMore(mDate);
             }
             int position = manager.findFirstVisibleItemPosition();
@@ -196,14 +220,24 @@ public class MainActivity extends AppCompatActivity
             int type = item.getType();
             if (type == StoriesAdapter.Type.TYPE_HEADER) {
                 mTitle = getString(R.string.title_activity_main);
-            } else if (dy > 0 && type == StoriesAdapter.Type.TYPE_DATE) {
-                mTitle = DateViewHolder.getDate(item.getDate(), MainActivity.this);
+            } else if (dy > 0 ) {
+//                mTitle = DateViewHolder.getDate(item.getDate(), ListStory.this);
+                mTitle = DateViewHolder.getDate(adapter.getTitleAtPosition(position), ListStory.this);
+                if (TextUtils.isEmpty(mTitle)) {
+                    return;
+                }
             } else if (dy < 0) {
-                mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), MainActivity.this);
+                mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), ListStory.this);
             }
-            MainActivity.this.getSupportActionBar().setTitle(mTitle);
+            ListStory.this.getSupportActionBar().setTitle(mTitle);
             lastTitlePos = position;
 
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            Log.e("state", newState + "");
         }
     }
 }
