@@ -1,7 +1,6 @@
 package com.lovejjfg.zhifou.ui.widget;
 
 import android.content.Context;
-import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -57,16 +56,12 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
     }
 
     public void setRefresh(final boolean refresh) {
-        if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
-            mRefreshLayout.setRefreshing(refresh);
-        } else {
             mRecyclerView.post(new Runnable() {
                 @Override
                 public void run() {
                     mRefreshLayout.setRefreshing(refresh);
                 }
             });
-        }
     }
 
     @Override
