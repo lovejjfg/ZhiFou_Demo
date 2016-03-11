@@ -9,14 +9,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,17 +26,19 @@ import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
+import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
 
 public class ListStory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener,OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener,OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
 
-    private RecyclerView mRecyclerView;
+    private SwipRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
     private StoriesAdapter adapter;
     private String mDate;
-    private SwipeRefreshLayout mSwip;
+//    private SwipeRefreshLayout mSwip;
     private String mTitle;
+    private double lastTitlePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +46,16 @@ public class ListStory extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rcv);
-        mSwip = (SwipeRefreshLayout) findViewById(R.id.srl);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.rcv);
+//        mSwip = (SwipeRefreshLayout) findViewById(R.id.srl);
+        mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.addOnScrollListener(new FinishScrollListener());
-        mSwip.setOnRefreshListener(this);
         adapter = new StoriesAdapter();
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setOnRefreshListener(this);
+        mRecyclerView.setOnScrollListener(this);
 
         mMainPresenter = new ListPresenterImpl(this);
 
@@ -170,24 +170,22 @@ public class ListStory extends AppCompatActivity
 
     @Override
     public void isLoading(final boolean isLoading) {
-
-        mSwip.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mSwip.isRefreshing() && !isLoading) {
-                    mSwip.setRefreshing(false);
-                } else {
-                    mSwip.setRefreshing(isLoading);
-                }
-            }
-        });
-
-
+        mRecyclerView.setRefresh(isLoading);
     }
 
     @Override
     public void isLoadingMore(boolean loading) {
 
+    }
+
+//    @Override
+//    public void onRefresh() {
+//        mMainPresenter.onLoading();
+//    }
+
+    @Override
+    public void onItemClick( int id) {
+        mMainPresenter.onItemClicked(id);
     }
 
     @Override
@@ -196,23 +194,13 @@ public class ListStory extends AppCompatActivity
     }
 
     @Override
-    public void onItemClick( int id) {
-        mMainPresenter.onItemClicked(id);
+    public void onLoadMore() {
+        mMainPresenter.onLoadMore(mDate);
     }
 
-    private class FinishScrollListener extends RecyclerView.OnScrollListener {
-
-        private int lastTitlePos = -1;
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-
-            int lastCompletelyVisibleItemPosition = manager.findLastCompletelyVisibleItemPosition();
-
-            if (lastCompletelyVisibleItemPosition == mRecyclerView.getAdapter().getItemCount() - 1) {
-                mMainPresenter.onLoadMore(mDate);
-            }
-            int position = manager.findFirstVisibleItemPosition();
+    @Override
+    public void onScrolled(SwipRefreshRecycleView recyclerView, int dx, int dy) {
+        int position = manager.findFirstVisibleItemPosition();
             if (lastTitlePos == position) {
                 return;
             }
@@ -231,13 +219,5 @@ public class ListStory extends AppCompatActivity
             }
             ListStory.this.getSupportActionBar().setTitle(mTitle);
             lastTitlePos = position;
-
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            Log.e("state", newState + "");
-        }
     }
 }
