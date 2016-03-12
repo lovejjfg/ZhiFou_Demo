@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
+import com.lovejjfg.zhifou.ui.recycleview.holder.BottomViewHolder;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.recycleview.holder.HeaderViewPagerHolder;
 import com.lovejjfg.zhifou.ui.recycleview.holder.StoryViewHolder;
@@ -24,16 +25,22 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     protected List<Item> mItems;
     protected List<Item> mTmpItem;
     private OnItemClickListener listener;
+    private boolean isLoading;
 
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
+    public void isLoadingMore(boolean loading) {
+        isLoading = loading;
+    }
+
     public class Type {
         public static final int TYPE_HEADER = 0;
         public static final int TYPE_DATE = 1;
         public static final int TYPE_STORY = 2;
+        public static final int TYPE_BOTTOM = 3;
     }
 
     public StoriesAdapter() {
@@ -72,7 +79,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (positionStart == 0) {
             notifyDataSetChanged();
         } else {
-            notifyItemRangeChanged(positionStart, itemCount);
+            notifyItemRangeChanged(positionStart, itemCount + 1);
         }
     }
 
@@ -90,6 +97,9 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             case Type.TYPE_STORY:
                 itemView = UIUtils.inflate(R.layout.recycler_item_story, parent);
                 return new StoryViewHolder(itemView);
+            case Type.TYPE_BOTTOM:
+                itemView = UIUtils.inflate(R.layout.recycler_footer, parent);
+                return new BottomViewHolder(itemView);
             default:
                 return null;
         }
@@ -98,7 +108,10 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        final Item item = mItems.get(position);
+        Item item = null;
+        if (null != mItems && mItems.size() > 0 && position < mItems.size()) {
+            item = mItems.get(position);
+        }
         switch (viewType) {
             case Type.TYPE_HEADER:
                 ((HeaderViewPagerHolder) holder).bindHeaderView();
@@ -108,26 +121,35 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 break;
             case Type.TYPE_STORY:
                 ((StoryViewHolder) holder).bindStoryView(item.getStory());
+                final Item finalItem = item;
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (null != listener) {
-                            listener.onItemClick(Integer.valueOf(item.getStory().getId()));
+                            listener.onItemClick(Integer.valueOf(finalItem.getStory().getId()));
                         }
                     }
                 });
+                break;
+            case Type.TYPE_BOTTOM:
+                ((BottomViewHolder) holder).bindDateView(isLoading);
                 break;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mItems.get(position).getType();
+        if (position < mItems.size()
+                && mItems.size() > 0) {
+            return mItems.get(position).getType();
+        } else {
+            return Type.TYPE_BOTTOM;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return mItems.size() + 1;
     }
 
     public Item getItem(int position) {
