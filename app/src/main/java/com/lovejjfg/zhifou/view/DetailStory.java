@@ -11,11 +11,12 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
 import com.lovejjfg.zhifou.presenters.DetailPresenterImpl;
+import com.lovejjfg.zhifou.ui.widget.NestedWebView;
 
 public class DetailStory extends AppCompatActivity implements DetailPresenter.View {
 
     private ImageView mHeaderImage;
-    private WebView mWeb;
+    private NestedWebView mWeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +31,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     private void initView() {
         mHeaderImage = (ImageView) findViewById(R.id.iv_header);
-        mWeb = (WebView) findViewById(R.id.wv);
+        mWeb = (NestedWebView) findViewById(R.id.wv);
     }
 
     @Override
