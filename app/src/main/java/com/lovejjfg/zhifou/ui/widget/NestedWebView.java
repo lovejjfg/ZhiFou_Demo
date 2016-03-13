@@ -23,7 +23,7 @@ import android.widget.FrameLayout;
 /**
  * Created by 张俊 on 2016/3/12.
  */
-public class NestedWebView extends FrameLayout implements NestedScrollingParent, NestedScrollingChild {
+public class NestedWebView extends WebView implements NestedScrollingParent, NestedScrollingChild {
     private final NestedScrollingParentHelper mParentHelper = new NestedScrollingParentHelper(this);
 
     private final NestedScrollingChildHelper mChildHelper = new NestedScrollingChildHelper(this);

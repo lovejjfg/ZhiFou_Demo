@@ -14,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
@@ -119,6 +121,15 @@ public class ListStory extends AppCompatActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+            Log.e("请求开始了！！", "");
+            new Thread(){
+                @Override
+                public void run() {
+                    BmobUtil.send(ListStory.this);
+                }
+            }.start();
+
+
 
         } else if (id == R.id.nav_share) {
 

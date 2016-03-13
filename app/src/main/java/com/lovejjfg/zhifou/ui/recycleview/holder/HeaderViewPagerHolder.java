@@ -30,6 +30,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         viewPager = (TopViewPager) itemView.findViewById(R.id.viewPager);
+
         indicator = (SlidingCircleLayout) itemView.findViewById(R.id.scl);
         if (ListUtils.isEmpty(stories)) {
             return;
