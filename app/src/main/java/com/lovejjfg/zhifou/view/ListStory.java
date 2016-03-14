@@ -25,11 +25,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.ContactUtils;
 import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.data.model.ResultBean;
+import com.lovejjfg.zhifou.data.model.Results;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
@@ -145,6 +148,8 @@ public class ListStory extends AppCompatActivity
                             @Override
                             public void onResponse(Response response) throws IOException {
                                 Log.e("body:::", response.body().toString());
+                                Gson gson = new Gson();
+                                ResultBean results = gson.fromJson(response.body().toString(), ResultBean.class);
                                 response.body().close();
                             }
                         });
