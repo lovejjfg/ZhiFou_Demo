@@ -126,7 +126,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     @Override
                     public void onClick(View v) {
                         if (null != listener) {
-                            listener.onItemClick(Integer.valueOf(finalItem.getStory().getId()));
+
+                            listener.onItemClick(holder.itemView,((StoryViewHolder) holder).getImage(),Integer.valueOf(finalItem.getStory().getId()));
                         }
                     }
                 });

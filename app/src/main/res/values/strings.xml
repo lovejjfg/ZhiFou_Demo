@@ -9,6 +9,8 @@
     <string name="recycler_item_main_today_hottest">今日热点</string>
     <string name="recycler_item_main_select_from">Selected from</string>
     <string name="date_picker">data_picker</string>
+    <string name="header_image">header_image</string>
+    <string name="detail_view">detail_view</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

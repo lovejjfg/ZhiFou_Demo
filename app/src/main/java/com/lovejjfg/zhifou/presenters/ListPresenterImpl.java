@@ -1,9 +1,14 @@
 package com.lovejjfg.zhifou.presenters;
 
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
+import android.util.Pair;
 
+import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
@@ -36,11 +41,17 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onItemClicked(int id) {
+    public void onItemClicked(android.view.View itemView, android.view.View image, int id) {
         Intent i = new Intent(activity, DetailStory.class);
         i.putExtra(Constants.ID, id);
-        activity.startActivity(i);
+        final ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(activity,
+                        Pair.create(itemView,
+                                activity.getResources().getString(R.string.detail_view))
+                        );
+        activity.startActivity(i, options.toBundle());
     }
 
     @Override

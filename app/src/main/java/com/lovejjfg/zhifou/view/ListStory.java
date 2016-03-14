@@ -19,6 +19,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.BmobUtil;
@@ -196,8 +197,8 @@ public class ListStory extends AppCompatActivity
 //    }
 
     @Override
-    public void onItemClick( int id) {
-        mMainPresenter.onItemClicked(id);
+    public void onItemClick(View itemView, ImageView image, int id) {
+        mMainPresenter.onItemClicked(itemView,image,id);
     }
 
     @Override

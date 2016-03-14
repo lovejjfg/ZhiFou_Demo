@@ -23,7 +23,7 @@ import com.lovejjfg.zhifou.view.LoadingView;
 
 public interface ListPresenter {
 
-    void onItemClicked(int position);
+    void onItemClicked(android.view.View itemView, android.view.View image, int id);
 
     void onRefresh();
 

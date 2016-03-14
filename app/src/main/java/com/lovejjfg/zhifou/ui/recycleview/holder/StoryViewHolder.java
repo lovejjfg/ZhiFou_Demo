@@ -21,6 +21,15 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
     private CardView card;
     private TextView text;
     private TextView theme;
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+
     private ImageView image;
     private ImageView ivMultiPic;
     private ImageView line;
