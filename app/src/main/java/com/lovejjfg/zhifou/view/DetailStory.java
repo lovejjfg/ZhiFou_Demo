@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.view;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,6 +21,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     private WebView mWeb;
     private Toolbar toolbar;
     private TextView mTittle;
+    private AppBarLayout appBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +33,22 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void initView() {
         mHeaderImage = (ImageView) findViewById(R.id.iv_header);
         mWeb = (WebView) findViewById(R.id.wbv);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         mTittle = (TextView) findViewById(R.id.tv_tittle);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DetailStory.this.finish();
+            }
+        });
+
     }
 
     @Override
