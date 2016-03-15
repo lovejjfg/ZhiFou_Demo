@@ -46,6 +46,9 @@ public class DetailPresenterImpl implements DetailPresenter {
                         String data = WebUtils.BuildHtmlWithCss(story.getBody(), story.getCssList(), false);
                         view.onBindWebView(data);
                     }
+                    if (!TextUtils.isEmpty(story.getTitle())) {
+                        view.onBindTittle(story.getTitle());
+                    }
                 }
 
                 @Override

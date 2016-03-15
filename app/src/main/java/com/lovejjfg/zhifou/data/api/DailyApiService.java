@@ -10,6 +10,7 @@ import com.lovejjfg.zhifou.data.model.Themes;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import rx.Observable;
 
 /**
  */
@@ -20,6 +21,8 @@ public interface DailyApiService {
 
     @GET("/news/latest")
     void getLatestDailyStories(Callback<DailyStories> callback);
+    @GET("/news/latest")
+    Observable<DailyStories> getLatestDailyStories();
 
     @GET("/news/before/{date}")
     void getBeforeDailyStories(@Path("date") String date, Callback<DailyStories> callback);

@@ -31,5 +31,7 @@ public interface DetailPresenter extends LifecycleCallbacks {
         void onBindImage(String image);
 
         void onBindWebView(String data);
+
+        void onBindTittle(String title);
     }
 }

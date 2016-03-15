@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lovejjfg.zhifou.R;
@@ -17,13 +18,13 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     private ImageView mHeaderImage;
     private WebView mWeb;
+    private Toolbar toolbar;
+    private TextView mTittle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_story);
-
-
         initView();
         DetailPresenter detailPresenter = new DetailPresenterImpl(this);
         detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
@@ -33,8 +34,8 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     private void initView() {
         mHeaderImage = (ImageView) findViewById(R.id.iv_header);
         mWeb = (WebView) findViewById(R.id.wbv);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("呵呵呵");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mTittle = (TextView) findViewById(R.id.tv_tittle);
     }
 
     @Override
@@ -55,8 +56,11 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     @Override
     public void onBindWebView(String data) {
-//        mWeb.loadData(data, Constants.MIME_TYPE, Constants.ENCODING);
-//        mWeb.loadData(data, "text/html; charset=UTF-8", null);
         mWeb.loadDataWithBaseURL(Constants.BASE_URL, data, Constants.MIME_TYPE, Constants.ENCODING, Constants.FAIL_URL);
+    }
+
+    @Override
+    public void onBindTittle(String title) {
+        mTittle.setText(title);
     }
 }

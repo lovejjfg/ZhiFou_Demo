@@ -17,6 +17,9 @@ import com.lovejjfg.zhifou.view.DetailStory;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
     View mView;
@@ -50,12 +53,13 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
                 ActivityOptions.makeSceneTransitionAnimation(activity,
                         Pair.create(itemView,
                                 activity.getResources().getString(R.string.detail_view))
-                        );
+                );
         activity.startActivity(i, options.toBundle());
     }
 
     @Override
     public void onDestroy() {
+
 
     }
 
@@ -69,21 +73,32 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
         if (!isLoading) {
             mView.isLoading(true);
             isLoading = true;
-            BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
-                @Override
-                public void success(DailyStories dailyStories, Response response) {
-                    mView.onLoadMore(dailyStories);
-                    mView.isLoading(false);
-                    isLoading = false;
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    mView.onLoadError(error.toString());
-                    mView.isLoading(false);
-                    isLoading = false;
-                }
-            });
+//            BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
+//                @Override
+//                public void success(DailyStories dailyStories, Response response) {
+//                    mView.onLoadMore(dailyStories);
+//                    mView.isLoading(false);
+//                    isLoading = false;
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    mView.onLoadError(error.toString());
+//                    mView.isLoading(false);
+//                    isLoading = false;
+//                }
+//            });
+            BaseDataManager.getDailyApiService().getLatestDailyStories()
+                    .subscribeOn(Schedulers.io())//事件产生在子线程
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<DailyStories>() {
+                        @Override
+                        public void call(DailyStories dailyStories) {
+                            mView.onLoadMore(dailyStories);
+                            mView.isLoading(false);
+                            isLoading = false;
+                        }
+                    });
 
         }
     }

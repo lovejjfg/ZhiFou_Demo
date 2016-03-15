@@ -29,4 +29,6 @@ public interface LoadingView {
      * 是否显示正在加载更多
      */
     void isLoadingMore(boolean isLoadingMore);
+
+
 }
