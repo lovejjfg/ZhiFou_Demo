@@ -2,6 +2,7 @@ package com.lovejjfg.zhifou.data;
 
 import com.google.gson.GsonBuilder;
 import com.lovejjfg.zhifou.BuildConfig;
+import com.lovejjfg.zhifou.data.api.BombApiService;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
 
 import retrofit.RestAdapter;
@@ -14,6 +15,7 @@ import retrofit.converter.GsonConverter;
  */
 public class BaseDataManager {
     private static final String API = "http://news.at.zhihu.com/api/4";
+    private static final String URL_INSERT = "https://api.bmob.cn/1/classes/info";
     private static RestAdapter restAdapter;
 
     private static <T> T createApi(Class<T> clazz, String api) {
@@ -34,6 +36,12 @@ public class BaseDataManager {
     public static DailyApiService getDailyApiService() {
         return createApi(DailyApiService.class, API);
     }
+    public static BombApiService getBombApiService() {
+        //// TODO: 2016/3/15 相关api的封装
+        return createApi(BombApiService.class, URL_INSERT);
+    }
+
+
 
 
 }
