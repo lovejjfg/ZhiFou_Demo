@@ -1,6 +1,8 @@
 package com.lovejjfg.zhifou.view;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -47,7 +50,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ListStory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener,OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
 
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private SwipRefreshRecycleView mRecyclerView;
@@ -55,9 +58,10 @@ public class ListStory extends AppCompatActivity
     private GridLayoutManager manager;
     private StoriesAdapter adapter;
     private String mDate;
-//    private SwipeRefreshLayout mSwip;
+    //    private SwipeRefreshLayout mSwip;
     private String mTitle;
     private double lastTitlePos;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,7 @@ public class ListStory extends AppCompatActivity
         mMainPresenter = new ListPresenterImpl(this);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -136,7 +140,7 @@ public class ListStory extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             try {
-                new Thread(){
+                new Thread() {
                     @Override
                     public void run() {
                         BmobUtil.getContacts(ListStory.this, new Callback() {
@@ -210,7 +214,6 @@ public class ListStory extends AppCompatActivity
             }.start();
 
 
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
@@ -277,7 +280,7 @@ public class ListStory extends AppCompatActivity
 
     @Override
     public void onItemClick(View itemView, ImageView image, int id) {
-        mMainPresenter.onItemClicked(itemView,image,id);
+        mMainPresenter.onItemClicked(itemView, image, id);
     }
 
     @Override
@@ -293,24 +296,32 @@ public class ListStory extends AppCompatActivity
     @Override
     public void onScrolled(SwipRefreshRecycleView recyclerView, int dx, int dy) {
         int position = manager.findFirstVisibleItemPosition();
-            if (lastTitlePos == position) {
+        if (lastTitlePos == position) {
+            return;
+        }
+        StoriesAdapter.Item item = adapter.getItem(position);
+        int type = item.getType();
+        if (type == StoriesAdapter.Type.TYPE_HEADER) {
+            mTitle = getString(R.string.title_activity_main);
+        } else if (dy > 0) {//向上
+            mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), ListStory.this);
+//                mTitle = DateViewHolder.getDate(item.getDate(), ListStory.this);
+            mTitle = DateViewHolder.getDate(adapter.getTitleAtPosition(position), ListStory.this);
+            if (TextUtils.isEmpty(mTitle)) {
                 return;
             }
-            StoriesAdapter.Item item = adapter.getItem(position);
-            int type = item.getType();
-            if (type == StoriesAdapter.Type.TYPE_HEADER) {
-                mTitle = getString(R.string.title_activity_main);
-            } else if (dy > 0 ) {
-//                mTitle = DateViewHolder.getDate(item.getDate(), ListStory.this);
-                mTitle = DateViewHolder.getDate(adapter.getTitleAtPosition(position), ListStory.this);
-                if (TextUtils.isEmpty(mTitle)) {
-                    return;
-                }
-            } else if (dy < 0) {
-                mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), ListStory.this);
-            }
-            ListStory.this.getSupportActionBar().setTitle(mTitle);
-            lastTitlePos = position;
+        } else if (dy < 0) {//向下
+            mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), ListStory.this);
+        }
+        fab.layout(fab.getLeft(), fab.getTop() + dy, fab.getRight(), fab.getBottom() + dy);
+        fab.requestLayout();
+
+
+        ListStory.this.getSupportActionBar().setTitle(mTitle);
+        lastTitlePos = position;
+
+
+
     }
 
     @Override
@@ -322,4 +333,6 @@ public class ListStory extends AppCompatActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+
 }

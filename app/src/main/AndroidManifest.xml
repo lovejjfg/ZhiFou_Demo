@@ -28,7 +28,7 @@
             android:name=".view.DatePick"
             android:theme="@style/TransparentAppCompatTheme" />
         <activity android:name=".view.DetailStory"
-            android:theme="@style/AppThemeTransparentNavigation"
+            android:theme="@style/AppDrawerLayout"
             />
     </application>
 

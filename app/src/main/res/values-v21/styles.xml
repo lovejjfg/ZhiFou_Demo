@@ -16,7 +16,7 @@
         <item name="android:windowNoTitle">true</item>
 
         <!-- 任务栏 color -->
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
         <!--底部按键-->
         <!--<item name="android:navigationBarColor">@android:color/transparent</item>-->
 
@@ -26,6 +26,10 @@
         <item name="android:windowSharedElementExitTransition">
             @android:transition/slide_right
         </item>
+
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
     </style>
 
     <style name="AppThemeTransparentNavigation" parent="AppDrawerLayout">
