@@ -1,7 +1,6 @@
 package com.lovejjfg.zhifou.view;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,7 +20,6 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     private WebView mWeb;
     private Toolbar toolbar;
     private TextView mTittle;
-    private AppBarLayout appBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

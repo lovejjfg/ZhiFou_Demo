@@ -15,10 +15,10 @@
         android:layout_height="wrap_content"
         android:text="17sp"
         android:textSize="18sp"
-        android:textColor="#f26a6a"
         android:textStyle="bold"
+        android:textColor="@color/white"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="15dp"
+        android:padding="15dp"
         android:layout_marginBottom="20dp"
         />
 

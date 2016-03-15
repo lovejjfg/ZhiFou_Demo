@@ -91,6 +91,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
         public Object instantiateItem(final ViewGroup container, final int position) {
             HeaderImageView iv = new HeaderImageView(container.getContext());
             final Story story = mStories.get(position);
+            // TODO: 2016-03-15 header的点击处理
 //            storyHeaderView.bindData(story.getTitle(), story.getImageSource(), story.getImage(), mOptions);
 //            storyHeaderView.setOnClickListener(new View.OnClickListener() {
 //                @Override
