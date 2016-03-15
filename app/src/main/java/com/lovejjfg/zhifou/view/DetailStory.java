@@ -2,6 +2,7 @@ package com.lovejjfg.zhifou.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_story);
 
+
         initView();
         DetailPresenter detailPresenter = new DetailPresenterImpl(this);
         detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
@@ -31,6 +33,8 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     private void initView() {
         mHeaderImage = (ImageView) findViewById(R.id.iv_header);
         mWeb = (WebView) findViewById(R.id.wbv);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("呵呵呵");
     }
 
     @Override
