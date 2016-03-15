@@ -4,7 +4,9 @@ import com.google.gson.GsonBuilder;
 import com.lovejjfg.zhifou.BuildConfig;
 import com.lovejjfg.zhifou.data.api.BombApiService;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
+import com.squareup.okhttp.MediaType;
 
+import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
@@ -16,6 +18,11 @@ import retrofit.converter.GsonConverter;
 public class BaseDataManager {
     private static final String API = "http://news.at.zhihu.com/api/4";
     private static final String URL_INSERT = "https://api.bmob.cn/1/classes/info";
+    /*bomb*/
+    private static final String URL_CONTACT = "https://api.bmob.cn/1/classes/Contacts";
+    private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";
+    private static final String API_KEY = "b55f225809b92ba6093a2b69a39f38f8";
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static RestAdapter restAdapter;
 
     private static <T> T createApi(Class<T> clazz, String api) {
@@ -38,7 +45,20 @@ public class BaseDataManager {
     }
     public static BombApiService getBombApiService() {
         //// TODO: 2016/3/15 相关api的封装
-        return createApi(BombApiService.class, URL_INSERT);
+        return new RestAdapter.Builder()
+                .setEndpoint(URL_INSERT)
+                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
+                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override
+                    public void intercept(RequestFacade request) {
+                        request.addHeader("Content-Type", "application/json");
+                        request.addHeader("X-Bmob-Application-Id", APPLICATION_ID);
+                        request.addHeader("X-Bmob-REST-API-Key", API_KEY);
+                    }
+                })
+                .build()
+                .create(BombApiService.class);
     }
 
 
