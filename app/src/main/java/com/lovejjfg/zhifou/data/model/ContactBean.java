@@ -1,7 +1,5 @@
 package com.lovejjfg.zhifou.data.model;
 
-import java.util.ArrayList;
-
 /**
  * Created by 张俊 on 2016/3/13.
  */
@@ -30,7 +28,18 @@ public class ContactBean {
         this.nickName = nickName;
     }
 
-
+    @Override
+    public String toString() {
+        return "ContactBean{" +
+                "name='" + name + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", workNumber='" + workNumber + '\'' +
+                ", workMobile='" + workMobile + '\'' +
+                ", homeNumber='" + homeNumber + '\'' +
+                '}';
+    }
 
     private String name;
     private String nickName;

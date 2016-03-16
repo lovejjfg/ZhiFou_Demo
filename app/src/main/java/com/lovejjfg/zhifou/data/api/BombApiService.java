@@ -1,9 +1,11 @@
 package com.lovejjfg.zhifou.data.api;
 
-import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.data.model.ContactBean;
+import com.lovejjfg.zhifou.data.model.ResultBean;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.GET;
 import retrofit.http.POST;
 
 /**
@@ -13,5 +15,7 @@ public interface BombApiService {
 
 
     @POST("/info")
-    void insertInfoDb(@Body String bean, Callback<DailyStories> callback);
+    void insertInfoDb(@Body ContactBean bean, Callback<ContactBean> callback);
+    @GET("/info")
+    void getDbInfos( Callback<ResultBean> callback);
 }

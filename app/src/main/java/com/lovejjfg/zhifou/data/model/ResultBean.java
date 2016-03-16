@@ -8,6 +8,13 @@ import java.util.List;
 public class ResultBean {
 
 
+    @Override
+    public String toString() {
+        return "ResultBean{" +
+                "results=" + results +
+                '}';
+    }
+
     /**
      * birthday : 1964-07-28
      * createdAt : 2016-03-14 21:42:24
@@ -34,6 +41,18 @@ public class ResultBean {
         private String name;
         private String objectId;
         private String updatedAt;
+
+        @Override
+        public String toString() {
+            return "ResultsEntity{" +
+                    "birthday='" + birthday + '\'' +
+                    ", createdAt='" + createdAt + '\'' +
+                    ", mobile='" + mobile + '\'' +
+                    ", name='" + name + '\'' +
+                    ", objectId='" + objectId + '\'' +
+                    ", updatedAt='" + updatedAt + '\'' +
+                    '}';
+        }
 
         public void setBirthday(String birthday) {
             this.birthday = birthday;

@@ -29,7 +29,6 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.ContactUtils;
-import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.ResultBean;
@@ -138,29 +137,18 @@ public class ListStory extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            try {
-                new Thread() {
-                    @Override
-                    public void run() {
-                        BmobUtil.getContacts(ListStory.this, new Callback() {
-                            @Override
-                            public void onFailure(Request request, IOException e) {
 
-                            }
+            BaseDataManager.getBombApiService().getDbInfos(new retrofit.Callback<ResultBean>() {
+                @Override
+                public void success(ResultBean resultBean, retrofit.client.Response response) {
+                    Log.e("success", resultBean.toString());
+                }
 
-                            @Override
-                            public void onResponse(Response response) throws IOException {
-                                Log.e("body:::", response.body().toString());
-                                Gson gson = new Gson();
-                                ResultBean results = gson.fromJson(response.body().toString(), ResultBean.class);
-                                response.body().close();
-                            }
-                        });
-                    }
-                }.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("failed", error.getMessage());
+                }
+            });
 
         } else if (id == R.id.nav_slideshow) {
             int hasWriteContactsPermission = checkSelfPermission(Manifest.permission_group.CONTACTS);
@@ -210,11 +198,13 @@ public class ListStory extends AppCompatActivity
 //                        }
 //                    });
                     Gson gson = new Gson();
-                    Person person = new Person("1992-10-25", "zj");
-                    BaseDataManager.getBombApiService().insertInfoDb(gson.toJson(person), new retrofit.Callback<DailyStories>() {
+                    ContactBean bean = new ContactBean();
+                    bean.setMobile("999999");
+                    bean.setName("zhangsan");
+                    BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
                         @Override
-                        public void success(DailyStories dailyStories, retrofit.client.Response response) {
-                            Log.e("插入表", "成功！！！");
+                        public void success(ContactBean dailyStories, retrofit.client.Response response) {
+                            Log.e("插入表", "成功！！！" + dailyStories.toString());
                         }
 
                         @Override

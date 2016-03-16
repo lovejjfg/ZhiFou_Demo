@@ -47,7 +47,7 @@ public class BaseDataManager {
         //// TODO: 2016/3/15 相关api的封装
         return new RestAdapter.Builder()
                 .setEndpoint(BOMB_API)
-                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
+//                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
                 .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
