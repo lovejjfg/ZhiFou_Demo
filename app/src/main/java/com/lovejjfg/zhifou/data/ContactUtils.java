@@ -7,9 +7,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.model.ContactBean;
+import com.lovejjfg.zhifou.data.model.ResultBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +116,7 @@ public class ContactUtils {
     }
 
     //批量添加
-    public static void addContact2(Context context,ContactBean bean) throws Exception {
+    public static void addContact2(Context context,ResultBean.ResultsEntity bean) throws Exception {
         Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
         ContentResolver resolver = context.getContentResolver();
         ArrayList<ContentProviderOperation> operations = new ArrayList<>();
@@ -131,7 +133,7 @@ public class ContactUtils {
                 .withValue("data2", bean.getName())
                 .build();
         operations.add(op2);
-        //添加电话号码
+        //添加移动电话号码
         ContentProviderOperation op3 = ContentProviderOperation.newInsert(uri)
                 .withValueBackReference("raw_contact_id", 0)
                 .withValue("mimetype", "vnd.android.cursor.item/phone_v2")
@@ -139,7 +141,7 @@ public class ContactUtils {
                 .withValue("data2", ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE)
                 .build();
         operations.add(op3);
-        if (bean.getHomeNumber() != null) {
+        if (bean.getHomeNumber() != null) {//住宅
             ContentProviderOperation op4 = ContentProviderOperation.newInsert(uri)
                     .withValueBackReference("raw_contact_id", 0)
                     .withValue("mimetype", "vnd.android.cursor.item/phone_v2")
@@ -148,7 +150,7 @@ public class ContactUtils {
                     .build();
             operations.add(op4);
         }
-        if (bean.getHomeNumber() != null) {
+        if (bean.getWorkMobile() != null) {//工作移动
             ContentProviderOperation op5 = ContentProviderOperation.newInsert(uri)
                     .withValueBackReference("raw_contact_id", 0)
                     .withValue("mimetype", "vnd.android.cursor.item/phone_v2")
@@ -157,25 +159,25 @@ public class ContactUtils {
                     .build();
             operations.add(op5);
         }
-        if (bean.getHomeNumber() != null) {
+        if (!TextUtils.isEmpty(bean.getWorkNumber())) {//工作
             ContentProviderOperation op6 = ContentProviderOperation.newInsert(uri)
                     .withValueBackReference("raw_contact_id", 0)
                     .withValue("mimetype", "vnd.android.cursor.item/phone_v2")
-                    .withValue("data1", bean.getWorkNumber())
-                    .withValue("data2", ContactsContract.CommonDataKinds.Phone.TYPE_HOME)
+                    .withValue(ContactsContract.Data.DATA1, bean.getWorkNumber())
+                    .withValue("data2", ContactsContract.CommonDataKinds.Phone.TYPE_WORK)
                     .build();
             operations.add(op6);
         }
-
-        //添加电话号码
-        ContentProviderOperation op4 = ContentProviderOperation.newInsert(uri)
-                .withValueBackReference("raw_contact_id", 0)
-                .withValue("mimetype", "vnd.android.cursor.item/phone_v2")
-                .withValue("data1", "110")
-                .withValue("data2", "1")
-                .build();
-        operations.add(op4);
-
+        //插入生日
+        if (!TextUtils.isEmpty(bean.getBirthday())) {
+            ContentProviderOperation op7 = ContentProviderOperation.newInsert(uri)
+                    .withValueBackReference(ContactsContract.RawContacts.Data.RAW_CONTACT_ID, 0)
+                    .withValue(ContactsContract.RawContacts.Data.MIMETYPE, ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Event.TYPE, ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY)
+                    .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, bean.getBirthday())
+                    .withYieldAllowed(true).build();
+            operations.add(op7);
+        }
         ContentProviderResult[] contentProviderResults = resolver.applyBatch("com.android.contacts", operations);
         contentProviderResults.toString();
     }

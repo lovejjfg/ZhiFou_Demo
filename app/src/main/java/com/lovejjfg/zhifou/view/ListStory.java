@@ -3,6 +3,7 @@ package com.lovejjfg.zhifou.view;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -19,10 +20,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.lovejjfg.zhifou.R;
@@ -46,6 +50,11 @@ import java.io.IOException;
 import java.util.List;
 
 import retrofit.RetrofitError;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
@@ -60,6 +69,9 @@ public class ListStory extends AppCompatActivity
     private String mTitle;
     private double lastTitlePos;
     private FloatingActionButton fab;
+    private ProgressBar bar;
+    private int i;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +79,6 @@ public class ListStory extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        mRecyclerView = (RecyclerView) findViewById(R.id.rcv);
-//        mSwip = (SwipeRefreshLayout) findViewById(R.id.srl);
         mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
         mRecyclerView.setLayoutManager(manager);
@@ -79,6 +89,12 @@ public class ListStory extends AppCompatActivity
         mRecyclerView.setOnScrollListener(this);
 
         mMainPresenter = new ListPresenterImpl(this);
+        dialog = new Dialog(this);
+        View inflate = LayoutInflater.from(this).inflate(R.layout.layout_bar, null);
+        bar = (ProgressBar) inflate.findViewById(R.id.pb);
+
+
+        dialog.addContentView(inflate, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -136,19 +152,55 @@ public class ListStory extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_gallery) {//获取数据库的相关信息
 
-            BaseDataManager.getBombApiService().getDbInfos(new retrofit.Callback<ResultBean>() {
-                @Override
-                public void success(ResultBean resultBean, retrofit.client.Response response) {
-                    Log.e("success", resultBean.toString());
-                }
+//            BaseDataManager.getBombApiService().getDbInfos(new retrofit.Callback<ResultBean>() {
+//                @Override
+//                public void success(ResultBean resultBean, retrofit.client.Response response) {
+//                    Log.e("success", resultBean.toString());
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    Log.e("failed", error.getMessage());
+//                }
+//            });
+            dialog.show();
+            i = 0;
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("failed", error.getMessage());
-                }
-            });
+            BaseDataManager.getBombApiService().getDbInfos()
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(new Func1<ResultBean, Observable<ResultBean.ResultsEntity>>() {
+                        @Override
+                        public Observable<ResultBean.ResultsEntity> call(ResultBean resultBean) {
+                            bar.setMax(resultBean.getResults().size());
+                            return Observable.from(resultBean.getResults());//这里出去的就是一个一个的用户信息了！
+                        }
+                    })
+                    .map(new Func1<ResultBean.ResultsEntity, ResultBean.ResultsEntity>() {
+                        @Override
+                        public ResultBean.ResultsEntity call(ResultBean.ResultsEntity resultsEntity) {
+                            if (null != resultsEntity.getName()) {
+                                try {
+                                    ContactUtils.addContact2(ListStory.this, resultsEntity);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                return resultsEntity;
+                            } else {
+                                return null;
+                            }
+
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<ResultBean.ResultsEntity>() {
+                        @Override
+                        public void call(ResultBean.ResultsEntity resultsEntity) {
+                            bar.setProgress(i++);
+                            Log.e("插入：", resultsEntity.toString());
+                        }
+                    });
 
         } else if (id == R.id.nav_slideshow) {
             int hasWriteContactsPermission = checkSelfPermission(Manifest.permission_group.CONTACTS);
@@ -321,7 +373,6 @@ public class ListStory extends AppCompatActivity
 
         ListStory.this.getSupportActionBar().setTitle(mTitle);
         lastTitlePos = position;
-
 
 
     }

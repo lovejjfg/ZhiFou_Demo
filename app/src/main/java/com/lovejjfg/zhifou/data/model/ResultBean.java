@@ -42,6 +42,34 @@ public class ResultBean {
         private String objectId;
         private String updatedAt;
 
+        public String getWorkNumber() {
+            return workNumber;
+        }
+
+        public void setWorkNumber(String workNumber) {
+            this.workNumber = workNumber;
+        }
+
+        public String getWorkMobile() {
+            return workMobile;
+        }
+
+        public void setWorkMobile(String workMobile) {
+            this.workMobile = workMobile;
+        }
+
+        public String getHomeNumber() {
+            return homeNumber;
+        }
+
+        public void setHomeNumber(String homeNumber) {
+            this.homeNumber = homeNumber;
+        }
+
+        private String workNumber;
+        private String workMobile;
+        private String homeNumber;
+
         @Override
         public String toString() {
             return "ResultsEntity{" +
