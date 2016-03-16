@@ -90,7 +90,7 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
 //            });
             BaseDataManager.getDailyApiService().getLatestDailyStories()
                     .subscribeOn(Schedulers.io())//事件产生在子线程
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .observeOn(AndroidSchedulers.mainThread())// TODO: 2016-03-16 添加这个没有网络会报异常。。
                     .subscribe(new Action1<DailyStories>() {
                         @Override
                         public void call(DailyStories dailyStories) {

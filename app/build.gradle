@@ -30,8 +30,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.7.4'
     compile 'io.reactivex:rxjava:1.1.1'
     compile 'io.reactivex:rxandroid:1.1.0'
-// Because RxAndroid releases are few and far between, it is recommended you also
-// explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'com.google.code.gson:gson:2.4'
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:palette-v7:${supportLibVersion}"

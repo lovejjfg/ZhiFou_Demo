@@ -1,8 +1,6 @@
 package com.lovejjfg.zhifou.view;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -12,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,17 +22,17 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.ContactUtils;
+import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.ResultBean;
-import com.lovejjfg.zhifou.data.model.Results;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
@@ -48,6 +45,8 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
@@ -199,15 +198,28 @@ public class ListStory extends AppCompatActivity
             new Thread() {
                 @Override
                 public void run() {
-                    BmobUtil.sendTest(ListStory.this, new Callback() {
+//                    BmobUtil.sendTest(ListStory.this, new Callback() {
+//                        @Override
+//                        public void onFailure(Request request, IOException e) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onResponse(Response response) throws IOException {
+//
+//                        }
+//                    });
+                    Gson gson = new Gson();
+                    Person person = new Person("1992-10-25", "zj");
+                    BaseDataManager.getBombApiService().insertInfoDb(gson.toJson(person), new retrofit.Callback<DailyStories>() {
                         @Override
-                        public void onFailure(Request request, IOException e) {
-
+                        public void success(DailyStories dailyStories, retrofit.client.Response response) {
+                            Log.e("插入表", "成功！！！");
                         }
 
                         @Override
-                        public void onResponse(Response response) throws IOException {
-
+                        public void failure(RetrofitError error) {
+                            Log.e("插入表", "失败！！！" + error.getMessage());
                         }
                     });
                 }

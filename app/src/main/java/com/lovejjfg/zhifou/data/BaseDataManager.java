@@ -17,7 +17,7 @@ import retrofit.converter.GsonConverter;
  */
 public class BaseDataManager {
     private static final String API = "http://news.at.zhihu.com/api/4";
-    private static final String URL_INSERT = "https://api.bmob.cn/1/classes/info";
+    private static final String BOMB_API = "https://api.bmob.cn/1/classes";
     /*bomb*/
     private static final String URL_CONTACT = "https://api.bmob.cn/1/classes/Contacts";
     private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";
@@ -46,7 +46,7 @@ public class BaseDataManager {
     public static BombApiService getBombApiService() {
         //// TODO: 2016/3/15 相关api的封装
         return new RestAdapter.Builder()
-                .setEndpoint(URL_INSERT)
+                .setEndpoint(BOMB_API)
                 .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
                 .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                 .setRequestInterceptor(new RequestInterceptor() {
