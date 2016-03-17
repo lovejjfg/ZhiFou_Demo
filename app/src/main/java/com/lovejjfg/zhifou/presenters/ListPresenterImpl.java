@@ -7,11 +7,13 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Pair;
+import android.view.View;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.view.DetailStory;
 
 import retrofit.Callback;
@@ -44,18 +46,21 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onItemClicked(android.view.View itemView, android.view.View image, int id) {
-        Intent i = new Intent(activity, DetailStory.class);
-        i.putExtra(Constants.ID, id);
-        final ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(activity,
-                        Pair.create(itemView,
-                                activity.getResources().getString(R.string.detail_view))
-                );
-        activity.startActivity(i, options.toBundle());
+        JumpUtils.jumpToDetail(activity,itemView, id);
     }
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    private void jumpToDetail(android.view.View itemView, int id) {
+//        Intent i = new Intent(activity, DetailStory.class);
+//        i.putExtra(Constants.ID, id);
+//        final ActivityOptions options =
+//                ActivityOptions.makeSceneTransitionAnimation(activity,
+//                        Pair.create(itemView,
+//                                activity.getResources().getString(R.string.detail_view))
+//                );
+//        activity.startActivity(i, options.toBundle());
+//    }
 
     @Override
     public void onDestroy() {

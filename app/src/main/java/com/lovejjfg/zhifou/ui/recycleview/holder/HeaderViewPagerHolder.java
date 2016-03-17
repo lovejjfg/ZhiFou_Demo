@@ -1,5 +1,6 @@
 package com.lovejjfg.zhifou.ui.recycleview.holder;
 
+import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.ui.widget.HeaderImageView;
 import com.lovejjfg.zhifou.ui.widget.TopViewPager;
+import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.ListUtils;
 
 import java.util.List;
@@ -89,16 +91,15 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
 
         @Override
         public Object instantiateItem(final ViewGroup container, final int position) {
-            HeaderImageView iv = new HeaderImageView(container.getContext());
+            final HeaderImageView iv = new HeaderImageView(container.getContext());
             final Story story = mStories.get(position);
             // TODO: 2016-03-15 header的点击处理
-//            storyHeaderView.bindData(story.getTitle(), story.getImageSource(), story.getImage(), mOptions);
-//            storyHeaderView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    IntentUtils.intentToStoryActivity((Activity) v.getContext(), story);
-//                }
-//            });
+            iv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    JumpUtils.jumpToDetail(((Activity) container.getContext()), iv, Integer.valueOf(story.getId()));
+                }
+            });
             Glide.with(container.getContext()).load(story.getImage()).into(iv.mImageView);
             iv.mTvTittle.setText(story.getTitle());
             container.addView(iv);
