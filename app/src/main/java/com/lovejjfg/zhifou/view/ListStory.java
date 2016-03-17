@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -81,6 +82,7 @@ public class ListStory extends AppCompatActivity
         setSupportActionBar(toolbar);
         mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(manager);
         adapter = new StoriesAdapter();
         adapter.setOnItemClickListener(this);

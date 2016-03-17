@@ -17,8 +17,8 @@ import com.lovejjfg.zhifou.view.DetailStory;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
@@ -91,9 +91,21 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
             BaseDataManager.getDailyApiService().getLatestDailyStories()
                     .subscribeOn(Schedulers.io())//事件产生在子线程
                     .observeOn(AndroidSchedulers.mainThread())// TODO: 2016-03-16 添加这个没有网络会报异常。。
-                    .subscribe(new Action1<DailyStories>() {
+                    .subscribe(new Subscriber<DailyStories>() {
                         @Override
-                        public void call(DailyStories dailyStories) {
+                        public void onCompleted() {
+                            mView.isLoading(false);
+                            isLoading = false;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            mView.isLoading(false);
+                            isLoading = false;
+                        }
+
+                        @Override
+                        public void onNext(DailyStories dailyStories) {
                             mView.onLoadMore(dailyStories);
                             mView.isLoading(false);
                             isLoading = false;

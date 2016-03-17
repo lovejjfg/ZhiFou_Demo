@@ -117,9 +117,12 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((HeaderViewPagerHolder) holder).bindHeaderView();
                 break;
             case Type.TYPE_DATE:
-                ((DateViewHolder) holder).bindDateView(item.getDate());
+                if (item != null) {
+                    ((DateViewHolder) holder).bindDateView(item.getDate());
+                }
                 break;
             case Type.TYPE_STORY:
+                assert item != null;
                 ((StoryViewHolder) holder).bindStoryView(item.getStory());
                 final Item finalItem = item;
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
