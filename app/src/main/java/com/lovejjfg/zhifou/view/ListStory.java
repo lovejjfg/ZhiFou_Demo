@@ -52,8 +52,8 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -179,27 +179,42 @@ public class ListStory extends AppCompatActivity
                             return Observable.from(resultBean.getResults());//这里出去的就是一个一个的用户信息了！
                         }
                     })
-                    .map(new Func1<ResultBean.ResultsEntity, ResultBean.ResultsEntity>() {
+                    .filter(new Func1<ResultBean.ResultsEntity, Boolean>() {
                         @Override
-                        public ResultBean.ResultsEntity call(ResultBean.ResultsEntity resultsEntity) {
-                            if (null != resultsEntity.getName()) {
-                                try {
-                                    ContactUtils.addContact2(ListStory.this, resultsEntity);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                return resultsEntity;
-                            } else {
-                                return null;
-                            }
-
+                        public Boolean call(ResultBean.ResultsEntity resultsEntity) {
+                            return resultsEntity.getName() != null;
                         }
                     })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<ResultBean.ResultsEntity>() {
+                    .observeOn(Schedulers.io())
+                    .map(new Func1<ResultBean.ResultsEntity, Integer>() {
                         @Override
-                        public void call(ResultBean.ResultsEntity resultsEntity) {
-                            bar.setProgress(i++);
+                        public Integer call(ResultBean.ResultsEntity resultsEntity) {
+                            try {
+                                ContactUtils.addContact2(ListStory.this, resultsEntity);
+                                return ++i;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                return 0;
+                            }
+                        }
+
+
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<Integer>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(Integer resultsEntity) {
+                            bar.setProgress(resultsEntity);
                             Log.e("插入：", resultsEntity.toString());
                         }
                     });
