@@ -43,6 +43,7 @@ import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.util.JumpUtils;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -284,12 +285,8 @@ public class ListStory extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-                Intent i = new Intent(this, DatePick.class);
-                final ActivityOptions options =
-                        ActivityOptions.makeSceneTransitionAnimation(this,
-                                Pair.create(v,
-                                        getString(R.string.date_picker)));
-                this.startActivity(i, options.toBundle());
+                JumpUtils.jumpToDataPicker(this, v);
+                break;
         }
 
     }
