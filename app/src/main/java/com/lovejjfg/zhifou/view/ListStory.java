@@ -155,21 +155,8 @@ public class ListStory extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {//获取数据库的相关信息
-
-//            BaseDataManager.getBombApiService().getDbInfos(new retrofit.Callback<ResultBean>() {
-//                @Override
-//                public void success(ResultBean resultBean, retrofit.client.Response response) {
-//                    Log.e("success", resultBean.toString());
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Log.e("failed", error.getMessage());
-//                }
-//            });
             dialog.show();
             i = 0;
-
             BaseDataManager.getBombApiService().getDbInfos()
                     .subscribeOn(Schedulers.io())
                     .flatMap(new Func1<ResultBean, Observable<ResultBean.ResultsEntity>>() {
@@ -252,42 +239,27 @@ public class ListStory extends AppCompatActivity
 
         } else if (id == R.id.nav_manage) {
             Log.e("请求开始了！！", "");
-            new Thread() {
+            ContactBean bean = new ContactBean();
+            bean.setMobile("999999");
+            bean.setName("zhangsan");
+            BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
                 @Override
-                public void run() {
-//                    BmobUtil.sendTest(ListStory.this, new Callback() {
-//                        @Override
-//                        public void onFailure(Request request, IOException e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onResponse(Response response) throws IOException {
-//
-//                        }
-//                    });
-                    Gson gson = new Gson();
-                    ContactBean bean = new ContactBean();
-                    bean.setMobile("999999");
-                    bean.setName("zhangsan");
-                    BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
-                        @Override
-                        public void success(ContactBean dailyStories, retrofit.client.Response response) {
-                            Log.e("插入表", "成功！！！" + dailyStories.toString());
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Log.e("插入表", "失败！！！" + error.getMessage());
-                        }
-                    });
+                public void success(ContactBean dailyStories, retrofit.client.Response response) {
+                    Log.e("插入表", "成功！！！" + dailyStories.toString());
                 }
-            }.start();
 
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("插入表", "失败！！！" + error.getMessage());
+                }
+            });
+        } else if (id == R.id.nav_share)
 
-        } else if (id == R.id.nav_share) {
+        {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_send)
+
+        {
 
         }
 
@@ -395,7 +367,7 @@ public class ListStory extends AppCompatActivity
     }
 
     @Override
-    public boolean shouldShowRequestPermissionRationale(String permission) {
+    public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
         return super.shouldShowRequestPermissionRationale(permission);
     }
 
