@@ -82,7 +82,7 @@ public class ListStory extends AppCompatActivity
         setSupportActionBar(toolbar);
         mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(manager);
         adapter = new StoriesAdapter();
         adapter.setOnItemClickListener(this);
