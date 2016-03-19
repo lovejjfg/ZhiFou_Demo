@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="SlidingCircleLayout"><attr format="dimension" name="point_default_diameter"/><attr format="dimension" name="point_selected_diameter"/><attr format="dimension" name="point_margin"/><attr format="color|reference" name="point_selected"/><attr format="color|reference" name="point_default"/><attr format="boolean" name="point_smooth_slide"/></declare-styleable>
-    <string name="app_name">CirclePoint</string>
-</resources>

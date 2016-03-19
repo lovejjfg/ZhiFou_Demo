@@ -1,7 +1,11 @@
 package com.lovejjfg.zhifou.data.api;
 
+import com.lovejjfg.zhifou.data.model.BatchBean;
+import com.lovejjfg.zhifou.data.model.BatchResultBean;
 import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.ResultBean;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -15,10 +19,13 @@ import rx.Observable;
 public interface BombApiService {
 
 
-    @POST("/info")
+    @POST("/classes/info")
     void insertInfoDb(@Body ContactBean bean, Callback<ContactBean> callback);
-    @GET("/info")
+    @GET("/classes/info")
     void getDbInfos( Callback<ResultBean> callback);
-    @GET("/info")
+    @GET("/classes/info")
     Observable<ResultBean> getDbInfos();
+
+    @POST("/batch")
+    void insertDbInfos(@Body BatchBean bean,Callback<List<BatchResultBean>> callback);
 }

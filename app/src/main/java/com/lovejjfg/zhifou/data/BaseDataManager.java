@@ -17,7 +17,7 @@ import retrofit.converter.GsonConverter;
  */
 public class BaseDataManager {
     private static final String API = "http://news.at.zhihu.com/api/4";
-    private static final String BOMB_API = "https://api.bmob.cn/1/classes";
+    private static final String BOMB_API = "https://api.bmob.cn/1";
     /*bomb*/
     private static final String URL_CONTACT = "https://api.bmob.cn/1/classes/Contacts";
     private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";

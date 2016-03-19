@@ -2,9 +2,7 @@ package com.lovejjfg.zhifou.view;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.ActivityOptions;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +18,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,11 +26,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.gson.Gson;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.ContactUtils;
+import com.lovejjfg.zhifou.data.model.BatchBean;
+import com.lovejjfg.zhifou.data.model.BatchResultBean;
 import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.ResultBean;
@@ -49,6 +47,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.RetrofitError;
@@ -239,21 +238,49 @@ public class ListStory extends AppCompatActivity
 
 
         } else if (id == R.id.nav_manage) {
-            Log.e("请求开始了！！", "");
-            ContactBean bean = new ContactBean();
-            bean.setMobile("999999");
-            bean.setName("zhangsan");
-            BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
+//            /**
+//             * 单个插入
+//             */
+//            Log.e("请求开始了！！", "");
+//            ContactBean bean = new ContactBean();
+//            bean.setMobile("999999");
+//            bean.setName("zhangsan");
+//            BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
+//                @Override
+//                public void success(ContactBean dailyStories, retrofit.client.Response response) {
+//                    Log.e("插入表", "成功！！！" + dailyStories.toString());
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    Log.e("插入表", "失败！！！" + error.getMessage());
+//                }
+//            });
+
+            /**
+             * 批量插入
+             */
+            BatchBean batchBean = new BatchBean();
+            final BatchBean.RequestsEntity entity = new BatchBean.RequestsEntity();
+            entity.setPath("/1/classes/Contacts");
+            entity.setMethod("POST");
+            entity.setBody(new BatchBean.RequestsEntity.BodyEntity("zhangwang", "136474"));
+
+            ArrayList<BatchBean.RequestsEntity> beans = new ArrayList<>();
+            beans.add(entity);
+            batchBean.setRequests(beans);
+            BaseDataManager.getBombApiService().insertDbInfos(batchBean, new retrofit.Callback<List<BatchResultBean>>() {
                 @Override
-                public void success(ContactBean dailyStories, retrofit.client.Response response) {
-                    Log.e("插入表", "成功！！！" + dailyStories.toString());
+                public void success(List<BatchResultBean> batchResultBeans, retrofit.client.Response response) {
+                    Log.e("Success", batchResultBeans.get(0).toString());
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Log.e("插入表", "失败！！！" + error.getMessage());
+                    Log.e("Failed", error.getMessage());
                 }
             });
+
         } else if (id == R.id.nav_share)
 
         {
