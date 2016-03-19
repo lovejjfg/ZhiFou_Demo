@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.util;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,4 +40,16 @@ public class DateUtils {
     }
 
 
+    public static boolean isMoreThanToday(String date) {
+        Calendar mCalendar = Calendar.getInstance();
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH) + 1;
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
+        Log.i("当前的日期：", year + "年:" + month + "月" + day + "日");
+        int pickYear = Integer.valueOf(date.substring(0, 4));
+        int pickMonth = Integer.valueOf(date.substring(4).substring(0, 2));
+        int pickDay = Integer.valueOf(date.substring(4).substring(2));
+        Log.i("选中的日期：", pickYear + "年:" + pickMonth + "月" + pickDay + "日");
+        return pickYear > year || pickYear == year && pickMonth > month || pickYear == year && pickMonth == month && pickDay > day;
+    }
 }
