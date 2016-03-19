@@ -15,22 +15,13 @@
   limitations under the License.
   -->
 
-<transition
+<fade
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="300"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:transitionOrdering="together">
+    android:duration="@android:integer/config_mediumAnimTime"
+    android:interpolator="@android:interpolator/fast_out_slow_in">
 
-    <changeBounds>
-        <targets>
-            <target android:targetId="@id/comments_container" />
-        </targets>
-    </changeBounds>
+    <targets>
+        <target android:targetId="@android:id/navigationBarBackground"/>
+    </targets>
 
-    <changeBounds>
-        <targets>
-            <target android:targetId="@id/story_title_background" />
-        </targets>
-    </changeBounds>
-
-</transition>
+</fade>

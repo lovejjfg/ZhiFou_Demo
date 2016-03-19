@@ -40,4 +40,5 @@ public interface DailyApiService {
     void getThemeBeforeStory(@Path("themeId") String themeId, @Path("storyId") String storyId, Callback<Theme> callback);
 
 
+
 }

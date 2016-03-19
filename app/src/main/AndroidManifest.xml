@@ -33,7 +33,9 @@
         <activity
             android:name=".view.SpecifiedDateStory"
             android:label="@string/title_activity_specified_date_story"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".view.SearchActivity"
+            />
     </application>
 
 </manifest>

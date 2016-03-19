@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   Copyright 2015 Google Inc.
 
@@ -15,24 +16,13 @@
   limitations under the License.
   -->
 
-<transitionSet
+<ripple
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:transitionOrdering="together"
-    android:duration="300" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    >
-
-    <changeBounds>
-        <targets>
-            <target android:targetId="@id/comments_container"/>
-        </targets>
-    </changeBounds>
-
-    <transition class="io.plaidapp.ui.transitions.StoryTitleSharedEnter">
-        <targets>
-            <target android:targetId="@id/story_title_background"/>
-        </targets>
-        <arcMotion/>
-    </transition>
-
-</transitionSet>
+    android:color="@color/ripple_dark">
+    <item>
+        <shape
+            android:shape="oval">
+            <solid android:color="?android:colorAccent" />
+        </shape>
+    </item>
+</ripple>

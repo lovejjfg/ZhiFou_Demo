@@ -2,6 +2,7 @@ package com.lovejjfg.zhifou.view;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -61,6 +62,7 @@ public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
 
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
+    private static final int RC_SEARCH = 11;
     private SwipRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
@@ -73,15 +75,15 @@ public class ListStory extends AppCompatActivity
     private ProgressBar bar;
     private int i;
     private Dialog dialog;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        toolbar.setTitle("首页");
+        getSupportActionBar().setTitle("首页");
         mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -132,6 +134,7 @@ public class ListStory extends AppCompatActivity
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -140,7 +143,15 @@ public class ListStory extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
+            // get the icon's location on screen to pass through to the search screen
+            View searchMenuView = toolbar.findViewById(R.id.action_search);
+            int[] loc = new int[2];
+            searchMenuView.getLocationOnScreen(loc);
+            startActivityForResult(SearchActivity.createStartIntent(this, loc[0], loc[0] +
+                    (searchMenuView.getWidth() / 2)), RC_SEARCH, ActivityOptions
+                    .makeSceneTransitionAnimation(this).toBundle());
+            searchMenuView.setAlpha(0f);
             return true;
         }
 

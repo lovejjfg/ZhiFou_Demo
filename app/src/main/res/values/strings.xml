@@ -102,5 +102,11 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_specified_date_story">SpecifiedDateStory</string>
+    <string name="search">搜索</string>
+    <string name="confirm_save_dribbble_search">确认保存</string>
+    <string name="confirm_save_designer_news_search">确认保存2</string>
+    <string name="confirm_save_search">确认</string>
+    <string name="search_hint">关键词</string>
+    <string name="no_search_results">没有相关内容</string>
 
 </resources>

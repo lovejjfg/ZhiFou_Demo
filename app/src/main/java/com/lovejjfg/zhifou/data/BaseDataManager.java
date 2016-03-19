@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder;
 import com.lovejjfg.zhifou.BuildConfig;
 import com.lovejjfg.zhifou.data.api.BombApiService;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
+import com.lovejjfg.zhifou.data.api.SearchService;
 import com.squareup.okhttp.MediaType;
 
 import retrofit.RequestInterceptor;
@@ -18,6 +19,7 @@ import retrofit.converter.GsonConverter;
 public class BaseDataManager {
     private static final String API = "http://news.at.zhihu.com/api/4";
     private static final String BOMB_API = "https://api.bmob.cn/1";
+    private static final String SEARCH_API = "http://zhihu-daily-purify.herokuapp.com";
     /*bomb*/
     private static final String URL_CONTACT = "https://api.bmob.cn/1/classes/Contacts";
     private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";
@@ -42,6 +44,14 @@ public class BaseDataManager {
 
     public static DailyApiService getDailyApiService() {
         return createApi(DailyApiService.class, API);
+    }
+    public static SearchService getSearchService() {
+        return new RestAdapter.Builder()
+                .setEndpoint(SEARCH_API)
+//                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
+                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
+                .build()
+                .create(SearchService.class);
     }
     public static BombApiService getBombApiService() {
         //// TODO: 2016/3/15 相关api的封装

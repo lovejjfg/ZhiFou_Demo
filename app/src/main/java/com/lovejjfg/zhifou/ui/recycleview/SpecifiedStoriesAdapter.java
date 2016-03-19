@@ -32,6 +32,11 @@ public class SpecifiedStoriesAdapter extends RecyclerView.Adapter<RecyclerView.V
         isLoading = loading;
     }
 
+    public void clear() {
+        mItems.clear();
+        notifyDataSetChanged();
+    }
+
     public class Type {
         public static final int TYPE_HEADER = 0;
         public static final int TYPE_DATE = 1;
