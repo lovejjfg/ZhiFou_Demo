@@ -18,9 +18,9 @@ import com.lovejjfg.zhifou.data.model.Story;
  * Created by Aspsine on 2015/3/11.
  */
 public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private CardView card;
-    private TextView text;
-    private TextView theme;
+    public CardView card;
+    public TextView text;
+    public TextView theme;
 
     public ImageView getImage() {
         return image;
@@ -30,11 +30,11 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
         this.image = image;
     }
 
-    private ImageView image;
-    private ImageView ivMultiPic;
-    private ImageView line;
-    private RelativeLayout rlContent;
-    private Story mStory;
+    public ImageView image;
+    public ImageView ivMultiPic;
+    public ImageView line;
+    public RelativeLayout rlContent;
+    public Story mStory;
 
     public StoryViewHolder(View itemView) {
         super(itemView);
