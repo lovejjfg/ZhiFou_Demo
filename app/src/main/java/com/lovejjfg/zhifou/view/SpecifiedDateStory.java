@@ -1,5 +1,6 @@
 package com.lovejjfg.zhifou.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +20,13 @@ import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 
-public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener,SpecifiedDateView{
+public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
 
     private SwipRefreshRecycleView mRecycleView;
     private SpecifiedStoriesAdapter adapter;
     private SpecifiedDateImpl presenter;
     private String date;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +34,12 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         setContentView(R.layout.activity_specified_date_story);
         date = getIntent().getStringExtra(Constants.DATE);
         presenter = new SpecifiedDateImpl(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (date != null) {
         toolbar.setTitle(DateUtils.getMainPageDate(date));
+        }
         mRecycleView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -52,7 +56,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                JumpUtils.jumpToDataPicker(SpecifiedDateStory.this, view);
+                JumpUtils.jumpToDataPickerForResult(SpecifiedDateStory.this, view, 100);
             }
         });
     }
@@ -74,7 +78,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
     @Override
     public void onLoadMore(DailyStories stories) {
-        adapter.appendList(stories);
+        adapter.setList(stories);
 
     }
 
@@ -91,5 +95,17 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
     @Override
     public void isLoadingMore(boolean isLoadingMore) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 200) {
+            String date = data.getStringExtra(Constants.DATE);
+            if (null != date) {
+                presenter.onLoading(date);
+                toolbar.setTitle(DateUtils.getMainPageDate(date));
+            }
+        }
     }
 }

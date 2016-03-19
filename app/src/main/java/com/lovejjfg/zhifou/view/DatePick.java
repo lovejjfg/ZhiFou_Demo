@@ -1,11 +1,13 @@
 package com.lovejjfg.zhifou.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.DatePicker;
 
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 
@@ -18,6 +20,7 @@ public class DatePick extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
+        final boolean isFirst = getIntent().getBooleanExtra(Constants.FIRST, true);
 //        initDialog();
         DatePicker mDatePicker = (DatePicker) findViewById(R.id.date_picker);
         Calendar calendar = Calendar.getInstance();
@@ -31,9 +34,14 @@ public class DatePick extends AppCompatActivity {
                 Log.e("截止：", year + "年" + +chooseMonth + "月" + dayOfMonth + "日");
                 String date = String.format("%d%2d%2d", year, chooseMonth, dayOfMonth).replace(" ", "0");
                 if (!DateUtils.isMoreThanToday(date)) {
-                    JumpUtils.jumpToSpecifiedDate(DatePick.this, String.format("%d%2d%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
-                    Log.e("DATE-->", String.format("%d-%2d-%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
+                    Intent i = new Intent();
+                    i.putExtra(Constants.DATE, date);
+                    setResult(200, i);
+                    if (isFirst) {
+                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date);
+                    }
                     finish();
+                    Log.e("DATE-->", String.format("%d-%2d-%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
                 } else {
                     Log.e("DATE-->", "大于了今天");
                 }
@@ -41,6 +49,7 @@ public class DatePick extends AppCompatActivity {
         });
 
     }
+
     public static String getCurrentDate() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

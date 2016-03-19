@@ -34,6 +34,7 @@ public class JumpUtils {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void jumpToDataPicker(Activity activity, View view) {
         Intent i = new Intent(activity, DatePick.class);
+        i.putExtra(Constants.FIRST, true);
         final ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(activity,
                         Pair.create(view,
@@ -46,5 +47,16 @@ public class JumpUtils {
         i.putExtra(Constants.DATE, date);
         activity.startActivity(i);
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public static void jumpToDataPickerForResult(Activity activity, View view,int requestCode) {
+        Intent i = new Intent(activity, DatePick.class);
+        i.putExtra(Constants.FIRST, false);
+        final ActivityOptions options =
+                ActivityOptions.makeSceneTransitionAnimation(activity,
+                        Pair.create(view,
+                                activity.getString(R.string.date_picker)));
+        activity.startActivityForResult(i, requestCode,options.toBundle());
     }
 }
