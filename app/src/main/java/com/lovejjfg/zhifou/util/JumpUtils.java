@@ -3,7 +3,6 @@ package com.lovejjfg.zhifou.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Pair;
@@ -13,6 +12,7 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.view.DatePick;
 import com.lovejjfg.zhifou.view.DetailStory;
+import com.lovejjfg.zhifou.view.SpecifiedDateStory;
 
 /**
  * Created by 张俊 on 2016/3/18.
@@ -39,5 +39,12 @@ public class JumpUtils {
                         Pair.create(view,
                                 activity.getString(R.string.date_picker)));
         activity.startActivity(i, options.toBundle());
+    }
+
+    public static void jumpToSpecifiedDate(Activity activity,String date) {
+        Intent i = new Intent(activity, SpecifiedDateStory.class);
+        i.putExtra(Constants.DATE, date);
+        activity.startActivity(i);
+
     }
 }
