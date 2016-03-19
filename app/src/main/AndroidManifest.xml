@@ -27,9 +27,14 @@
         <activity
             android:name=".view.DatePick"
             android:theme="@style/TransparentAppCompatTheme" />
-        <activity android:name=".view.DetailStory"
-            android:theme="@style/AppDrawerLayout"
-            />
+        <activity
+            android:name=".view.DetailStory"
+            android:theme="@style/AppDrawerLayout" />
+        <activity
+            android:name=".view.SpecifiedDateStory"
+            android:label="@string/title_activity_specified_date_story"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
