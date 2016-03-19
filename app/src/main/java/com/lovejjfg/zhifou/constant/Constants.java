@@ -10,6 +10,8 @@ public class Constants {
     public static final String FAIL_URL = "http//:daily.zhihu.com/";
 
     public static final String ID = "id";
+    public static final String DATE= "date";
+
 
 
 }
