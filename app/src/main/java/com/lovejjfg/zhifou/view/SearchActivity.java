@@ -57,12 +57,16 @@ import android.widget.SearchView;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.lovejjfg.zhifou.presenters.SearchImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
+import com.lovejjfg.zhifou.ui.recycleview.SearchStoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
 import com.lovejjfg.zhifou.util.ImeUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.ViewUtils;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -118,7 +122,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
 
     private int searchBackDistanceX;
     private int searchIconCenterX;
-    private SpecifiedStoriesAdapter adapter;
+    private SearchStoriesAdapter adapter;
     private SearchImpl presenter;
     //    private SearchDataManager dataManager;
 //    private FeedAdapter adapter;
@@ -142,12 +146,9 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         results.setLayoutManager(manager);
-        adapter = new SpecifiedStoriesAdapter();
+        adapter = new SearchStoriesAdapter();
         adapter.setOnItemClickListener(this);
         results.setAdapter(adapter);
-        results.setAdapter(adapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, columns);
-        results.setLayoutManager(layoutManager);
         results.setHasFixedSize(true);
         results.addOnScrollListener(gridScroll);
 
@@ -550,8 +551,8 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
     };
 
     @Override
-    public void onSearchOut(DailyStories stories) {
-        if (stories != null) {
+    public void onSearchOut(List<SearchResult> list) {
+        if (list != null && list.size()>0) {
             if (results.getVisibility() != View.VISIBLE) {
                 TransitionManager.beginDelayedTransition(container, auto);
                 progress.setVisibility(View.GONE);
@@ -569,7 +570,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
                         .setInterpolator(AnimationUtils.loadInterpolator(SearchActivity
                                 .this, android.R.interpolator.linear_out_slow_in));
             }
-            adapter.appendList(stories);
+            adapter.appendList(list);
         } else {
             TransitionManager.beginDelayedTransition(container, auto);
             progress.setVisibility(View.GONE);
