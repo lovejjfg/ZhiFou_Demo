@@ -35,6 +35,7 @@
             android:label="@string/title_activity_specified_date_story"
             android:theme="@style/AppTheme" />
         <activity android:name=".view.SearchActivity"
+                  android:theme="@style/ZhiFou.Translucent.Search"
             />
     </application>
 
