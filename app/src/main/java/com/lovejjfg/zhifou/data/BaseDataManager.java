@@ -27,7 +27,7 @@ public class BaseDataManager {
     private static final String API_KEY = "b55f225809b92ba6093a2b69a39f38f8";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static RestAdapter restAdapter;
-    // TODO: 2016-03-21 完成Retrofit2.0的升级
+    // TODO: 2016-03-21 完成Retrofit2.0的升级，这个是什么情况
 
     private static <T> T createApi(Class<T> clazz, String api) {
         if (restAdapter == null) {
@@ -46,15 +46,6 @@ public class BaseDataManager {
 
     public static DailyApiService getDailyApiService() {
         return createApi(DailyApiService.class, API);
-    }
-    public static SearchService getSearchService() {
-        return new RestAdapter.Builder()
-                .setEndpoint(SEARCH_API)
-//                .setConverter(new GsonConverter().p)
-//                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
-                .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
-                .build()
-                .create(SearchService.class);
     }
     public static BombApiService getBombApiService() {
         return new RestAdapter.Builder()
