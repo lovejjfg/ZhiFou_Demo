@@ -9,9 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
     </com.lovejjfg.zhifou.ui.widget.TopViewPager>
-
     <com.lovejjfg.circlepoint.SlidingCircleLayout
         android:id="@+id/scl"
         android:layout_width="match_parent"

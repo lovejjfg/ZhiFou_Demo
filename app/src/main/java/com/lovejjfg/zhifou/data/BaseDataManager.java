@@ -9,6 +9,7 @@ import com.squareup.okhttp.MediaType;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
+import retrofit.converter.Converter;
 import retrofit.converter.GsonConverter;
 
 /**
@@ -49,6 +50,7 @@ public class BaseDataManager {
     public static SearchService getSearchService() {
         return new RestAdapter.Builder()
                 .setEndpoint(SEARCH_API)
+//                .setConverter(new GsonConverter().p)
 //                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
                 .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
                 .build()

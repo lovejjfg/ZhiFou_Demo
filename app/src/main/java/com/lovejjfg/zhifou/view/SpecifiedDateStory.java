@@ -103,6 +103,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         if (resultCode == 200) {
             String date = data.getStringExtra(Constants.DATE);
             if (null != date) {
+                this.date = date;
                 presenter.onLoading(date);
                 toolbar.setTitle(DateUtils.getMainPageDate(date));
             }

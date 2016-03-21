@@ -1,10 +1,14 @@
 package com.lovejjfg.zhifou.data;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.TextUtils;
+import android.text.method.NumberKeyListener;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lovejjfg.zhifou.data.model.ContactBean;
+import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -12,7 +16,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLSocketFactory;
 
@@ -54,6 +64,54 @@ public class BmobUtil {
             e.printStackTrace();
             Log.e("error", e.toString());
         }
+
+    }
+
+    public static List<SearchResult> getSearchResult(String url) {
+        Request insert = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+        try {
+            String re = client.newCall(insert).execute().body().string();
+            if (TextUtils.isEmpty(re)) {
+                return null;
+            }
+            String result = Html.fromHtml(Html.fromHtml(re).toString()).toString();
+            List<SearchResult> newsList = new ArrayList<>();
+            Gson gson = new Gson();
+
+            if (!TextUtils.isEmpty(result)) {
+                JSONArray resultArray = null;
+                try {
+                    resultArray = new JSONArray(result);
+
+
+                    if (resultArray.length() == 0) {
+                        return null;
+                    } else {
+                        JSONObject newsObject;
+                        for (int i = 0; i < resultArray.length(); i++) {
+                            newsObject = resultArray.getJSONObject(i);
+                            SearchResult.ContentEntity entity = gson.fromJson(newsObject.getString("content"), SearchResult.ContentEntity.class);
+                            SearchResult news = gson.fromJson(newsObject.getString("content"), SearchResult.class);
+
+                            assert news != null;
+                            news.setDate(newsObject.getString("date"));
+                            news.setContent(entity);
+                            newsList.add(news);
+                        }
+                        return newsList;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
 
     }
     public static void sendContact(Context context, ContactBean bean, Callback callback) {

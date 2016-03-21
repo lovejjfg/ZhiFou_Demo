@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -76,6 +77,7 @@ public class ListStory extends AppCompatActivity
     private int i;
     private Dialog dialog;
     private Toolbar toolbar;
+    private View searchMenuView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +147,7 @@ public class ListStory extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
             // get the icon's location on screen to pass through to the search screen
-            View searchMenuView = toolbar.findViewById(R.id.action_search);
+            searchMenuView = toolbar.findViewById(R.id.action_search);
             int[] loc = new int[2];
             searchMenuView.getLocationOnScreen(loc);
             startActivityForResult(SearchActivity.createStartIntent(this, loc[0], loc[0] +
@@ -413,5 +415,11 @@ public class ListStory extends AppCompatActivity
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SEARCH) {
+            searchMenuView.setAlpha(1.0f);
+        }
+    }
 }
