@@ -26,6 +26,7 @@ public class BaseDataManager {
     private static final String API_KEY = "b55f225809b92ba6093a2b69a39f38f8";
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static RestAdapter restAdapter;
+    // TODO: 2016-03-21 完成Retrofit2.0的升级
 
     private static <T> T createApi(Class<T> clazz, String api) {
         if (restAdapter == null) {
@@ -54,7 +55,6 @@ public class BaseDataManager {
                 .create(SearchService.class);
     }
     public static BombApiService getBombApiService() {
-        //// TODO: 2016/3/15 相关api的封装
         return new RestAdapter.Builder()
                 .setEndpoint(BOMB_API)
 //                .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
