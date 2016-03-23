@@ -11,7 +11,6 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DatePick extends AppCompatActivity {
@@ -48,11 +47,5 @@ public class DatePick extends AppCompatActivity {
             }
         });
 
-    }
-
-    public static String getCurrentDate() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(c.getTime());
     }
 }
