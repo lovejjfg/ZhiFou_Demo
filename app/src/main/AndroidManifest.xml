@@ -29,7 +29,7 @@
             android:theme="@style/TransparentAppCompatTheme" />
         <activity
             android:name=".view.DetailStory"
-            android:theme="@style/AppDrawerLayout" />
+            android:theme="@style/AppTheme.Detail" />
         <activity
             android:name=".view.SpecifiedDateStory"
             android:label="@string/title_activity_specified_date_story"

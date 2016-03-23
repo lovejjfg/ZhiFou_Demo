@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionName="@string/detail_view">
+    android:transitionName="@string/detail_container">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="200dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -17,16 +19,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
+                android:id="@+id/fl_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                >
 
-                <ImageView
+                <com.lovejjfg.zhifou.ui.widget.ForegroundImageView
                     android:id="@+id/iv_header"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
+                    android:background="@color/cardview_light_background"
                     android:scaleType="centerCrop"
                     app:layout_collapseMode="parallax"
                     app:layout_scrollFlags="scroll|enterAlways" />
@@ -50,6 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
+                android:fitsSystemWindows="true"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
             </android.support.v7.widget.Toolbar>
 
