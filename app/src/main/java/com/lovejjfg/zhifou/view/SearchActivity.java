@@ -56,12 +56,10 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.lovejjfg.zhifou.presenters.SearchImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.SearchStoriesAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
 import com.lovejjfg.zhifou.util.ImeUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.ViewUtils;
