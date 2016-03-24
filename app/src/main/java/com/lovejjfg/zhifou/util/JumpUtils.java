@@ -25,11 +25,12 @@ public class JumpUtils {
         i.putExtra(Constants.ID, id);
         final ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(activity,
-                        Pair.create(itemView,
-                                activity.getResources().getString(R.string.detail_view))
-                );
+                        Pair.create(itemView, activity.getString(R.string
+                                .detail_container))
+                        );
         activity.startActivity(i, options.toBundle());
     }
+
     @SuppressWarnings("unchecked")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void jumpToDataPicker(Activity activity, View view) {
@@ -42,7 +43,7 @@ public class JumpUtils {
         activity.startActivity(i, options.toBundle());
     }
 
-    public static void jumpToSpecifiedDate(Activity activity,String date) {
+    public static void jumpToSpecifiedDate(Activity activity, String date) {
         Intent i = new Intent(activity, SpecifiedDateStory.class);
         i.putExtra(Constants.DATE, date);
         activity.startActivity(i);
@@ -50,13 +51,13 @@ public class JumpUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void jumpToDataPickerForResult(Activity activity, View view,int requestCode) {
+    public static void jumpToDataPickerForResult(Activity activity, View view, int requestCode) {
         Intent i = new Intent(activity, DatePick.class);
         i.putExtra(Constants.FIRST, false);
         final ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(activity,
                         Pair.create(view,
                                 activity.getString(R.string.date_picker)));
-        activity.startActivityForResult(i, requestCode,options.toBundle());
+        activity.startActivityForResult(i, requestCode, options.toBundle());
     }
 }
