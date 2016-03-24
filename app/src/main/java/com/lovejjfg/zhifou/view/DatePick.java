@@ -39,7 +39,7 @@ public class DatePick extends AppCompatActivity {
                     if (isFirst) {
                         JumpUtils.jumpToSpecifiedDate(DatePick.this, date);
                     }
-                    finish();
+                    finishAfterTransition();
                     Log.e("DATE-->", String.format("%d-%2d-%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
                 } else {
                     Log.e("DATE-->", "大于了今天");
