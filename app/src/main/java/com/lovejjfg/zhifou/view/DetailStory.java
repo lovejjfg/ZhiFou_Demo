@@ -24,6 +24,7 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
 import com.lovejjfg.zhifou.presenters.DetailPresenterImpl;
+import com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout;
 import com.lovejjfg.zhifou.ui.widget.ForegroundImageView;
 import com.lovejjfg.zhifou.util.ColorUtils;
 import com.lovejjfg.zhifou.util.GlideUtils;
@@ -33,31 +34,46 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DetailStory extends AppCompatActivity implements DetailPresenter.View {
+    /*mWeb = (WebView) findViewById(R.id.wbv);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-    private ForegroundImageView mHeaderImage;
-    private WebView mWeb;
-    private Toolbar toolbar;
-    private TextView mTittle;
+        mTittle = (TextView) findViewById(R.id.tv_tittle);*/
+    @Bind(R.id.wbv)
+    WebView mWeb;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.tv_tittle)
+    TextView mTittle;
     @Bind(R.id.fl_container)
     FrameLayout container;
 
+    @Bind(R.id.draggable_frame)
+    ElasticDragDismissFrameLayout dragDismissFrameLayout;
+
+    @Bind(R.id.iv_header)
+    ForegroundImageView mHeaderImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_story);
         ButterKnife.bind(this);
         initView();
         DetailPresenter detailPresenter = new DetailPresenterImpl(this);
         detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
+        dragDismissFrameLayout.addListener(new ElasticDragDismissFrameLayout.SystemChromeFader(getWindow()) {
+            @Override
+            public void onDragDismissed() {
+                finishAfterTransition();
+            }
+        });
 
     }
 
     @SuppressWarnings("ConstantConditions")
     private void initView() {
-        mHeaderImage = (ForegroundImageView) findViewById(R.id.iv_header);
-        mWeb = (WebView) findViewById(R.id.wbv);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        mTittle = (TextView) findViewById(R.id.tv_tittle);
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -194,7 +210,5 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
             return false;
 
         }
-
-
     };
 }

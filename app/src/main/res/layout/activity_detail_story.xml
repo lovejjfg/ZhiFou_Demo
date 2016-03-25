@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/parent_container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/draggable_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:transitionName="@string/detail_container">
+    android:transitionName="@string/detail_container"
+    app:dragDismissDistance="@dimen/drag_dismiss_distance"
+    app:dragDismissScale="0.95"
+    tools:context="io.plaidapp.ui.DribbbleShot">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_height="200dp"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -18,16 +23,15 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
             android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
                 android:id="@+id/fl_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                >
+                android:fitsSystemWindows="true">
 
                 <com.lovejjfg.zhifou.ui.widget.ForegroundImageView
                     android:id="@+id/iv_header"
@@ -43,12 +47,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textStyle="bold"
                     android:layout_marginBottom="16dp"
                     android:maxLines="2"
                     android:padding="16dp"
                     android:textColor="@color/white"
-                    android:textSize="22sp" />
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
             </FrameLayout>
 
@@ -56,9 +60,10 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
                 android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -66,4 +71,4 @@
 
     <include layout="@layout/content_scrolling" />
 
-</android.support.design.widget.CoordinatorLayout>
+</com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout>
