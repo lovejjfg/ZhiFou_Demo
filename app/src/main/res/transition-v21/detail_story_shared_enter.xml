@@ -24,7 +24,7 @@
 
     <changeBounds android:duration="500">
         <targets>
-            <target android:targetId="@id/parent_container" />
+            <target android:targetId="@id/draggable_frame" />
         </targets>
     </changeBounds>
 
