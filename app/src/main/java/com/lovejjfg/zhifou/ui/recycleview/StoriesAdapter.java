@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.ui.recycleview;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by lovejjfg on 2016/2/21.
+ * Created by Joe on 2016/2/21.
+ * Email lovejjfg@gmail.com
  */
 public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = StoriesAdapter.class.getSimpleName();
+    @NonNull
     protected List<Item> mItems;
+    @NonNull
     protected List<Item> mTmpItem;
+    @Nullable
     private OnItemClickListener listener;
     private boolean isLoading;
 
@@ -108,10 +114,11 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        Item item = null;
-        if (null != mItems && mItems.size() > 0 && position < mItems.size()) {
-            item = mItems.get(position);
+        Item item;
+        if (mItems.size() == 0 || position >= mItems.size() - 1) {
+            return;
         }
+        item = mItems.get(position);
         switch (viewType) {
             case Type.TYPE_HEADER:
                 ((HeaderViewPagerHolder) holder).bindHeaderView();
@@ -130,7 +137,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     public void onClick(View v) {
                         if (null != listener) {
 
-                            listener.onItemClick(holder.itemView,((StoryViewHolder) holder).getImage(),Integer.valueOf(finalItem.getStory().getId()));
+                            listener.onItemClick(holder.itemView, ((StoryViewHolder) holder).getImage(), Integer.valueOf(finalItem.getStory().getId()));
                         }
                     }
                 });

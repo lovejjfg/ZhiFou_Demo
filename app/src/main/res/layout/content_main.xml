@@ -5,22 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.MainActivity"
+    tools:context=".view.ListStory"
     tools:showIn="@layout/app_bar_main">
 
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-        <!--android:id="@+id/srl"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-
-
-        <!--<android.support.v7.widget.RecyclerView-->
-            <!--android:id="@+id/rcv"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent" />-->
-    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
     <com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView
         android:id="@+id/srrv"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
