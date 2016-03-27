@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.ui.widget;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,12 +12,13 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**
- * Created by zhangjun on 2016-03-11.
+ * Created by Joe on 2016-03-11.
+ * Email lovejjfg@gmail.com
  */
 public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
-
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
+    @Nullable
     private RecyclerView.LayoutManager manager;
 
     public SwipRefreshRecycleView(Context context) {
@@ -34,6 +36,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
 
     private void init(Context context) {
+
         mRefreshLayout = new SwipeRefreshLayout(context);
         mRecyclerView = new RecyclerView(context);
         mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -48,6 +51,13 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
     }
 
+    @SuppressWarnings("unused")
+    public void setItemAnimator(RecyclerView.ItemAnimator animator) {
+        mRecyclerView.setItemAnimator(animator);
+
+    }
+
+
     private RecyclerView.Adapter adapter;
 
     public void setAdapter(RecyclerView.Adapter adapter) {
@@ -56,12 +66,12 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
     }
 
     public void setRefresh(final boolean refresh) {
-            mRecyclerView.post(new Runnable() {
-                @Override
-                public void run() {
-                    mRefreshLayout.setRefreshing(refresh);
-                }
-            });
+        mRecyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(refresh);
+            }
+        });
     }
 
     @Override
@@ -102,7 +112,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
             if (manager instanceof LinearLayoutManager) {
                 int lastCompletelyVisibleItemPosition = ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
 
-                if (lastCompletelyVisibleItemPosition == adapter.getItemCount() - 1) {
+                if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition == adapter.getItemCount() - 1) {
                     if (null != listener) {
                         listener.onLoadMore();
                     }
@@ -138,11 +148,12 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
     }
 
     private OnScrollListener scrollListener;
+
     public void setOnScrollListener(OnScrollListener listener) {
         this.scrollListener = listener;
     }
 
-    public interface OnScrollListener{
+    public interface OnScrollListener {
         void onScrolled(SwipRefreshRecycleView recyclerView, int dx, int dy);
     }
 
