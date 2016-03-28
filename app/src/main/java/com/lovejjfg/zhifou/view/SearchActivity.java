@@ -336,6 +336,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
                 .start();
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.fab)
     protected void save() {
         // show the save confirmation bubble
@@ -405,6 +406,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
         });
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.save_confirmed)
     protected void doSave() {
 //        Intent saveData = new Intent();
