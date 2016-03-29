@@ -160,7 +160,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return mItems.size() + 1;
+        return mItems.size() == 0 ? 0 : mItems.size() + 1;
     }
 
     public Item getItem(int position) {
