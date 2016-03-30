@@ -39,6 +39,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
         mRefreshLayout = new SwipeRefreshLayout(context);
         mRecyclerView = new RecyclerView(context);
+        mRecyclerView.setVerticalScrollBarEnabled(true);
         mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
@@ -142,6 +143,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
             super.onScrollStateChanged(recyclerView, newState);
             Log.e("state", newState + "");
         }

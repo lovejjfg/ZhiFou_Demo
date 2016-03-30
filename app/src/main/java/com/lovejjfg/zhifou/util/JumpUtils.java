@@ -18,16 +18,18 @@ import com.lovejjfg.zhifou.view.SpecifiedDateStory;
  * Created by 张俊 on 2016/3/18.
  */
 public class JumpUtils {
-    @SuppressWarnings("unchecked")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void jumpToDetail(Activity activity, View itemView, int id) {
         Intent i = new Intent(activity, DetailStory.class);
         i.putExtra(Constants.ID, id);
+//        final ActivityOptions options =
+//                ActivityOptions.makeSceneTransitionAnimation(activity,
+//                        Pair.create(itemView, activity.getString(R.string
+//                                .detail_container))
+//                        );
         final ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(activity,
-                        Pair.create(itemView, activity.getString(R.string
-                                .detail_container))
-                        );
+                ActivityOptions.makeSceneTransitionAnimation(activity, itemView, activity.getString(R.string.detail_container));
+
         activity.startActivity(i, options.toBundle());
     }
 

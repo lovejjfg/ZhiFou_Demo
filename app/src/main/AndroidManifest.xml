@@ -31,6 +31,9 @@
             android:name=".view.DetailStory"
             android:theme="@style/AppTheme.Detail" />
         <activity
+            android:name=".view.DetailStory1"
+            android:theme="@style/AppTheme.Detail" />
+        <activity
             android:name=".view.SpecifiedDateStory"
             android:label="@string/title_activity_specified_date_story"
             android:theme="@style/AppTheme" />
