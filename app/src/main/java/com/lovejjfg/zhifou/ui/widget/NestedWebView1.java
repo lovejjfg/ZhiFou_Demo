@@ -25,6 +25,7 @@ public class NestedWebView1 extends FrameLayout implements NestedScrollingChild 
 
     private final NestedScrollingChildHelper mChildHelper = new NestedScrollingChildHelper(this);
     private int scrollRange;
+
     private int activePointerId = -1;
     private double mLastMotionY;
     private double yDiff;
@@ -69,12 +70,6 @@ public class NestedWebView1 extends FrameLayout implements NestedScrollingChild 
     private final int[] mScrollOffset = new int[2];
     private final int[] mScrollConsumed = new int[2];
     private int mNestedYOffset;
-    private int mLastTouchX;
-    private int mLastTouchY;
-    private int mScrollPointerId;
-    private int mInitialTouchX;
-    private int mInitialTouchY;
-    private int[] mNestedOffsets;
 
     /**
      * Sentinel value for no current active pointer.
