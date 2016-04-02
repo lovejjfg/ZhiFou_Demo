@@ -251,6 +251,7 @@ public class StickyScrollView extends ScrollView {
 			redirectTouchesToStickyView = false;
 		}
 		if(redirectTouchesToStickyView){
+			// TODO: 2016/4/2 what  this is mean??  纠正点击的位置？？
 			ev.offsetLocation(0, -1*((getScrollY() + stickyViewTopOffset) - getTopForViewRelativeOnlyChild(currentlyStickingView)));
 		}
 		return super.dispatchTouchEvent(ev);

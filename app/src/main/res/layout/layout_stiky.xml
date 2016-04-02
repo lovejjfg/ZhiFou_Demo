@@ -30,7 +30,7 @@
                 android:id="@+id/mybutton"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:text="hello world" />
+                android:text="hello" />
         </FrameLayout>
 
         <View
@@ -67,8 +67,8 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="100dip"
-            android:background="#ffcc9922"
-            android:tag="sticky" />
+            android:background="#cccc9922"
+            android:tag="sticky-hastransparancy" />
 
         <View
             android:layout_width="fill_parent"
