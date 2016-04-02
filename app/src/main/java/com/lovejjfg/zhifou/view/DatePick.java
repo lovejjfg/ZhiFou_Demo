@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.view;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -47,5 +49,8 @@ public class DatePick extends AppCompatActivity {
             }
         });
 
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage("正在获取微信授权！！");
+        dialog.show();
     }
 }

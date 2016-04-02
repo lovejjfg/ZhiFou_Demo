@@ -22,7 +22,8 @@
     <dimen name="display_4_text_size">112sp</dimen>
     <dimen name="divider_height">1px</dimen>
     <dimen name="dialog_corners">2dp</dimen>
-    <dimen name="padding_room_for_fab">88dp</dimen> <!-- padding_normal + fab_size + padding_normal -->
+    <dimen name="padding_room_for_fab">88dp
+    </dimen> <!-- padding_normal + fab_size + padding_normal -->
     <dimen name="fab_plus_single_padding">72dp</dimen> <!-- fab_size + padding_normal -->
     <dimen name="half_fab_plus_single_padding">44dp</dimen> <!-- (fab_size / 2) + padding_normal -->
     <dimen name="drag_dismiss_distance">112dp</dimen> <!-- 2 * ?android:actionBarSize -->
