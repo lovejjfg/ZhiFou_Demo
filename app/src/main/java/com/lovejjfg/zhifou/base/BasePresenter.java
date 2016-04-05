@@ -1,7 +1,7 @@
 package com.lovejjfg.zhifou.base;
 
 /**
- * Created by zhangjun on 2016-03-10.
+ * Created by Joe on 2016-03-10.
  * There are some base methods for Presenter in MVP.
  * At most,it's more about lifeRecycle.
  * You should make your PresenterInterface Extend this.

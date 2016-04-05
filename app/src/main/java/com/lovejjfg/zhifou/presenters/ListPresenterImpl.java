@@ -1,20 +1,11 @@
 package com.lovejjfg.zhifou.presenters;
 
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.os.Build;
-import android.util.Pair;
-import android.view.View;
 
-import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.util.JumpUtils;
-import com.lovejjfg.zhifou.view.DetailStory;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

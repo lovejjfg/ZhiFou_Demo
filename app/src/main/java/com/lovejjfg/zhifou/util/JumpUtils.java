@@ -13,6 +13,7 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.view.DatePick;
 import com.lovejjfg.zhifou.view.DetailStory;
 import com.lovejjfg.zhifou.view.SpecifiedDateStory;
+import com.lovejjfg.zhifou.view.Sticky;
 
 /**
  * Created by 张俊 on 2016/3/18.
@@ -36,7 +37,7 @@ public class JumpUtils {
     @SuppressWarnings("unchecked")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static void jumpToDataPicker(Activity activity, View view) {
-        Intent i = new Intent(activity, DatePick.class);
+        Intent i = new Intent(activity, Sticky.class);
         i.putExtra(Constants.FIRST, true);
         final ActivityOptions options =
                 ActivityOptions.makeSceneTransitionAnimation(activity,
