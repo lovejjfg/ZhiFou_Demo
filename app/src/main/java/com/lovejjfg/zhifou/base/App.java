@@ -6,7 +6,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by Joe on 2016-04-05
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@gmail.com
  */
 public class App extends Application {
     @Override
