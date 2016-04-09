@@ -18,11 +18,12 @@ package com.lovejjfg.zhifou.util;
 
 import android.animation.Animator;
 import android.animation.TimeInterpolator;
-import android.annotation.TargetApi;
-import android.os.Build;
+import android.content.Context;
 import android.transition.Transition;
 import android.util.ArrayMap;
 import android.util.Property;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,34 @@ import java.util.ArrayList;
 public class AnimUtils {
 
     private AnimUtils() { }
+
+    private static Interpolator fastOutSlowIn;
+    private static Interpolator fastOutLinearIn;
+    private static Interpolator linearOutSlowIn;
+
+    public static Interpolator getFastOutSlowInInterpolator(Context context) {
+        if (fastOutSlowIn == null) {
+            fastOutSlowIn = AnimationUtils.loadInterpolator(context,
+                    android.R.interpolator.fast_out_slow_in);
+        }
+        return fastOutSlowIn;
+    }
+
+    public static Interpolator getFastOutLinearInInterpolator(Context context) {
+        if (fastOutLinearIn == null) {
+            fastOutLinearIn = AnimationUtils.loadInterpolator(context,
+                    android.R.interpolator.fast_out_linear_in);
+        }
+        return fastOutLinearIn;
+    }
+
+    public static Interpolator getLinearOutSlowInInterpolator(Context context) {
+        if (linearOutSlowIn == null) {
+            linearOutSlowIn = AnimationUtils.loadInterpolator(context,
+                    android.R.interpolator.linear_out_slow_in);
+        }
+        return linearOutSlowIn;
+    }
 
     /**
      * Linear interpolate between a and b with parameter t.
@@ -103,7 +132,6 @@ public class AnimUtils {
      * Interrupting Activity transitions can yield an OperationNotSupportedException when the
      * transition tries to pause the animator. Yikes! We can fix this by wrapping the Animator:
      */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static class NoPauseAnimator extends Animator {
         private final Animator mAnimator;
         private final ArrayMap<AnimatorListener, AnimatorListener> mListeners =
@@ -260,7 +288,6 @@ public class AnimUtils {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     public static class TransitionListenerAdapter implements Transition.TransitionListener {
 
         @Override
