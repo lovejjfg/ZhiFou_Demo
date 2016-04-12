@@ -12,6 +12,7 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.view.DatePick;
 import com.lovejjfg.zhifou.view.DetailStory;
+import com.lovejjfg.zhifou.view.ScrollingActivity;
 import com.lovejjfg.zhifou.view.SpecifiedDateStory;
 import com.lovejjfg.zhifou.view.Sticky;
 
@@ -28,10 +29,12 @@ public class JumpUtils {
 //                        Pair.create(itemView, activity.getString(R.string
 //                                .detail_container))
 //                        );
-        final ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(activity, itemView, activity.getString(R.string.detail_container));
+//        final ActivityOptions options =
+//                ActivityOptions.makeSceneTransitionAnimation(activity, itemView, activity.getString(R.string.detail_container));
+//
+//        activity.startActivity(i, options.toBundle());
+        activity.startActivity(new Intent(activity, ScrollingActivity.class));
 
-        activity.startActivity(i, options.toBundle());
     }
 
     @SuppressWarnings("unchecked")

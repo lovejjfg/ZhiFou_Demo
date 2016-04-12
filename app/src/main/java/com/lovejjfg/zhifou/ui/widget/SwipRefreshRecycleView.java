@@ -36,7 +36,6 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
 
     private void init(Context context) {
-
         mRefreshLayout = new SwipeRefreshLayout(context);
         mRecyclerView = new RecyclerView(context);
         mRecyclerView.setVerticalScrollBarEnabled(true);

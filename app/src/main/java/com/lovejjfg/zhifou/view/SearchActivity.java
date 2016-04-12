@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
         searchBackContainer.setTranslationX(searchBackDistanceX);
         searchBackContainer.animate()
                 .translationX(0f)
-                .setDuration(650L)
+                .setDuration(6500L)
                 .setInterpolator(AnimationUtils.loadInterpolator(this,
                         android.R.interpolator.fast_out_slow_in));
         // transform from search icon to back icon
@@ -178,12 +178,12 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
                 searchBack.setImageDrawable(ContextCompat.getDrawable(SearchActivity.this,
                         R.drawable.ic_arrow_back_padded));
             }
-        }, 600L);
+        }, 6000);
 
         // fade in the other search chrome
         searchBackground.animate()
                 .alpha(1f)
-                .setDuration(300L)
+                .setDuration(800L)
                 .setInterpolator(AnimationUtils.loadInterpolator(this,
                         android.R.interpolator.linear_out_slow_in));
         searchView.animate()
@@ -219,7 +219,7 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
                                 ViewUtils.BACKGROUND_COLOR,
                                 Color.TRANSPARENT,
                                 ContextCompat.getColor(SearchActivity.this, R.color.scrim)));
-                showScrim.setDuration(400L);
+                showScrim.setDuration(6000L);
                 showScrim.setInterpolator(AnimationUtils.loadInterpolator(SearchActivity.this,
                         android.R.interpolator.linear_out_slow_in));
                 showScrim.start();

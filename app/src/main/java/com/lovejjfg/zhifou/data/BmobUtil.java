@@ -3,7 +3,6 @@ package com.lovejjfg.zhifou.data;
 import android.content.Context;
 import android.text.Html;
 import android.text.TextUtils;
-import android.text.method.NumberKeyListener;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -49,6 +48,7 @@ public class BmobUtil {
         }
         Person person = new Person("张三", "杭州");
         RequestBody body = RequestBody.create(JSON, gson.toJson(person));
+
         Request insert = new Request.Builder()
                 .url(URL_INSERT)
                 .addHeader("Content-Type", "application/json")
