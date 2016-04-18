@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.lovejjfg.zhifou.R;
 
-public class Sticky extends AppCompatActivity {
+public class sticky extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

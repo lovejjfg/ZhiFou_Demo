@@ -41,7 +41,7 @@
         <activity
             android:name=".view.SearchActivity"
             android:theme="@style/ZhiFou.Translucent.Search"/>
-        <activity android:name=".view.Sticky"/>
+        <activity android:name=".view.sticky"/>
         <activity android:name=".view.ScrollingActivity" />
     </application>
 
