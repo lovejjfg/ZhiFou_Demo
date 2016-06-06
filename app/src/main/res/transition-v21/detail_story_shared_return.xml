@@ -19,17 +19,25 @@
     android:interpolator="@android:interpolator/fast_out_slow_in"
     android:transitionOrdering="together">
 
-    <changeBounds>
-        <targets>
-            <target android:targetId="@id/draggable_frame" />
-        </targets>
-    </changeBounds>
+    <!--<changeBounds>-->
+    <!--<targets>-->
+    <!--<target android:targetId="@id/container" />-->
+    <!--</targets>-->
+    <!--</changeBounds>-->
 
     <changeBounds>
         <targets>
-            <target android:targetId="@id/iv_header" />
+            <target android:targetId="@id/parent_container" />
         </targets>
     </changeBounds>
+
+    <transitionSet>
+        <targets>
+            <target android:targetId="@id/iv_header" />
+        </targets>
+        <!--<changeClipBounds/>-->
+        <!--<changeImageTransform/>-->
+    </transitionSet>
 
 
 </transitionSet>

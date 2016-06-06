@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2015 Google Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,32 +14,31 @@
   limitations under the License.
   -->
 
-<transitionSet
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
     android:interpolator="@android:interpolator/fast_out_slow_in"
-    android:transitionOrdering="together"
-    android:duration="500">
+    android:transitionOrdering="together">
 
 
     <changeBounds android:duration="500">
         <targets>
-            <target android:targetId="@id/draggable_frame" />
+            <target android:targetId="@id/iv_header" />
         </targets>
     </changeBounds>
 
-    <changeBounds android:duration="500">
+
+    <transition class="com.lovejjfg.zhifou.transitions.DetailSharedEnter" >
         <targets>
-            <target android:targetId="@id/wbv" />
+            <target android:targetId="@id/parent_container" />
         </targets>
-    </changeBounds>
 
 
+    </transition>
 
 
-    <!--<transition class="com.lovejjfg.zhifou.transitions.DetailSharedEnter">-->
-        <!--<targets>-->
-            <!--<target android:targetId="@id/iv_header" />-->
-        <!--</targets>-->
-    <!--</transition>-->
+    <!--<changeBounds android:duration="500">--><!--<targets>--><!--<target android:targetId="@id/" />--><!--</targets>--><!--</changeBounds>-->
+
+
+    <!--<transition class="com.lovejjfg.zhifou.transitions.DetailSharedEnter">--><!--<targets>--><!--<target android:targetId="@id/iv_header" />--><!--</targets>--><!--</transition>-->
 
 </transitionSet>
