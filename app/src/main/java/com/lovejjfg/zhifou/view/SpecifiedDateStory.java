@@ -63,7 +63,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
     @Override
     public void onItemClick(View itemView, ImageView image, int id) {
-        JumpUtils.jumpToDetail(this, itemView, id);
+        JumpUtils.jumpToDetail(this, itemView, image, id);
     }
 
     @Override

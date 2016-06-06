@@ -19,16 +19,19 @@ import com.lovejjfg.zhifou.view.SpecifiedDateStory;
  */
 public class JumpUtils {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static void jumpToDetail(Activity activity, View itemView, int id) {
+    public static void jumpToDetail(Activity activity, View itemView, View imageView, int id) {
         Intent i = new Intent(activity, DetailStory.class);
         i.putExtra(Constants.ID, id);
-//        final ActivityOptions options =
-//                ActivityOptions.makeSceneTransitionAnimation(activity,
-//                        Pair.create(itemView, activity.getString(R.string
-//                                .detail_container))
-//                        );
         final ActivityOptions options =
-                ActivityOptions.makeSceneTransitionAnimation(activity, itemView, activity.getString(R.string.detail_container));
+                ActivityOptions.makeSceneTransitionAnimation(activity,
+                        Pair.create(imageView, activity.getString(R.string
+                                .header_image)),
+                        Pair.create(itemView, activity.getString(R.string
+                                .detail_container))
+
+                        );
+//        final ActivityOptions options =
+//                ActivityOptions.makeSceneTransitionAnimation(activity, itemView, activity.getString(R.string.header_image));
 
         activity.startActivity(i, options.toBundle());
     }

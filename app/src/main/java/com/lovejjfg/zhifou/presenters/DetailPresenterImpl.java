@@ -2,6 +2,7 @@ package com.lovejjfg.zhifou.presenters;
 
 import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.Story;
@@ -19,10 +20,13 @@ public class DetailPresenterImpl implements DetailPresenter {
     private boolean isLoading;
     View view;
     Activity activity;
+//    private final ExecutorService service;
 
     public DetailPresenterImpl(View view) {
         this.view = view;
-        this.activity = (Activity) view;
+        activity = (Activity) view;
+//        service = Executors.newCachedThreadPool();
+
     }
 
     @Override
@@ -73,6 +77,10 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void onDestroy() {
+        Log.i("TAG", "onDestroy: xxxxxxx");
+//        service.shutdownNow();
+        activity = null;
+        view = null;
 
     }
 }

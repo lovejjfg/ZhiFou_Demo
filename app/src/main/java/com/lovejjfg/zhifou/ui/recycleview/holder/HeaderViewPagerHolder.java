@@ -98,7 +98,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
             iv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JumpUtils.jumpToDetail(((Activity) container.getContext()), iv, Integer.valueOf(story.getId()));
+                    JumpUtils.jumpToDetail(((Activity) container.getContext()), iv, iv, Integer.valueOf(story.getId()));
                 }
             });
             Glide.with(container.getContext()).load(story.getImage()).into(iv.mImageView);

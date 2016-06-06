@@ -586,6 +586,6 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
 
     @Override
     public void onItemClick(View itemView, ImageView image, int id) {
-        JumpUtils.jumpToDetail(this, itemView, id);
+        JumpUtils.jumpToDetail(this, itemView, image, id);
     }
 }

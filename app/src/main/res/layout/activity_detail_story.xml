@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/draggable_frame"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionName="@string/detail_container"
-    app:dragDismissDistance="@dimen/drag_dismiss_distance"
-    app:dragDismissScale="0.95"
-    tools:context="io.plaidapp.ui.DribbbleShot">
+    tools:context=".view.DetailStory">
 
 
     <android.support.design.widget.AppBarLayout
@@ -71,4 +69,4 @@
 
     <include layout="@layout/content_scrolling" />
 
-</com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout>
+</android.support.design.widget.CoordinatorLayout>

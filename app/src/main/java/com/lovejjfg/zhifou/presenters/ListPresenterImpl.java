@@ -39,7 +39,7 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
 
     @Override
     public void onItemClicked(android.view.View itemView, android.view.View image, int id) {
-        JumpUtils.jumpToDetail(activity,itemView, id);
+        JumpUtils.jumpToDetail(activity,itemView,image, id);
     }
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 //    private void jumpToDetail(android.view.View itemView, int id) {

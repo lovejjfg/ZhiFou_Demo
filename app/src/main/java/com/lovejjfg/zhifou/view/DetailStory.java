@@ -1,18 +1,20 @@
 package com.lovejjfg.zhifou.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -25,71 +27,126 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
 import com.lovejjfg.zhifou.presenters.DetailPresenterImpl;
 import com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout;
-import com.lovejjfg.zhifou.ui.widget.ForegroundImageView;
+import com.lovejjfg.zhifou.ui.widget.ParallaxScrimageView;
+import com.lovejjfg.zhifou.util.AnimUtils;
 import com.lovejjfg.zhifou.util.ColorUtils;
 import com.lovejjfg.zhifou.util.GlideUtils;
 import com.lovejjfg.zhifou.util.ViewUtils;
+import com.lovejjfg.zhifou.util.glide.ColorFilterTransformation;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DetailStory extends AppCompatActivity implements DetailPresenter.View {
-    /*mWeb = (WebView) findViewById(R.id.wbv);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        mTittle = (TextView) findViewById(R.id.tv_tittle);*/
+//    @Bind(R.id.container)
+//    CoordinatorLayout parent;
+//    @Bind(R.id.app_bar)
+//    AppBarLayout appBarLayout;
     @Bind(R.id.wbv)
     WebView mWeb;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.tv_tittle)
-    TextView mTittle;
-    @Bind(R.id.fl_container)
-    FrameLayout container;
+//    @Bind(R.id.toolbar)
+//    Toolbar toolbar;
+//    @Bind(R.id.tv_tittle)
+//    TextView mTittle;
+//    @Bind(R.id.fl_container)
+//    FrameLayout container;
 
-    @Bind(R.id.draggable_frame)
+    @Bind(R.id.scroll_view)
+    NestedScrollView mScrollView;
+    @Bind(R.id.parent_container)
     ElasticDragDismissFrameLayout dragDismissFrameLayout;
 
     @Bind(R.id.iv_header)
-    ForegroundImageView mHeaderImage;
+    ParallaxScrimageView mHeaderImage;
+    private DetailPresenter detailPresenter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_story);
+        setContentView(R.layout.activity_detail_story1);
         ButterKnife.bind(this);
         initView();
-        DetailPresenter detailPresenter = new DetailPresenterImpl(this);
+        detailPresenter = new DetailPresenterImpl(this);
         detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
         dragDismissFrameLayout.addListener(new ElasticDragDismissFrameLayout.SystemChromeFader(getWindow()) {
             @Override
             public void onDragDismissed() {
-                finishAfterTransition();
+                expandImageAndFinish();
             }
         });
+        mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                Log.i("TAG", "onScrollChange: "+scrollY);
+                mHeaderImage.setOffset(-scrollY);
+            }
+        });
+    }
 
+    @Override
+    public void onBackPressed() {
+        expandImageAndFinish();
+    }
+
+    @Override
+    public boolean onNavigateUp() {
+        expandImageAndFinish();
+        return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        detailPresenter.onDestroy();
+    }
+
+    private void expandImageAndFinish() {
+        if (mHeaderImage.getOffset() != 0f) {
+            Animator expandImage = ObjectAnimator.ofFloat(mHeaderImage, ParallaxScrimageView.OFFSET,
+                    0f);
+            expandImage.setDuration(80);
+            expandImage.setInterpolator(AnimUtils.getFastOutSlowInInterpolator(getApplicationContext()));
+            expandImage.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    finishAfterTransition();
+                }
+            });
+            expandImage.start();
+        } else {
+            finishAfterTransition();
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
     private void initView() {
 
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DetailStory.this.finishAfterTransition();
-            }
-        });
+//
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DetailStory.this.finishAfterTransition();
+//            }
+//        });
+//        int totalScrollRange = appBarLayout.getTotalScrollRange();
+//        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                Log.i("TAG", "onOffsetChanged: " + verticalOffset);
+//                boolean expanded = verticalOffset == 0;
+//            }
+//        });
 
     }
 
     @Override
     public void isLoading(boolean isLoading) {
-
+        Log.i("TAG", "isLoading: "+isLoading);
     }
 
     @Override
@@ -99,12 +156,17 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     @Override
     public void onBindImage(String image) {
-        Glide.with(this)
+        Glide.with(getApplicationContext())
                 .load(image)
                 .listener(shotLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .priority(Priority.IMMEDIATE)
+//                .thumbnail(0.1f)
+//                .fitCenter()
+//                .bitmapTransform()
+                .bitmapTransform(new ColorFilterTransformation(getApplicationContext(), Color.RED))
                 .into(mHeaderImage);
+
         mHeaderImage.setVisibility(View.VISIBLE);
     }
 
@@ -115,7 +177,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     @Override
     public void onBindTittle(String title) {
-        mTittle.setText(title);
+//        mTittle.setText(title);
     }
 
     private RequestListener shotLoadListener = new RequestListener<String, GlideDrawable>() {
@@ -188,24 +250,24 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 //                            }
 
                     });
-            Palette.from(bitmap)
-                    .clearFilters() // by default palette ignore certain hues (e.g. pure
-                            // black/white) but we don't want this.
-                    .generate(new Palette.PaletteAsyncListener() {
-                        @TargetApi(Build.VERSION_CODES.M)
-                        @Override
-                        public void onGenerated(Palette palette) {
-                            // color the ripple on the image spacer (default is grey)
-                            // slightly more opaque ripple on the pinned image to compensate
-                            // for the scrim
-                            container.setBackground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
-                                    ContextCompat.getColor(DetailStory.this, R.color.mid_grey),
-                                    true));
-                            mHeaderImage.setForeground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
-                                    ContextCompat.getColor(DetailStory.this, R.color.mid_grey),
-                                    true));
-                        }
-                    });
+//            Palette.from(bitmap)
+//                    .clearFilters() // by default palette ignore certain hues (e.g. pure
+//                            // black/white) but we don't want this.
+//                    .generate(new Palette.PaletteAsyncListener() {
+//                        @TargetApi(Build.VERSION_CODES.M)
+//                        @Override
+//                        public void onGenerated(Palette palette) {
+//                            // color the ripple on the image spacer (default is grey)
+//                            // slightly more opaque ripple on the pinned image to compensate
+//                            // for the scrim
+//                            container.setBackground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
+//                                    ContextCompat.getColor(DetailStory.this, R.color.mid_grey),
+//                                    true));
+//                            mHeaderImage.setForeground(ViewUtils.createRipple(palette, 0.3f, 0.6f,
+//                                    ContextCompat.getColor(DetailStory.this, R.color.mid_grey),
+//                                    true));
+//                        }
+//                    });
             mHeaderImage.setBackground(null);
             return false;
 
