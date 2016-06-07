@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,13 +13,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.Story;
+import com.lovejjfg.zhifou.util.glide.CircleTransform;
 
 
 /**
  * Created by Aspsine on 2015/3/11.
  */
 public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    public CardView card;
+//    public CardView card;
+    public FrameLayout card;
     public TextView text;
     public TextView theme;
 
@@ -40,7 +43,8 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
         super(itemView);
 
 
-        card = (CardView) itemView.findViewById(R.id.card);
+//        card = (CardView) itemView.findViewById(R.id.card);
+        card = (FrameLayout) itemView.findViewById(R.id.card);
         text = (TextView) itemView.findViewById(R.id.text);
         image = (ImageView) itemView.findViewById(R.id.image);
         ivMultiPic = (ImageView) itemView.findViewById(R.id.ivMultiPic);
@@ -49,6 +53,8 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
         line = (ImageView) itemView.findViewById(R.id.line);
         card.setOnClickListener(this);
         theme.setOnClickListener(this);
+//        CardView cardView = new CardView(itemView.getContext());
+
     }
 
     @Override
@@ -97,7 +103,12 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
             image.setVisibility(View.GONE);
         } else {
             image.setVisibility(View.VISIBLE);
-            Glide.with(image.getContext()).load(imageUrl).into(image);
+            Glide.with(image.getContext())
+                    .load(imageUrl)
+                    .placeholder(R.mipmap.ic_launcher)
+                    .crossFade(R.anim.fade_out_rapidly, 5000)
+                    .transform(new CircleTransform(image.getContext()))
+                    .into(image);
         }
     }
 }

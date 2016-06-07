@@ -32,6 +32,7 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Nullable
     private OnItemClickListener listener;
     private boolean isLoading;
+    public HeaderViewPagerHolder headerViewPagerHolder;
 
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -96,7 +97,8 @@ public class StoriesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (viewType) {
             case Type.TYPE_HEADER:
                 itemView = UIUtils.inflate(R.layout.recycler_header_viewpager, parent);
-                return new HeaderViewPagerHolder(itemView, mItems.get(0).getStories());
+                headerViewPagerHolder = new HeaderViewPagerHolder(itemView, mItems.get(0).getStories());
+                return headerViewPagerHolder;
             case Type.TYPE_DATE:
                 itemView = UIUtils.inflate(R.layout.recycler_item_date, parent);
                 return new DateViewHolder(itemView);

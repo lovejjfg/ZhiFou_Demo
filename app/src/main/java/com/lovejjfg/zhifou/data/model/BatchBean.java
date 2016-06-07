@@ -28,12 +28,12 @@ public class BatchBean {
     "method": "POST",
     "path": "/1/classes/TableName",
      */
-    public static class RequestsEntity {
-        private BodyEntity body;
+    public static  class RequestsEntity<T> {
+        private T body;
         private String method;
         private String path;
 
-        public void setBody(BodyEntity body) {
+        public void setBody(T body) {
             this.body = body;
         }
 
@@ -45,7 +45,7 @@ public class BatchBean {
             this.path = path;
         }
 
-        public BodyEntity getBody() {
+        public T getBody() {
             return body;
         }
 

@@ -16,6 +16,7 @@ import com.lovejjfg.zhifou.ui.widget.TopViewPager;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.ListUtils;
 
+import java.security.PublicKey;
 import java.util.List;
 
 
@@ -24,14 +25,14 @@ import java.util.List;
  */
 public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
     private static final String TAG = HeaderViewPagerHolder.class.getSimpleName();
-    private TopViewPager viewPager;
+    public TopViewPager viewPager;
     private SlidingCircleLayout indicator;
     private PagerAdapter mPagerAdapter;
 
     public HeaderViewPagerHolder(@Nullable View itemView, List<Story> stories) {
         super(itemView);
 
-        viewPager = (TopViewPager) itemView.findViewById(R.id.viewPager);
+         viewPager = (TopViewPager) itemView.findViewById(R.id.viewPager);
 
         indicator = (SlidingCircleLayout) itemView.findViewById(R.id.scl);
         if (ListUtils.isEmpty(stories)) {
