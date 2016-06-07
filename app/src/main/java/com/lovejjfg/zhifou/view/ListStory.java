@@ -82,19 +82,43 @@ public class ListStory extends AppCompatActivity
     private Dialog dialog;
     private Toolbar toolbar;
     private View searchMenuView;
+    private int startX;
+    private int startY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        View view = findViewById(R.id.view);
-//        view.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                adapter.headerViewPagerHolder.viewPager.onTouchEvent(event);
-//                return true;
-//            }
-//        });
+        final View view = findViewById(R.id.view);
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent ev) {
+                switch (ev.getAction()) {
+                    case MotionEvent.ACTION_DOWN://有事件先拦截再说！！
+                        startX = (int) ev.getRawX();
+                        startY = (int) ev.getRawY();
+                        view.getParent().requestDisallowInterceptTouchEvent(true);
+                        break;
+                    case MotionEvent.ACTION_MOVE://移动的时候
+                        int endX = (int) ev.getRawX();
+                        int endY = (int) ev.getRawY();
+                        //判断四种情况：
+                        //3.上下互动，需要ListView来响应。
+                        if (Math.abs(endX - startX) < (Math.abs(endY - startY))) {
+                            view.getParent().requestDisallowInterceptTouchEvent(false);
+                            break;
+                        }
+                }
+
+                return adapter.headerViewPagerHolder.viewPager.dispatchTouchEvent(ev);
+            }
+        });
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.headerViewPagerHolder.viewPager.performClick();
+            }
+        });
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("首页");

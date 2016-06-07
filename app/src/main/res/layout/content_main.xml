@@ -15,18 +15,31 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <View
-            android:id="@+id/view"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:background="@color/cardview_shadow_start_color"/>
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@color/cardview_shadow_start_color"/>
+
+            <TextView
+                android:background="@color/cardview_shadow_start_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/large_text"
+                />
+        </LinearLayout>
+
+
+    </ScrollView>
 
 
 </RelativeLayout>
