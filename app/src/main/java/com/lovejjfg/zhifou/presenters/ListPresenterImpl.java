@@ -7,9 +7,9 @@ import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.util.JumpUtils;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -40,7 +40,7 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
 
     @Override
     public void onItemClicked(android.view.View itemView, android.view.View image, int id) {
-        JumpUtils.jumpToDetail(activity,itemView,image, id);
+        JumpUtils.jumpToDetail(activity, itemView, image, id);
     }
 //    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 //    private void jumpToDetail(android.view.View itemView, int id) {
@@ -123,20 +123,23 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
         if (!isLoadingMore) {
             mView.isLoadingMore(true);
             isLoadingMore = true;
-            BaseDataManager.getDailyApiService().getBeforeDailyStories(date, new Callback<DailyStories>() {
+            Call<DailyStories> stories = BaseDataManager.getDailyApiService().getBeforeDailyStories(date);
+            stories.enqueue(new Callback<DailyStories>() {
                 @Override
-                public void success(DailyStories dailyStories, Response response) {
-                    mView.onLoadMore(dailyStories);
+                public void onResponse(Call<DailyStories> call, Response<DailyStories> response) {
+                    mView.onLoadMore(response.body());
                     mView.isLoadingMore(false);
                     isLoadingMore = false;
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
-                    mView.onLoadError(error.toString());
+                public void onFailure(Call<DailyStories> call, Throwable t) {
+                    mView.onLoadError(t.toString());
                     isLoadingMore = false;
                 }
+
             });
+//            BaseDataManager.getDailyApiService().getBeforeDailyStories(date,
         }
 
 

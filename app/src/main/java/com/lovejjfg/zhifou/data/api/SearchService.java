@@ -1,18 +1,14 @@
 package com.lovejjfg.zhifou.data.api;
 
-import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.data.model.SearchResult;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 
-import java.util.List;
-
-import retrofit.Callback;
-import retrofit.http.GET;
-import retrofit.http.Path;
 
 /**
  * Created by zhangjun on 2016-03-19.
  */
 public interface SearchService {
     @GET("/search/{query}")
-    void getSearchInfo(@Path("query") String query, Callback<String> callback);
+    Call<String> getSearchInfo(@Path("query") String query);
 }

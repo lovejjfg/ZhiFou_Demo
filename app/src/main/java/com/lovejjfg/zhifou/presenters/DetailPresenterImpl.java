@@ -8,9 +8,9 @@ import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.util.WebUtils;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zhangjun on 2016-03-01.
@@ -40,9 +40,12 @@ public class DetailPresenterImpl implements DetailPresenter {
         if (!isLoading) {
             view.isLoading(true);
             isLoading = true;
-            BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id), new Callback<Story>() {
+            Call<Story> storyDetail =
+                    BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id));
+            storyDetail.enqueue(new Callback<Story>() {
                 @Override
-                public void success(Story story, Response response) {
+                public void onResponse(Call<Story> call, Response<Story> response) {
+                    Story story = response.body();
                     if (!TextUtils.isEmpty(story.getImage())) {
                         view.onBindImage(story.getImage());
                     }
@@ -56,7 +59,7 @@ public class DetailPresenterImpl implements DetailPresenter {
                 }
 
                 @Override
-                public void failure(RetrofitError error) {
+                public void onFailure(Call<Story> call, Throwable t) {
 
                 }
             });

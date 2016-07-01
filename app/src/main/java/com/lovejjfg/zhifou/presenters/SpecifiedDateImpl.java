@@ -7,16 +7,16 @@ import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.view.SpecifiedDateView;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by zhangjun on 2016-03-19.
  */
 public class SpecifiedDateImpl implements SpecifiedDatePresenter {
 
-   SpecifiedDateView view;
+    SpecifiedDateView view;
     Activity activity;
 
     public SpecifiedDateImpl(SpecifiedDateView view) {
@@ -29,15 +29,18 @@ public class SpecifiedDateImpl implements SpecifiedDatePresenter {
     @Override
     public void onLoading(String date) {
         view.isLoading(true);
-        BaseDataManager.getDailyApiService().getBeforeDailyStories(date, new Callback<DailyStories>() {
+        Call<DailyStories> beforeDailyStories =
+                BaseDataManager.getDailyApiService().getBeforeDailyStories(date);
+        beforeDailyStories.enqueue(new Callback<DailyStories>() {
             @Override
-            public void success(DailyStories dailyStories, Response response) {
-                view.onLoadMore(dailyStories);
+            public void onResponse(Call<DailyStories> call, Response<DailyStories> response) {
+                DailyStories body = response.body();
+                view.onLoadMore(body);
                 view.isLoading(false);
             }
 
             @Override
-            public void failure(RetrofitError error) {
+            public void onFailure(Call<DailyStories> call, Throwable t) {
                 view.isLoading(false);
             }
         });

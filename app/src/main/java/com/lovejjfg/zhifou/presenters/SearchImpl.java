@@ -1,33 +1,14 @@
 package com.lovejjfg.zhifou.presenters;
 
-import android.text.Html;
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.lovejjfg.zhifou.constant.Constants;
-import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.BmobUtil;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.lovejjfg.zhifou.view.SearchView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.text.BreakIterator;
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -58,7 +39,7 @@ public class SearchImpl implements SearchPresenter {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                List<SearchResult> searchResult = BmobUtil.getSearchResult(URL+info);
+                List<SearchResult> searchResult = BmobUtil.getSearchResult(URL + info);
                 if (null == searchResult) {
                     subscriber.onCompleted();
                 } else {
