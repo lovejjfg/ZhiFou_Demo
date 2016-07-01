@@ -1,17 +1,14 @@
 package com.lovejjfg.zhifou.view;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -21,26 +18,17 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.data.BaseDataManager;
-import com.lovejjfg.zhifou.data.BmobUtil;
-import com.lovejjfg.zhifou.data.ContactUtils;
-import com.lovejjfg.zhifou.data.model.BatchBean;
-import com.lovejjfg.zhifou.data.model.BatchResultBean;
-import com.lovejjfg.zhifou.data.model.ContactBean;
 import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.data.model.ResultBean;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
@@ -48,20 +36,6 @@ import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
 import com.lovejjfg.zhifou.util.JumpUtils;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import retrofit.RetrofitError;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
@@ -198,157 +172,6 @@ public class ListStory extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {//获取数据库的相关信息
-            dialog.show();
-            i = 0;
-            BaseDataManager.getBombApiService().getDbInfos()
-                    .subscribeOn(Schedulers.io())
-                    .flatMap(new Func1<ResultBean, Observable<ResultBean.ResultsEntity>>() {
-                        @Override
-                        public Observable<ResultBean.ResultsEntity> call(ResultBean resultBean) {
-                            bar.setMax(resultBean.getResults().size());
-                            return Observable.from(resultBean.getResults());//这里出去的就是一个一个的用户信息了！
-                        }
-                    })
-                    .filter(new Func1<ResultBean.ResultsEntity, Boolean>() {
-                        @Override
-                        public Boolean call(ResultBean.ResultsEntity resultsEntity) {
-                            return resultsEntity.getName() != null;
-                        }
-                    })
-                    .observeOn(Schedulers.io())
-                    .map(new Func1<ResultBean.ResultsEntity, Integer>() {
-                        @Override
-                        public Integer call(ResultBean.ResultsEntity resultsEntity) {
-                            try {
-                                ContactUtils.addContact2(ListStory.this, resultsEntity);
-                                return ++i;
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                return 0;
-                            }
-                        }
-
-
-                    })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Integer>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(Integer resultsEntity) {
-                            bar.setProgress(resultsEntity);
-                            Log.e("插入：", resultsEntity.toString());
-                        }
-                    });
-
-        } else if (id == R.id.nav_slideshow) {
-            int hasWriteContactsPermission = checkSelfPermission(Manifest.permission_group.CONTACTS);
-            if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
-                new Thread() {
-                    @TargetApi(Build.VERSION_CODES.M)
-                    @Override
-                    public void run() {
-                        try {
-                            List<ContactBean> contacts = ContactUtils.getContacts(ListStory.this);
-                            for (ContactBean bean : contacts) {
-                                BmobUtil.sendContact(ListStory.this, bean, new Callback() {
-                                    @Override
-                                    public void onFailure(Request request, IOException e) {
-
-                                    }
-
-                                    @Override
-                                    public void onResponse(Response response) throws IOException {
-                                        response.body().close();
-                                    }
-                                });
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }.start();
-            }
-
-
-        } else if (id == R.id.nav_manage) {
-//            /**
-//             * 单个插入
-//             */
-//            Log.e("请求开始了！！", "");
-//            ContactBean bean = new ContactBean();
-//            bean.setMobile("999999");
-//            bean.setName("zhangsan");
-//            BaseDataManager.getBombApiService().insertInfoDb(bean, new retrofit.Callback<ContactBean>() {
-//                @Override
-//                public void success(ContactBean dailyStories, retrofit.client.Response response) {
-//                    Log.e("插入表", "成功！！！" + dailyStories.toString());
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Log.e("插入表", "失败！！！" + error.getMessage());
-//                }
-//            });
-
-            /**
-             * 批量插入
-             */
-            BatchBean batchBean = new BatchBean();
-            final BatchBean.RequestsEntity entity = new BatchBean.RequestsEntity();
-            entity.setPath("/1/classes/Contacts");
-            entity.setMethod("POST");
-            entity.setBody(new BatchBean.RequestsEntity.BodyEntity("zhangwang", "136474"));
-
-            ArrayList<BatchBean.RequestsEntity> beans = new ArrayList<>();
-            beans.add(entity);
-            batchBean.setRequests(beans);
-            BaseDataManager.getBombApiService().insertDbInfos(batchBean, new retrofit.Callback<List<BatchResultBean>>() {
-                @Override
-                public void success(List<BatchResultBean> batchResultBeans, retrofit.client.Response response) {
-                    Log.e("Success", batchResultBeans.get(0).toString());
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.e("Failed", error.getMessage());
-                }
-            });
-
-        } else if (id == R.id.nav_share)
-
-        {
-
-        } else if (id == R.id.nav_send)
-
-        {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     @Override
     public void onLoadMore(DailyStories stories) {
         adapter.appendList(stories);
@@ -459,5 +282,10 @@ public class ListStory extends AppCompatActivity
         if (requestCode == RC_SEARCH) {
             searchMenuView.setAlpha(1.0f);
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        return false;
     }
 }
