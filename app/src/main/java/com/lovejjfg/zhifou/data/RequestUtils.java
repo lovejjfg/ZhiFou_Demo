@@ -4,7 +4,7 @@ import okhttp3.Request;
 
 /**
  * Created by Joe on 2016-05-27
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 public class RequestUtils {
     private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";

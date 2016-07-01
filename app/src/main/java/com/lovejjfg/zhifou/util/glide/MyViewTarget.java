@@ -6,7 +6,7 @@ import com.bumptech.glide.request.target.ViewTarget;
 
 /**
  * Created by Joe on 2016-06-06
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 public class MyViewTarget extends ViewTarget<MyFrameLayout, GlideDrawable> {
     public MyViewTarget(MyFrameLayout view) {

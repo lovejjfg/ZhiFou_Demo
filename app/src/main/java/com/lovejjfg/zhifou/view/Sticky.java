@@ -8,7 +8,7 @@ import com.lovejjfg.zhifou.R;
 
 /**
  * Created by Joe on 2016-05-10
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 public class Sticky extends AppCompatActivity {
     @Override

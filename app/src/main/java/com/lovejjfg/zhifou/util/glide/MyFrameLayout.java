@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 /**
  * Created by Joe on 2016-06-06
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 public class MyFrameLayout extends FrameLayout {
 

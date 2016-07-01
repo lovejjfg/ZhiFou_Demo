@@ -21,7 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 
 /**
  * Created by Joe on 2016-06-06
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 
 /**
