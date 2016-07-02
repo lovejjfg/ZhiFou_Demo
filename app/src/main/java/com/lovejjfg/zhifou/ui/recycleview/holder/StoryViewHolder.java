@@ -105,6 +105,7 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
             image.setVisibility(View.VISIBLE);
             Glide.with(image.getContext())
                     .load(imageUrl)
+                    .error(R.mipmap.girl)
                     .placeholder(R.mipmap.ic_launcher)
                     .crossFade(R.anim.fade_out_rapidly, 5000)
                     .transform(new CircleTransform(image.getContext()))
