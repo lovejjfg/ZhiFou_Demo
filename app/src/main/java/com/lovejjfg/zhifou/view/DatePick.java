@@ -49,8 +49,5 @@ public class DatePick extends AppCompatActivity {
             }
         });
 
-        ProgressDialog dialog = new ProgressDialog(this);
-        dialog.setMessage("正在获取微信授权！！");
-        dialog.show();
     }
 }
