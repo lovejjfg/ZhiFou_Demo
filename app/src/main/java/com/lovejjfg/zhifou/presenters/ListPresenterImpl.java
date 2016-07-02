@@ -11,11 +11,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
+public class ListPresenterImpl implements ListPresenter, BasePresenter {
     View mView;
     Activity activity;
     boolean isLoadingMore;
@@ -61,6 +64,16 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
     }
 
     @Override
+    public void subscribe(Subscription subscriber) {
+
+    }
+
+    @Override
+    public void unSubscribe() {
+
+    }
+
+    @Override
     public void onRefresh() {
 
     }
@@ -68,22 +81,7 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
     @Override
     public void onLoading() {
         if (!isLoading) {
-//            BaseDataManager.getDailyApiService().getLatestDailyStories(new Callback<DailyStories>() {
-//                @Override
-//                public void success(DailyStories dailyStories, Response response) {
-//                    mView.onLoadMore(dailyStories);
-//                    mView.isLoading(false);
-//                    isLoading = false;
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    mView.onLoadError(error.toString());
-//                    mView.isLoading(false);
-//                    isLoading = false;
-//                }
-//            });
-            BaseDataManager.getDailyApiService().getLatestDailyStories()
+            Subscription listSubscribe = BaseDataManager.getDailyApiService().getLatestDailyStories()
                     .subscribeOn(Schedulers.io())//事件产生在子线程
                     .doOnSubscribe(new Action0() {//subscribe之后，事件发送前执行。
                         @Override
@@ -114,32 +112,38 @@ public class ListPresenterImpl implements ListPresenter, LifecycleCallbacks {
                             isLoading = false;
                         }
                     });
-
+            subscribe(listSubscribe);
         }
     }
 
     @Override
     public void onLoadMore(String date) {
         if (!isLoadingMore) {
-            mView.isLoadingMore(true);
-            isLoadingMore = true;
-            Call<DailyStories> stories = BaseDataManager.getDailyApiService().getBeforeDailyStories(date);
-            stories.enqueue(new Callback<DailyStories>() {
-                @Override
-                public void onResponse(Call<DailyStories> call, Response<DailyStories> response) {
-                    mView.onLoadMore(response.body());
-                    mView.isLoadingMore(false);
-                    isLoadingMore = false;
-                }
-
-                @Override
-                public void onFailure(Call<DailyStories> call, Throwable t) {
-                    mView.onLoadError(t.toString());
-                    isLoadingMore = false;
-                }
-
-            });
-//            BaseDataManager.getDailyApiService().getBeforeDailyStories(date,
+            Subscription beforeSubscribe = BaseDataManager.getDailyApiService().getBeforeDailyStories(date)
+                    .subscribeOn(Schedulers.io())//事件产生在子线程
+                    .doOnSubscribe(new Action0() {//subscribe之后，事件发送前执行。
+                        @Override
+                        public void call() {
+                            mView.isLoadingMore(true);
+                            isLoadingMore = true;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<DailyStories>() {
+                        @Override
+                        public void call(DailyStories dailyStories) {
+                            mView.onLoadMore(dailyStories);
+                            mView.isLoadingMore(false);
+                            isLoadingMore = false;
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            mView.onLoadError(throwable.toString());
+                            isLoadingMore = false;
+                        }
+                    });
+            subscribe(beforeSubscribe);
         }
 
 

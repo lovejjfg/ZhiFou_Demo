@@ -20,7 +20,7 @@ package com.lovejjfg.zhifou.presenters;
 
 import com.lovejjfg.zhifou.view.LoadingView;
 
-public interface DetailPresenter extends LifecycleCallbacks {
+public interface DetailPresenter extends BasePresenter {
 
     void onRefresh();
 

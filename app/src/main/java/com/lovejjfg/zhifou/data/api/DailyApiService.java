@@ -21,10 +21,10 @@ public interface DailyApiService {
     Observable<DailyStories> getLatestDailyStories();
 
     @GET("news/before/{date}")
-    Call<DailyStories> getBeforeDailyStories(@Path("date") String date);
+    Observable<DailyStories> getBeforeDailyStories(@Path("date") String date);
 
     @GET("news/{storyId}")
-    Call<Story> getStoryDetail(@Path("storyId") String storyId);
+    Observable<Story> getStoryDetail(@Path("storyId") String storyId);
 
 
 

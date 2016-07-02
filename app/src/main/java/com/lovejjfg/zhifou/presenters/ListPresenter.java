@@ -21,7 +21,7 @@ package com.lovejjfg.zhifou.presenters;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.view.LoadingView;
 
-public interface ListPresenter {
+public interface ListPresenter  {
 
     void onItemClicked(android.view.View itemView, android.view.View image, int id);
 

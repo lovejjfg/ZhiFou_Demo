@@ -5,12 +5,19 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
+import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.util.WebUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by zhangjun on 2016-03-01.
@@ -36,35 +43,41 @@ public class DetailPresenterImpl implements DetailPresenter {
 
     @Override
     public void onLoading(int id) {
-
         if (!isLoading) {
-            view.isLoading(true);
-            isLoading = true;
-            Call<Story> storyDetail =
-                    BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id));
-            storyDetail.enqueue(new Callback<Story>() {
-                @Override
-                public void onResponse(Call<Story> call, Response<Story> response) {
-                    Story story = response.body();
-                    if (!TextUtils.isEmpty(story.getImage())) {
-                        view.onBindImage(story.getImage());
-                    }
-                    if (!TextUtils.isEmpty(story.getBody())) {
-                        String data = WebUtils.BuildHtmlWithCss(story.getBody(), story.getCssList(), false);
-                        view.onBindWebView(data);
-                    }
-                    if (!TextUtils.isEmpty(story.getTitle())) {
-                        view.onBindTittle(story.getTitle());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Story> call, Throwable t) {
-
-                }
-            });
+            BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id))
+                    .subscribeOn(Schedulers.io())
+                    .doOnSubscribe(new Action0() {
+                        @Override
+                        public void call() {
+                            view.isLoading(true);
+                            isLoading = true;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Story>() {
+                        @Override
+                        public void call(Story story) {
+                            isLoading = false;
+                            if (!TextUtils.isEmpty(story.getImage())) {
+                                view.onBindImage(story.getImage());
+                            }
+                            if (!TextUtils.isEmpty(story.getBody())) {
+                                String data = WebUtils.BuildHtmlWithCss(story.getBody(), story.getCssList(), false);
+                                view.onBindWebView(data);
+                            }
+                            if (!TextUtils.isEmpty(story.getTitle())) {
+                                view.onBindTittle(story.getTitle());
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            isLoading = false;
+                        }
+                    });
 
         }
+
 
     }
 
@@ -84,6 +97,16 @@ public class DetailPresenterImpl implements DetailPresenter {
 //        service.shutdownNow();
         activity = null;
         view = null;
+
+    }
+
+    @Override
+    public void subscribe(Subscription subscriber) {
+
+    }
+
+    @Override
+    public void unSubscribe() {
 
     }
 }
