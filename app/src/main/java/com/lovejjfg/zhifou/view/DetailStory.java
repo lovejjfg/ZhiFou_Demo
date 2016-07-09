@@ -27,6 +27,7 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
 import com.lovejjfg.zhifou.presenters.DetailPresenterImpl;
 import com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout;
+import com.lovejjfg.zhifou.ui.widget.ForegroundImageView;
 import com.lovejjfg.zhifou.ui.widget.ParallaxScrimageView;
 import com.lovejjfg.zhifou.util.AnimUtils;
 import com.lovejjfg.zhifou.util.ColorUtils;
@@ -70,6 +71,9 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
         initView();
         detailPresenter = new DetailPresenterImpl(this);
         detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
+        dragDismissFrameLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         dragDismissFrameLayout.addListener(new ElasticDragDismissFrameLayout.SystemChromeFader(getWindow()) {
             @Override
             public void onDragDismissed() {
@@ -158,13 +162,13 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     public void onBindImage(String image) {
         Glide.with(getApplicationContext())
                 .load(image)
-                .listener(shotLoadListener)
+//                .listener(shotLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .priority(Priority.IMMEDIATE)
 //                .thumbnail(0.1f)
 //                .fitCenter()
 //                .bitmapTransform()
-                .bitmapTransform(new ColorFilterTransformation(getApplicationContext(), Color.RED))
+//                .bitmapTransform(new ColorFilterTransformation(getApplicationContext(), Color.RED))
                 .into(mHeaderImage);
 
         mHeaderImage.setVisibility(View.VISIBLE);

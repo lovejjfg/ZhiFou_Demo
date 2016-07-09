@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+    android:id="@+id/scroll_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.lovejjfg.zhifou.view.ScrollingActivity"
     tools:showIn="@layout/activity_detail_story">
@@ -16,9 +18,11 @@
         android:orientation="vertical">
 
         <com.lovejjfg.zhifou.ui.widget.FourThreeView
-            android:background="@android:color/transparent"
+            android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#00000000"/>
+
         <WebView
             android:id="@+id/wbv"
             android:layout_width="match_parent"
