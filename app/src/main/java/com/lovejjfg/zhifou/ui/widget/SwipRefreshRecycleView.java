@@ -8,8 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import com.lovejjfg.zhifou.R;
 
 /**
  * Created by Joe on 2016-03-11.
@@ -36,13 +40,18 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
 
     private void init(Context context) {
-        mRefreshLayout = new SwipeRefreshLayout(context);
-        mRecyclerView = new RecyclerView(context);
-        mRecyclerView.setVerticalScrollBarEnabled(true);
-        mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        View inflate = LayoutInflater.from(context).inflate(R.layout.layout_recycler, this, false);
+        mRecyclerView = (RecyclerView) inflate.findViewById(R.id.recycle_view);
+        mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
+//        mRefreshLayout = new SwipeRefreshLayout(context);
+//        mRecyclerView = new RecyclerView(context);
+        mRecyclerView.setVerticalScrollBarEnabled(false);
+        mRecyclerView.setScrollContainer(true);
+//        mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
-        addView(mRefreshLayout, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(inflate, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        invalidate();
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager manager) {

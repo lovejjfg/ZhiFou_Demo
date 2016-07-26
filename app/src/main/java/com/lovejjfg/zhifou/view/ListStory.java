@@ -101,6 +101,7 @@ public class ListStory extends AppCompatActivity
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         manager.setOrientation(LinearLayoutManager.VERTICAL);
+        manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
         adapter = new StoriesAdapter();
         adapter.setOnItemClickListener(this);
