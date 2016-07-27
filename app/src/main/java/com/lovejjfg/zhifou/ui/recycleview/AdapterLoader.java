@@ -50,4 +50,6 @@ public interface AdapterLoader<T> {
 
     RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
 
+    int getItemRealCount();
+
 }

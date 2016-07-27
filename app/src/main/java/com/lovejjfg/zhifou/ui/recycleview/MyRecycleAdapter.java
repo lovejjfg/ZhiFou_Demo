@@ -23,4 +23,5 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
     public int getItemViewTypes(int position) {
         return 0;
     }
+
 }

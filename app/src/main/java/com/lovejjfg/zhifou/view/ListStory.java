@@ -234,9 +234,8 @@ public class ListStory extends AppCompatActivity
     }
 
     @Override
-    public void isLoadingMore(boolean loading) {
+    public void isLoadingMore(final boolean loading) {
         adapter.isLoadingMore(loading);
-        adapter.notifyItemChanged(adapter.getItemCount());
     }
 
 //    @Override

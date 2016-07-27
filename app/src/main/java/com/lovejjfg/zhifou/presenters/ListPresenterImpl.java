@@ -2,6 +2,7 @@ package com.lovejjfg.zhifou.presenters;
 
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
@@ -122,6 +123,7 @@ public class ListPresenterImpl implements ListPresenter, BasePresenter {
                         public void call() {
                             mView.isLoadingMore(true);
                             isLoadingMore = true;
+                            Log.e("TAG", "call: true");
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
@@ -130,6 +132,7 @@ public class ListPresenterImpl implements ListPresenter, BasePresenter {
                         public void call(DailyStories dailyStories) {
                             mView.onLoadMore(dailyStories);
                             mView.isLoadingMore(false);
+                            Log.e("TAG", "call: false");
                             isLoadingMore = false;
                         }
                     }, new Action1<Throwable>() {

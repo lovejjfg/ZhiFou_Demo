@@ -38,8 +38,9 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public List<T> getList() {
         return list;
     }
+
     @Override
-    public void setList(List<T> data) {
+    public final void setList(List<T> data) {
         if (data == null) {
             return;
         }
@@ -48,11 +49,9 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         }
         this.list = data;
     }
+
     @Override
-    public void appendList(List<T> data) {
-        if (list == null) {
-            list = new ArrayList<>();
-        }
+    public final void appendList(List<T> data) {
         list.addAll(data);
     }
 
@@ -60,7 +59,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public static final int TYPE_BOTTOM = 400;
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_BOTTOM:
                 if (loadMore != null) {
@@ -78,6 +77,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
         return null;
     }
+
     @Override
     public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int loadState) {
 
@@ -87,17 +87,14 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public abstract RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        int viewType = getItemViewType(position);
-//        if (list.size() == 0 || position >= list.size()) {
-//            return;
-//        }
-        if (viewType == TYPE_BOTTOM) {
+    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == TYPE_BOTTOM) {
             if (loadMore != null) {
                 if (!isHasMore()) {
                     loadState = STATE_LASTED;
                     onBottomViewHolderBind(holder, loadState);
                 } else {
+                    loadState = STATE_LOADING;
                     onBottomViewHolderBind(holder, loadState);
                 }
             } else {
@@ -107,6 +104,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
             onViewHolderBind(holder, position);
         }
     }
+
     @Override
     public abstract void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
 
@@ -117,20 +115,26 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         } else {
             loadState = STATE_DISMISS;
         }
+        notifyItemChanged(getItemCount());
     }
 
     @Override
-    public int getItemCount() {
+    public final int getItemCount() {
         return list.size() == 0 ? 0 : list.size() + 1;
     }
 
     @Override
-    public void setLoadMoreView(@NonNull View view) {
+    public int getItemRealCount() {
+        return list.size();
+    }
+
+    @Override
+    public final void setLoadMoreView(@NonNull View view) {
         loadMore = view;
     }
 
     @Override
-    public int getItemViewType(int position) {
+    public final int getItemViewType(int position) {
         if (list.size() > 0 && position < list.size()) {
             return getItemViewTypes(position);
         } else {
@@ -148,6 +152,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public boolean isHasMore() {
-        return !(list.size() > 25);
+        return !(getItemRealCount() > 100);
     }
 }
