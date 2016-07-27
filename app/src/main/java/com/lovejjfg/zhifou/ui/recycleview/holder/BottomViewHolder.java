@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.ui.recycleview.AdapterLoader;
 
 /**
  * Created by zhangjun on 2016-03-11.
@@ -18,8 +19,8 @@ public class BottomViewHolder extends RecyclerView.ViewHolder{
         pb = (ProgressBar) itemView.findViewById(R.id.progressbar);
     }
 
-    public void bindDateView(boolean isShow) {
-        pb.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    public void bindDateView(int state) {
+        pb.setVisibility(AdapterLoader.STATE_LOADING == state ? View.VISIBLE : View.GONE);
     }
 
 }
