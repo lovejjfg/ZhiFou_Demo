@@ -18,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,10 +33,11 @@ import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
-import com.lovejjfg.zhifou.ui.recycleview.StoriesAdapter;
+import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
-import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
 import com.lovejjfg.zhifou.util.JumpUtils;
+import com.lovejjfg.zhifou.util.UIUtils;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
@@ -45,7 +47,7 @@ public class ListStory extends AppCompatActivity
     private SwipRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
-    private StoriesAdapter adapter;
+    private StoriesRecycleAdapter adapter;
     private String mDate;
     //    private SwipeRefreshLayout mSwip;
     private String mTitle;
@@ -103,7 +105,8 @@ public class ListStory extends AppCompatActivity
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
-        adapter = new StoriesAdapter();
+        adapter = new StoriesRecycleAdapter();
+        adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecyclerView, false));
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setOnRefreshListener(this);
@@ -120,6 +123,19 @@ public class ListStory extends AppCompatActivity
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean b = UIUtils.doubleClick();
+                if (b) {
+                    Log.e("TAG", "onClick: 双击了！！");
+
+                    manager.setSmoothScrollbarEnabled(true);
+                    manager.scrollToPosition(0);
+
+                }
+            }
+        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -176,6 +192,12 @@ public class ListStory extends AppCompatActivity
     @Override
     public void onLoadMore(DailyStories stories) {
         adapter.appendList(stories);
+        mDate = stories.getDate();
+    }
+
+    @Override
+    public void onLoad(DailyStories stories) {
+        adapter.setList(stories);
         mDate = stories.getDate();
     }
 
@@ -243,9 +265,9 @@ public class ListStory extends AppCompatActivity
         if (lastTitlePos == position) {
             return;
         }
-        StoriesAdapter.Item item = adapter.getItem(position);
+        StoriesRecycleAdapter.Item item = adapter.getItem(position);
         int type = item.getType();
-        if (type == StoriesAdapter.Type.TYPE_HEADER) {
+        if (type == StoriesRecycleAdapter.Type.TYPE_HEADER) {
             mTitle = getString(R.string.title_activity_main);
         } else if (dy > 0) {//向上
             mTitle = DateViewHolder.getDate(adapter.getTitleBeforePosition(position), ListStory.this);

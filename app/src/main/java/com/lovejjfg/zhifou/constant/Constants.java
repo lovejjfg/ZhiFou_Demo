@@ -11,6 +11,7 @@ public class Constants {
 
     public static final String ID = "id";
     public static final String DATE= "date";
+    public static final String SHOW_DATE= "show_date";
 
 
     public static final String FIRST = "first";

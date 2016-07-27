@@ -34,6 +34,7 @@ public interface ListPresenter  {
     interface View extends LoadingView {
 
         void onLoadMore(DailyStories stories);
+        void onLoad(DailyStories stories);
 
         void onLoadError(String errorCode);
 
