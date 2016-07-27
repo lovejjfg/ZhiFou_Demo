@@ -15,15 +15,15 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.SpecifiedDateImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
-import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
-import com.lovejjfg.zhifou.ui.widget.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesRecycleAdapter;
+import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 
 public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
 
     private SwipRefreshRecycleView mRecycleView;
-    private SpecifiedStoriesAdapter adapter;
+    private SpecifiedStoriesRecycleAdapter adapter;
     private SpecifiedDateImpl presenter;
     private String date;
     private Toolbar toolbar;
@@ -37,14 +37,15 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        if (date != null) {
-        toolbar.setTitle(DateUtils.getMainPageDate(date));
+        String showDate = getIntent().getStringExtra(Constants.SHOW_DATE);
+        if (showDate != null) {
+            toolbar.setTitle(DateUtils.getMainPageDate(showDate));
         }
         mRecycleView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(manager);
-        adapter = new SpecifiedStoriesAdapter();
+        adapter = new SpecifiedStoriesRecycleAdapter();
         adapter.setOnItemClickListener(this);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
@@ -101,11 +102,12 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 200) {
+            String showDate = data.getStringExtra(Constants.SHOW_DATE);
             String date = data.getStringExtra(Constants.DATE);
             if (null != date) {
                 this.date = date;
                 presenter.onLoading(date);
-                toolbar.setTitle(DateUtils.getMainPageDate(date));
+                toolbar.setTitle(DateUtils.getMainPageDate(showDate));
             }
         }
     }

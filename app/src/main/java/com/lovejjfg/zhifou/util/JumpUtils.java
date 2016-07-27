@@ -48,9 +48,10 @@ public class JumpUtils {
         activity.startActivity(i, options.toBundle());
     }
 
-    public static void jumpToSpecifiedDate(Activity activity, String date) {
+    public static void jumpToSpecifiedDate(Activity activity, String date, String showDate) {
         Intent i = new Intent(activity, SpecifiedDateStory.class);
         i.putExtra(Constants.DATE, date);
+        i.putExtra(Constants.SHOW_DATE, showDate);
         activity.startActivity(i);
 
     }

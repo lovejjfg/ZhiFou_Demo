@@ -21,31 +21,36 @@ public class DatePick extends AppCompatActivity {
         setContentView(R.layout.activity_date_pick);
         final boolean isFirst = getIntent().getBooleanExtra(Constants.FIRST, true);
 //        initDialog();
-        DatePicker mDatePicker = (DatePicker) findViewById(R.id.date_picker);
+        final DatePicker mDatePicker = (DatePicker) findViewById(R.id.date_picker);
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
-        mDatePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                int chooseMonth = monthOfYear + 1;
-                Log.e("截止：", year + "年" + +chooseMonth + "月" + dayOfMonth + "日");
-                String date = String.format("%d%2d%2d", year, chooseMonth, dayOfMonth).replace(" ", "0");
-                if (!DateUtils.isMoreThanToday(date)) {
-                    Intent i = new Intent();
-                    i.putExtra(Constants.DATE, date);
-                    setResult(200, i);
-                    if (isFirst) {
-                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date);
+        if (mDatePicker != null) {
+            mDatePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+                @Override
+                public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    int chooseMonth = monthOfYear + 1;
+                    int chooseDay= dayOfMonth + 1;
+                    Log.e("截止：", year + "年" + +chooseMonth + "月" + dayOfMonth + "日");
+                    String date = String.format("%d%2d%2d", year, chooseMonth, chooseDay).replace(" ", "0");
+                    String showDate = String.format("%d%2d%2d", year, chooseMonth, dayOfMonth).replace(" ", "0");
+                    if (!DateUtils.isMoreThanToday(date)) {
+                        Intent i = new Intent();
+                        i.putExtra(Constants.DATE, date);
+                        i.putExtra(Constants.SHOW_DATE, showDate);
+                        setResult(200, i);
+                        if (isFirst) {
+                            JumpUtils.jumpToSpecifiedDate(DatePick.this, date,showDate);
+                        }
+                        finishAfterTransition();
+                        Log.e("DATE-->", String.format("%d-%2d-%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
+                    } else {
+                        Log.e("DATE-->", "大于了今天");
                     }
-                    finishAfterTransition();
-                    Log.e("DATE-->", String.format("%d-%2d-%2d", year, chooseMonth, dayOfMonth).replace(" ", "0"));
-                } else {
-                    Log.e("DATE-->", "大于了今天");
                 }
-            }
-        });
+            });
+        }
 
     }
 }
