@@ -1,4 +1,4 @@
-package com.lovejjfg.zhifou.ui.widget;
+package com.lovejjfg.zhifou.ui.recycleview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -45,7 +45,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
 //        mRefreshLayout = new SwipeRefreshLayout(context);
 //        mRecyclerView = new RecyclerView(context);
-        mRecyclerView.setVerticalScrollBarEnabled(false);
+        mRecyclerView.setVerticalScrollBarEnabled(true);
         mRecyclerView.setScrollContainer(true);
 //        mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRefreshLayout.setOnRefreshListener(this);
@@ -67,9 +67,9 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
     }
 
 
-    private RecyclerView.Adapter adapter;
+    private RefreshRecycleAdapter adapter;
 
-    public void setAdapter(RecyclerView.Adapter adapter) {
+    public void setAdapter(RefreshRecycleAdapter adapter) {
         this.adapter = adapter;
         mRecyclerView.setAdapter(adapter);
     }
@@ -121,7 +121,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
             if (manager instanceof LinearLayoutManager) {
                 int lastCompletelyVisibleItemPosition = ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
 
-                if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition == adapter.getItemCount() - 1) {
+                if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition == adapter.getItemCount() - 1 && adapter.isHasMore()) {
                     if (null != listener) {
                         listener.onLoadMore();
                     }
