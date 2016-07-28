@@ -35,7 +35,7 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder{
             case AdapterLoader.STATE_LASTED:
                 contaier.setVisibility(View.VISIBLE);
                 pb.setVisibility(View.GONE);
-                content.setText("没有更多了！");
+                content.setText("---  没有更多了  ---");
                 break;
             case AdapterLoader.STATE_LOADING:
                 contaier.setVisibility(View.VISIBLE);

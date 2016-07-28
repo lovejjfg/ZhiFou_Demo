@@ -19,6 +19,7 @@ import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
+import com.lovejjfg.zhifou.util.UIUtils;
 
 public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
 
@@ -46,6 +47,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(manager);
         adapter = new SpecifiedStoriesAdapter();
+        adapter.setLoadMoreView(UIUtils.inflate(R.layout.recycler_footer_new, mRecycleView));
         adapter.setOnItemClickListener(this);
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
@@ -79,8 +81,9 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
     @Override
     public void onLoadMore(DailyStories stories) {
-        adapter.setList(stories);
 
+        adapter.setList(stories);
+        adapter.setTotalCount(adapter.getList().size());
     }
 
     @Override
@@ -95,6 +98,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
     @Override
     public void isLoadingMore(boolean isLoadingMore) {
+        adapter.isLoadingMore(isLoadingMore);
 
     }
 
