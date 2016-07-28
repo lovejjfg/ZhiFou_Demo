@@ -43,27 +43,30 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
         View inflate = LayoutInflater.from(context).inflate(R.layout.layout_recycler, this, false);
         mRecyclerView = (RecyclerView) inflate.findViewById(R.id.recycle_view);
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
-//        mRefreshLayout = new SwipeRefreshLayout(context);
-//        mRecyclerView = new RecyclerView(context);
         mRecyclerView.setVerticalScrollBarEnabled(true);
-        mRecyclerView.setScrollContainer(true);
-//        mRefreshLayout.addView(mRecyclerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
         addView(inflate, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        invalidate();
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager manager) {
         this.manager = manager;
         mRecyclerView.setLayoutManager(manager);
-
     }
 
     @SuppressWarnings("unused")
     public void setItemAnimator(RecyclerView.ItemAnimator animator) {
         mRecyclerView.setItemAnimator(animator);
 
+    }
+
+    /**
+     * Enable to pullRefresh
+     * @param enable whether can pull refresh or not...
+     */
+    @SuppressWarnings("unused")
+    public void setPullRefreshEnable(boolean enable) {
+        mRefreshLayout.setEnabled(enable);
     }
 
 

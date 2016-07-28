@@ -7,15 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.lovejjfg.zhifou.view.DatePick">
-    <DatePicker
-        android:id="@+id/date_picker"
+    tools:context="com.lovejjfg.zhifou_demo.AdapterTestActivity">
+    <com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView
+        android:id="@+id/recycle_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:datePickerMode="calendar"
-        android:transitionName="@string/date_picker"
-        android:background="@android:color/white"
-        tools:ignore="UnusedAttribute" />
+        android:layout_height="match_parent">
 
+    </com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView>
 
 </RelativeLayout>

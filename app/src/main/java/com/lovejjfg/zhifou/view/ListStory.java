@@ -106,7 +106,7 @@ public class ListStory extends AppCompatActivity
         manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
         adapter = new StoriesRecycleAdapter();
-        adapter.setTotalCount(50);
+        adapter.setTotalCount(100);
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecyclerView, false));
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);

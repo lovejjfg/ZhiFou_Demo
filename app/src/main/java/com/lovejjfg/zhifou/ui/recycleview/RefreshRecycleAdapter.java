@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T> {
 
     private View loadMore;
-    private int loadState =STATE_LOADING ;
+    private int loadState = STATE_LOADING;
 
     public int getTotalCount() {
         return totalCount;
@@ -29,7 +29,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         this.totalCount = totalCount;
     }
 
-    private int totalCount = Integer.MAX_VALUE;
+    private int totalCount;
 
     public RefreshRecycleAdapter() {
         list = new ArrayList<>();
@@ -48,11 +48,20 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
             list.clear();
         }
         this.list = data;
+        notifyDataSetChanged();
     }
 
     @Override
     public final void appendList(List<T> data) {
+        int positionStart = list.size();
         list.addAll(data);
+        int itemCount = list.size() - positionStart;
+
+        if (positionStart == 0) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeChanged(positionStart, itemCount + 1);
+        }
     }
 
     public List<T> list;
@@ -111,13 +120,11 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public abstract void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
 
     @Override
-    public void isLoadingMore(boolean loading) {
+    public final void isLoadingMore(boolean loading) {
         if (loading) {
             loadState = STATE_LOADING;
             notifyItemChanged(getItemCount());
         }
-
-
     }
 
     @Override
@@ -150,10 +157,13 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     @Override
-    public abstract int getItemViewTypes(int position);
+    public int getItemViewTypes(int position) {
+        return 0;
+    }
+
 
     @Override
-    public boolean isHasMore() {
+    public final boolean isHasMore() {
         return getItemCount() < totalCount;
     }
 }
