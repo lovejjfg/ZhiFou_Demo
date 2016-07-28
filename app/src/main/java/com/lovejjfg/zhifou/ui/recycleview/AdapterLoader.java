@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by Joe on 2016-07-26
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@gmail.com
  */
 public interface AdapterLoader<T> {
     /**

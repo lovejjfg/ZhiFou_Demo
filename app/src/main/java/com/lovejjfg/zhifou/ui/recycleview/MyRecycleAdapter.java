@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 /**
  * Created by Joe on 2016-07-27
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@pingan.com
  */
 public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
 
