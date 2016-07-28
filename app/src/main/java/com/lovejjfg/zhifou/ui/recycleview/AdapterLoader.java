@@ -15,8 +15,7 @@ public interface AdapterLoader<T> {
      * state about load more..
      */
     int STATE_LOADING = 1;
-    int STATE_DISMISS = 2;
-    int STATE_LASTED = 3;
+    int STATE_LASTED = 2;
     /**
      * This method should be called  when you load more !
      */

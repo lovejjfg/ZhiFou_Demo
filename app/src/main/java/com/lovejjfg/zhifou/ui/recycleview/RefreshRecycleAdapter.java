@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter implements AdapterLoader<T> {
 
     private View loadMore;
-    private int loadState;
+    private int loadState =STATE_LOADING ;
 
     public int getTotalCount() {
         return totalCount;
@@ -89,14 +89,16 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
-            if (loadMore != null) {
-                if (!isHasMore()) {
-                    loadState = STATE_LASTED;
-                    onBottomViewHolderBind(holder, loadState);
+            if (!isHasMore()) {
+                if (loadMore != null) {
+                    onBottomViewHolderBind(holder, STATE_LASTED);
                 } else {
-                    loadState = STATE_LOADING;
-                    onBottomViewHolderBind(holder, loadState);
+                    ((BottomViewHolder) holder).bindDateView(STATE_LASTED);
                 }
+                return;
+            }
+            if (loadMore != null) {
+                onBottomViewHolderBind(holder, loadState);
             } else {
                 ((BottomViewHolder) holder).bindDateView(loadState);
             }
@@ -112,10 +114,10 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public void isLoadingMore(boolean loading) {
         if (loading) {
             loadState = STATE_LOADING;
-        } else {
-            loadState = STATE_DISMISS;
+            notifyItemChanged(getItemCount());
         }
-        notifyItemChanged(getItemCount());
+
+
     }
 
     @Override
@@ -152,6 +154,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public boolean isHasMore() {
-        return !(getItemRealCount() > 100);
+        return !(getItemRealCount() > totalCount);
     }
 }

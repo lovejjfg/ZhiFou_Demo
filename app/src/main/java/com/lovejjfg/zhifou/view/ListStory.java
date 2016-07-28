@@ -34,8 +34,8 @@ import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
@@ -106,6 +106,7 @@ public class ListStory extends AppCompatActivity
         manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
         adapter = new StoriesRecycleAdapter();
+        adapter.setTotalCount(50);
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecyclerView, false));
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
@@ -129,9 +130,7 @@ public class ListStory extends AppCompatActivity
                 boolean b = UIUtils.doubleClick();
                 if (b) {
                     Log.e("TAG", "onClick: 双击了！！");
-
-                    manager.setSmoothScrollbarEnabled(true);
-                    manager.scrollToPosition(0);
+                    manager.scrollToPositionWithOffset(0, 0);
 
                 }
             }
