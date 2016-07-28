@@ -19,11 +19,11 @@
         <activity
             android:name=".view.ListStory"
             android:theme="@style/AppDrawerLayout">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".view.DatePick"
@@ -44,11 +44,11 @@
         <!-- <activity android:name=".view.sticky"/> -->
         <activity android:name=".view.ScrollingActivity" />
         <activity android:name="com.lovejjfg.zhifou_demo.AdapterTestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
     </application>
 
