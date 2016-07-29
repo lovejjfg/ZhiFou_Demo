@@ -5,6 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lovejjfg.zhifou.ui.recycleview.holder.NewBottomViewHolder;
+
 /**
  * Created by Joe on 2016-07-27
  * Email: lovejjfg@pingan.com
@@ -48,6 +50,6 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
 
     @Override
     public void onBottomViewHolderBind(RecyclerView.ViewHolder holder, int state) {
-//        ((NewBottomViewHolder) holder).bindDateView(state);
+        ((NewBottomViewHolder) holder).bindDateView(state);
     }
 }

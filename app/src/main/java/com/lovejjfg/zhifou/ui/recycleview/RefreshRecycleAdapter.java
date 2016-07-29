@@ -2,12 +2,12 @@ package com.lovejjfg.zhifou.ui.recycleview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.ui.recycleview.holder.BottomViewHolder;
-import com.lovejjfg.zhifou.util.UIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +72,15 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         switch (viewType) {
             case TYPE_BOTTOM:
                 if (loadMore != null) {
-                    return onBottomViewHolderCreate(loadMore);
+                    RecyclerView.ViewHolder holder = onBottomViewHolderCreate(loadMore);
+                    if (holder == null) {
+                        throw new RuntimeException("You must impl onBottomViewHolderCreate() and return your own holder ");
+                    }
+                    return holder;
+                } else {
+                    BottomViewHolder holder = new BottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer, parent, false));
+                    return holder;
                 }
-                View itemView = UIUtils.inflate(R.layout.recycler_footer, parent);
-                return new BottomViewHolder(itemView);
             default:
                 return onViewHolderCreate(parent, viewType);
         }
@@ -84,7 +89,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return null;
+        return new BottomViewHolder(loadMore);
     }
 
     @Override
@@ -98,18 +103,10 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
-            if (!isHasMore()) {
-                if (loadMore != null) {
-                    onBottomViewHolderBind(holder, STATE_LASTED);
-                } else {
-                    ((BottomViewHolder) holder).bindDateView(STATE_LASTED);
-                }
-                return;
-            }
             if (loadMore != null) {
-                onBottomViewHolderBind(holder, loadState);
+                onBottomViewHolderBind(holder, STATE_LASTED);
             } else {
-                ((BottomViewHolder) holder).bindDateView(loadState);
+                ((BottomViewHolder) holder).bindDateView(STATE_LASTED);
             }
         } else {
             onViewHolderBind(holder, position);
