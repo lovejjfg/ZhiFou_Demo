@@ -78,8 +78,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                     }
                     return holder;
                 } else {
-                    BottomViewHolder holder = new BottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer, parent, false));
-                    return holder;
+                    return new BottomViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_footer, parent, false));
                 }
             default:
                 return onViewHolderCreate(parent, viewType);
@@ -109,9 +108,17 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
                 loadState = STATE_LOADING;
             }
             if (loadMore != null) {
-                onBottomViewHolderBind(holder, loadState);
+                try {
+                    onBottomViewHolderBind(holder, loadState);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
-                ((BottomViewHolder) holder).bindDateView(loadState);
+                try {
+                    ((BottomViewHolder) holder).bindDateView(loadState);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             onViewHolderBind(holder, position);
