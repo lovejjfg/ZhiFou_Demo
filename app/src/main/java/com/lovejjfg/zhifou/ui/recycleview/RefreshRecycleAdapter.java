@@ -47,8 +47,8 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         if (list != null) {
             list.clear();
         }
-        this.list = data;
-        notifyDataSetChanged();
+        appendList(data);
+
     }
 
     @Override
@@ -60,7 +60,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         if (positionStart == 0) {
             notifyDataSetChanged();
         } else {
-            notifyItemRangeChanged(positionStart, itemCount + 1);
+            notifyItemRangeInserted(positionStart+1 , itemCount);
         }
     }
 
@@ -103,10 +103,15 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
-            if (loadMore != null) {
-                onBottomViewHolderBind(holder, STATE_LASTED);
+            if (!isHasMore()) {
+                loadState = STATE_LASTED;
             } else {
-                ((BottomViewHolder) holder).bindDateView(STATE_LASTED);
+                loadState = STATE_LOADING;
+            }
+            if (loadMore != null) {
+                onBottomViewHolderBind(holder, loadState);
+            } else {
+                ((BottomViewHolder) holder).bindDateView(loadState);
             }
         } else {
             onViewHolderBind(holder, position);

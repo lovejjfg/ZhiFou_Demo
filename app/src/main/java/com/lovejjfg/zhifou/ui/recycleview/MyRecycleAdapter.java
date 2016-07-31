@@ -15,12 +15,14 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
 
     @Override
     public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
-        return new MyViewHolder(new TextView(parent.getContext()));
+        TextView textView = new TextView(parent.getContext());
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        return new MyViewHolder(textView);
     }
 
     @Override
     public void onViewHolderBind(RecyclerView.ViewHolder holder, int position) {
-        ((MyViewHolder) holder).bindDateView("这是" + position);
+        ((MyViewHolder) holder).bindDateView("这是" + list.get(position));
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -33,13 +35,13 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
         }
 
         public void bindDateView(String s) {
-            mTv.setText(s + "hahaahah");
+            mTv.setText(s);
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return null;
+        return new NewBottomViewHolder(loadMore);
     }
 
 
