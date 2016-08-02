@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.ui.recycleview;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +48,18 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
         mRefreshLayout.setOnRefreshListener(this);
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
         addView(inflate, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    /**
+     * Set the colors used in the progress animation. The first
+     * color will also be the color of the bar that grows in response to a user
+     * swipe gesture.
+     *
+     * @param colors
+     */
+    @ColorInt
+    public void setColorSchemeColors(int... colors) {
+        mRefreshLayout.setColorSchemeColors(colors);
     }
 
     public void setLayoutManager(RecyclerView.LayoutManager manager) {
