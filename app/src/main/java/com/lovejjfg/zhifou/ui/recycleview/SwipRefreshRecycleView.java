@@ -158,7 +158,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
 
                 int lastVisibleItemPosition = (itemPositions[1] != 0) ? ++itemPositions[1] : ++itemPositions[0];
 
-                if (lastVisibleItemPosition >= adapter.getItemCount()) {
+                if (lastVisibleItemPosition >= adapter.getItemCount()  && adapter.isHasMore()) {
                     if (null != listener) {
                         listener.onLoadMore();
                     }

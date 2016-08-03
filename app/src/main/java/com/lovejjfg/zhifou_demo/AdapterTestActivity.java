@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
     private boolean isRun;
     private boolean enable = true;
     private boolean own = true;
+    private static final int DEFAULT_TIME = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +75,13 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
             }
         };
         mRecycleView.setRefresh(true);
-        mRecycleView.postDelayed(refreshAction, 1000);
+        mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
 
     }
 
     @Override
     public void onRefresh() {
-        mRecycleView.postDelayed(refreshAction, 2000);
+        mRecycleView.postDelayed(refreshAction, DEFAULT_TIME);
 
     }
 
@@ -88,8 +90,9 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
         if (isRun) {
             return;
         }
+        Log.e("TAG", "onLoadMore: ");
         isRun = true;
-        mRecycleView.postDelayed(loadMoreAction, 2000);
+        mRecycleView.postDelayed(loadMoreAction, DEFAULT_TIME);
     }
 
     @Override
