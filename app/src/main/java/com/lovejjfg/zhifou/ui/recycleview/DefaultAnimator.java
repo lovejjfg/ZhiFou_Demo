@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Created by Joe on 2016-08-05
- * Email: zhangjun166@pingan.com.cn
+ * Email: lovejjfg@163.com
  */
 public class DefaultAnimator extends DefaultItemAnimator {
     @Override

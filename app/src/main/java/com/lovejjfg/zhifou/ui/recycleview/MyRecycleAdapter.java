@@ -9,7 +9,7 @@ import com.lovejjfg.zhifou.ui.recycleview.holder.NewBottomViewHolder;
 
 /**
  * Created by Joe on 2016-07-27
- * Email: lovejjfg@pingan.com
+ * Email: lovejjfg@163.com
  */
 public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
 
