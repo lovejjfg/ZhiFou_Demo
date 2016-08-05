@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.MyRecycleAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class AdapterTestActivity extends AppCompatActivity implements SwipRefreshRecycleView.OnRefreshLoadMoreListener {
+public class AdapterTestActivity extends AppCompatActivity implements SwipeRefreshRecycleView.OnRefreshLoadMoreListener {
     @Bind(R.id.recycle_view)
-    SwipRefreshRecycleView mRecycleView;
+    SwipeRefreshRecycleView mRecycleView;
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     private MyRecycleAdapter adapter;

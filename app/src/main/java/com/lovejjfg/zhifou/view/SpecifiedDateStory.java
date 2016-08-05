@@ -16,14 +16,14 @@ import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.SpecifiedDateImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
-public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
+public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
 
-    private SwipRefreshRecycleView mRecycleView;
+    private SwipeRefreshRecycleView mRecycleView;
     private SpecifiedStoriesAdapter adapter;
     private SpecifiedDateImpl presenter;
     private String date;
@@ -42,7 +42,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
         if (showDate != null) {
             toolbar.setTitle(DateUtils.getMainPageDate(showDate));
         }
-        mRecycleView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
+        mRecycleView = (SwipeRefreshRecycleView) findViewById(R.id.srrv);
         GridLayoutManager manager = new GridLayoutManager(this, 1);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecycleView.setLayoutManager(manager);

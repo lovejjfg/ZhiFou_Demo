@@ -11,11 +11,11 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.Toolbar>
-    <com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView
+    <com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView>
+    </com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView>
 
 </LinearLayout>

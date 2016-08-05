@@ -21,15 +21,15 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     private View loadMore;
     private int loadState = STATE_LOADING;
 
-    public SwipRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
+    public SwipeRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
         return loadMoreListener;
     }
 
-    public void setLoadMoreListener(SwipRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener) {
+    public void setLoadMoreListener(SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener) {
         this.loadMoreListener = loadMoreListener;
     }
 
-    private SwipRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener;
+    private SwipeRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener;
 
     public int getTotalCount() {
         return totalCount;

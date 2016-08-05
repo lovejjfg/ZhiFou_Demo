@@ -20,21 +20,21 @@ import com.lovejjfg.zhifou.R;
  * Created by Joe on 2016-03-11.
  * Email lovejjfg@gmail.com
  */
-public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
+public class SwipeRefreshRecycleView extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout mRefreshLayout;
     private RecyclerView mRecyclerView;
     @Nullable
     private RecyclerView.LayoutManager manager;
 
-    public SwipRefreshRecycleView(Context context) {
+    public SwipeRefreshRecycleView(Context context) {
         this(context, null);
     }
 
-    public SwipRefreshRecycleView(Context context, AttributeSet attrs) {
+    public SwipeRefreshRecycleView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public SwipRefreshRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SwipeRefreshRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -131,7 +131,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             if (null != scrollListener) {
-                scrollListener.onScrolled(SwipRefreshRecycleView.this, dx, dy);
+                scrollListener.onScrolled(SwipeRefreshRecycleView.this, dx, dy);
             }
             if (null == manager) {
                 throw new RuntimeException("you should call setLayoutManager() first!!");
@@ -187,7 +187,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
     }
 
     public interface OnScrollListener {
-        void onScrolled(SwipRefreshRecycleView recyclerView, int dx, int dy);
+        void onScrolled(SwipeRefreshRecycleView recyclerView, int dx, int dy);
     }
 
 }

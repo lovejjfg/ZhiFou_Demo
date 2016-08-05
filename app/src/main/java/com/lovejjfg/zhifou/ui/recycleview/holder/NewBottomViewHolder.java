@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.ui.recycleview.AdapterLoader;
-import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,9 +26,9 @@ public class NewBottomViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.content)
     TextView content;
     @Nullable
-    private final SwipRefreshRecycleView.OnRefreshLoadMoreListener mListener;
+    private final SwipeRefreshRecycleView.OnRefreshLoadMoreListener mListener;
 
-    public NewBottomViewHolder(View itemView, SwipRefreshRecycleView.OnRefreshLoadMoreListener listener) {
+    public NewBottomViewHolder(View itemView, SwipeRefreshRecycleView.OnRefreshLoadMoreListener listener) {
 
         super(itemView);
         ButterKnife.bind(this,itemView);

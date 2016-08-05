@@ -34,17 +34,17 @@ import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
+import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
 public class ListStory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipRefreshRecycleView.OnRefreshLoadMoreListener, SwipRefreshRecycleView.OnScrollListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
 
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final int RC_SEARCH = 11;
-    private SwipRefreshRecycleView mRecyclerView;
+    private SwipeRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
@@ -98,7 +98,7 @@ public class ListStory extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("首页");
-        mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
+        mRecyclerView = (SwipeRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
 
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -260,7 +260,7 @@ public class ListStory extends AppCompatActivity
     }
 
     @Override
-    public void onScrolled(SwipRefreshRecycleView recyclerView, int dx, int dy) {
+    public void onScrolled(SwipeRefreshRecycleView recyclerView, int dx, int dy) {
         int position = manager.findFirstVisibleItemPosition();
         if (lastTitlePos == position) {
             return;

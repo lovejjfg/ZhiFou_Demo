@@ -7,10 +7,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.lovejjfg.zhifou.view.SpecifiedDateStory"
     tools:showIn="@layout/activity_specified_date_story">
-    <com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView
+    <com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView
         android:id="@+id/srrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView>
+    </com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView>
 
 </RelativeLayout>
