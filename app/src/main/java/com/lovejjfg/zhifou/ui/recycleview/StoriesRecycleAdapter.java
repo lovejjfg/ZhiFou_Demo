@@ -31,6 +31,7 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
     @Nullable
     private OnItemClickListener listener;
     public HeaderViewPagerHolder headerViewPagerHolder;
+    private  SwipRefreshRecycleView.OnRefreshLoadMoreListener mListener;
 
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -43,8 +44,9 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
         public static final int TYPE_STORY = 2;
     }
 
-    public StoriesRecycleAdapter() {
+    public StoriesRecycleAdapter(SwipRefreshRecycleView.OnRefreshLoadMoreListener listener) {
         mTmpItem = new ArrayList<>();
+        mListener = listener;
     }
 
     public void setList(DailyStories dailyStories) {
@@ -147,7 +149,7 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore);
+        return new NewBottomViewHolder(loadMore,mListener);
     }
 
 

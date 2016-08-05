@@ -145,7 +145,7 @@ public class SpecifiedStoriesAdapter extends RefreshRecycleAdapter<StoriesRecycl
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore);
+        return new NewBottomViewHolder(loadMore, null);
     }
 
 

@@ -65,7 +65,6 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     }
 
     public List<T> list;
-    public static final int TYPE_BOTTOM = 400;
 
     @Override
     public final RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -102,11 +101,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_BOTTOM) {
-            if (!isHasMore()) {
-                loadState = STATE_LASTED;
-            } else {
-                loadState = STATE_LOADING;
-            }
+            loadState = loadState == STATE_ERROR ? STATE_ERROR : isHasMore() ? STATE_LOADING : STATE_LASTED;
             if (loadMore != null) {
                 try {
                     onBottomViewHolderBind(holder, loadState);
@@ -132,7 +127,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public final void isLoadingMore(boolean loading) {
         if (loading) {
             loadState = STATE_LOADING;
-            notifyItemChanged(getItemCount());
+            notifyItemRangeChanged(getItemRealCount(), 1);
         }
     }
 
@@ -174,5 +169,14 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final boolean isHasMore() {
         return getItemCount() < totalCount;
+    }
+
+    public void loadMoreError() {
+        loadState = STATE_ERROR;
+        notifyItemRangeChanged(getItemRealCount(), 1);
+    }
+
+    public void onRefresh() {
+        loadState = STATE_LOADING;
     }
 }

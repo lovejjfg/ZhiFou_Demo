@@ -16,6 +16,9 @@ public interface AdapterLoader<T> {
      */
     int STATE_LOADING = 1;
     int STATE_LASTED = 2;
+    int STATE_ERROR = 3;
+
+    int TYPE_BOTTOM = 400;
     /**
      * This method should be called  when you load more !
      */
@@ -36,9 +39,13 @@ public interface AdapterLoader<T> {
      */
     RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore);
 
+    void onRefresh();
+
     boolean isHasMore();
 
     void isLoadingMore(boolean loading);
+
+    void loadMoreError();
 
     /**
      * You can call this method to add data to RecycleView,if you want to append data,you should call {@link #appendList(List)}
@@ -87,5 +94,6 @@ public interface AdapterLoader<T> {
      * @return current list size!
      */
     int getItemRealCount();
+
 
 }

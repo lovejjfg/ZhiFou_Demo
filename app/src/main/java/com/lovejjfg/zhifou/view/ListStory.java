@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +31,7 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
+import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
@@ -100,13 +100,13 @@ public class ListStory extends AppCompatActivity
         getSupportActionBar().setTitle("首页");
         mRecyclerView = (SwipRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
-        adapter = new StoriesRecycleAdapter();
-        adapter.setTotalCount(100);
+        mRecyclerView.setItemAnimator(new DefaultAnimator());
+        adapter = new StoriesRecycleAdapter(this);
+        adapter.setTotalCount(50);
         adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecyclerView, false));
         adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
@@ -202,7 +202,8 @@ public class ListStory extends AppCompatActivity
 
     @Override
     public void onLoadError(String errorCode) {
-
+        Log.e("TAG", "onLoadError: " + errorCode);
+        adapter.loadMoreError();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -250,6 +251,7 @@ public class ListStory extends AppCompatActivity
     @Override
     public void onRefresh() {
         mMainPresenter.onLoading();
+        adapter.onRefresh();
     }
 
     @Override
