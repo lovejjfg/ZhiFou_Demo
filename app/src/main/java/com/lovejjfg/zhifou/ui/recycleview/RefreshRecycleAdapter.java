@@ -126,7 +126,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void isLoadingMore(boolean loading) {
         if (loading) {
-//            loadState = STATE_LOADING;
+            loadState = STATE_LOADING;
             notifyItemRangeChanged(getItemRealCount(), 1);
         }
     }
