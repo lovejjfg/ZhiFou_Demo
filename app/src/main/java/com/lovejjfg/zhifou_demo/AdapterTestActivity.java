@@ -30,12 +30,9 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipeRefre
     private List<String> list;
     private Runnable refreshAction;
     private Runnable loadMoreAction;
-    private ArrayList<String> arrayList;
     private boolean isRun;
     private boolean enable = true;
-    private boolean own = true;
     private static final int DEFAULT_TIME = 1000;
-    private boolean isError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +43,9 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipeRefre
         setSupportActionBar(mToolBar);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mRecycleView.setItemAnimator(new DefaultAnimator());
-//        mRecycleView.setPullRefreshEnable(false);
         adapter = new MyRecycleAdapter();
         adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
-//        adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
         mRecycleView.setAdapter(adapter);
         mRecycleView.setOnRefreshListener(this);
         list = new ArrayList<>();
