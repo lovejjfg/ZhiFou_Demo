@@ -126,7 +126,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     @Override
     public final void isLoadingMore(boolean loading) {
         if (loading) {
-            loadState = STATE_LOADING;
+//            loadState = STATE_LOADING;
             notifyItemRangeChanged(getItemRealCount(), 1);
         }
     }
@@ -171,12 +171,12 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         return getItemCount() < totalCount;
     }
 
-    public void loadMoreError() {
+    public final void loadMoreError() {
         loadState = STATE_ERROR;
         notifyItemRangeChanged(getItemRealCount(), 1);
     }
 
     public void onRefresh() {
-        loadState = STATE_LOADING;
+//        loadState = STATE_LOADING;
     }
 }
