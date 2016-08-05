@@ -46,6 +46,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
         mRefreshLayout = (SwipeRefreshLayout) inflate.findViewById(R.id.container);
         mRecyclerView.setVerticalScrollBarEnabled(true);
         mRefreshLayout.setOnRefreshListener(this);
+        mRecyclerView.setItemAnimator(new DefaultAnimator());
         mRecyclerView.addOnScrollListener(new FinishScrollListener());
         addView(inflate, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
@@ -142,6 +143,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
                 int lastCompletelyVisibleItemPosition = ((LinearLayoutManager) manager).findLastCompletelyVisibleItemPosition();
 
                 if (adapter.getItemCount() > 1 && lastCompletelyVisibleItemPosition >= adapter.getItemCount() - 1 && adapter.isHasMore()) {
+                    adapter.isLoadingMore();
                     if (null != listener) {
                         listener.onLoadMore();
                     }
@@ -159,6 +161,7 @@ public class SwipRefreshRecycleView extends FrameLayout implements SwipeRefreshL
                 int lastVisibleItemPosition = (itemPositions[1] != 0) ? ++itemPositions[1] : ++itemPositions[0];
 
                 if (lastVisibleItemPosition >= adapter.getItemCount()  && adapter.isHasMore()) {
+                    adapter.isLoadingMore();
                     if (null != listener) {
                         listener.onLoadMore();
                     }

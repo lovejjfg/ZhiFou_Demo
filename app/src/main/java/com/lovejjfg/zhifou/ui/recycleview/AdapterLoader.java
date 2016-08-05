@@ -43,7 +43,7 @@ public interface AdapterLoader<T> {
 
     boolean isHasMore();
 
-    void isLoadingMore(boolean loading);
+    void isLoadingMore();
 
     void loadMoreError();
 

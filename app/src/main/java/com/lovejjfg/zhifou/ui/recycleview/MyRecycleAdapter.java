@@ -41,7 +41,7 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
 
     @Override
     public RecyclerView.ViewHolder onBottomViewHolderCreate(View loadMore) {
-        return new NewBottomViewHolder(loadMore, null);
+        return new NewBottomViewHolder(loadMore, getLoadMoreListener());
     }
 
 

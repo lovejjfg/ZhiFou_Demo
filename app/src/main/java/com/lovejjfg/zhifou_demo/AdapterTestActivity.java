@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.MyRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.SwipRefreshRecycleView;
 
@@ -34,6 +35,7 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
     private boolean enable = true;
     private boolean own = true;
     private static final int DEFAULT_TIME = 1000;
+    private boolean isError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,10 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
         ButterKnife.bind(this);
         setSupportActionBar(mToolBar);
         mRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        mRecycleView.setItemAnimator(new DefaultAnimator());
 //        mRecycleView.setPullRefreshEnable(false);
         adapter = new MyRecycleAdapter();
+        adapter.setLoadMoreListener(this);
         adapter.setTotalCount(10);
 //        adapter.setLoadMoreView(LayoutInflater.from(this).inflate(R.layout.recycler_footer_new, mRecycleView, false));
         mRecycleView.setAdapter(adapter);
@@ -64,14 +68,22 @@ public class AdapterTestActivity extends AppCompatActivity implements SwipRefres
         loadMoreAction = new Runnable() {
             @Override
             public void run() {
-                ArrayList<String> arrayList = new ArrayList<>();
-                arrayList.add("ccc1");
-                arrayList.add("ccc2");
-                arrayList.add("ccc3");
-                arrayList.add("ccc4");
-                arrayList.add("ccc5");
-                adapter.appendList(arrayList);
+                int i = ((int) (Math.random() * 10)) % 3;
+                if (i == 0 || i == 1) {
+                    ArrayList<String> arrayList = new ArrayList<>();
+                    arrayList.add("ccc1");
+                    arrayList.add("ccc2");
+                    arrayList.add("ccc3");
+                    arrayList.add("ccc4");
+                    arrayList.add("ccc5");
+                    adapter.appendList(arrayList);
+                    Log.e("TAG", "run: 正常加载更多！！");
+                } else {
+                    adapter.loadMoreError();
+                    Log.e("TAG", "run: 加载失败！！！");
+                }
                 isRun = false;
+
             }
         };
         mRecycleView.setRefresh(true);

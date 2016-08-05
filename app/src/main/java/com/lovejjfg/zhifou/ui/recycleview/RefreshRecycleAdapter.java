@@ -21,6 +21,16 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     private View loadMore;
     private int loadState = STATE_LOADING;
 
+    public SwipRefreshRecycleView.OnRefreshLoadMoreListener getLoadMoreListener() {
+        return loadMoreListener;
+    }
+
+    public void setLoadMoreListener(SwipRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener) {
+        this.loadMoreListener = loadMoreListener;
+    }
+
+    private SwipRefreshRecycleView.OnRefreshLoadMoreListener loadMoreListener;
+
     public int getTotalCount() {
         return totalCount;
     }
@@ -60,7 +70,7 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
         if (positionStart == 0) {
             notifyDataSetChanged();
         } else {
-            notifyItemRangeInserted(positionStart+1 , itemCount);
+            notifyItemRangeInserted(positionStart + 1, itemCount);
         }
     }
 
@@ -124,11 +134,9 @@ public abstract class RefreshRecycleAdapter<T> extends RecyclerView.Adapter impl
     public abstract void onViewHolderBind(RecyclerView.ViewHolder holder, int position);
 
     @Override
-    public final void isLoadingMore(boolean loading) {
-        if (loading) {
-            loadState = STATE_LOADING;
-            notifyItemRangeChanged(getItemRealCount(), 1);
-        }
+    public final void isLoadingMore() {
+        loadState = STATE_LOADING;
+        notifyItemRangeChanged(getItemRealCount(), 1);
     }
 
     @Override

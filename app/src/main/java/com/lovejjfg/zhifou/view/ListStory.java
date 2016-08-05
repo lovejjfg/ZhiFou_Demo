@@ -235,7 +235,7 @@ public class ListStory extends AppCompatActivity
 
     @Override
     public void isLoadingMore(final boolean loading) {
-        adapter.isLoadingMore(loading);
+//        adapter.isLoadingMore(loading);
     }
 
 //    @Override
