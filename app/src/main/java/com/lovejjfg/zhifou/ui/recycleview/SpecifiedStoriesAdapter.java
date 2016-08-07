@@ -6,12 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.ui.recycleview.holder.HeaderViewPagerHolder;
-import com.lovejjfg.zhifou.ui.recycleview.holder.NewBottomViewHolder;
 import com.lovejjfg.zhifou.ui.recycleview.holder.StoryViewHolder;
 import com.lovejjfg.zhifou.util.UIUtils;
 

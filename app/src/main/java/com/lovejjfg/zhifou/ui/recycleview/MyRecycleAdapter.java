@@ -5,7 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lovejjfg.zhifou.ui.recycleview.holder.NewBottomViewHolder;
+import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 
 /**
  * Created by Joe on 2016-07-27
@@ -16,7 +17,8 @@ public class MyRecycleAdapter extends RefreshRecycleAdapter<String> {
     @Override
     public RecyclerView.ViewHolder onViewHolderCreate(ViewGroup parent, int viewType) {
         TextView textView = new TextView(parent.getContext());
-        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100));
+        float density = parent.getContext().getResources().getDisplayMetrics().density;
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (30* density)));
         return new MyViewHolder(textView);
     }
 

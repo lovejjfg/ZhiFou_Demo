@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lovejjfg.powerrecycle.DefaultAnimator;
+import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.MyRecycleAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 
 import java.util.ArrayList;
 import java.util.List;

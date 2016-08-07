@@ -98,7 +98,6 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
     @Override
     public void isLoadingMore(boolean isLoadingMore) {
-        adapter.isLoadingMore(isLoadingMore);
 
     }
 
