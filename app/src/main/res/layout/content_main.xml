@@ -9,7 +9,7 @@
                 tools:showIn="@layout/app_bar_main">
 
 
-    <com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView
+    <com.lovejjfg.powerrecycle.SwipeRefreshRecycleView
         android:id="@+id/srrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -4,8 +4,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.lovejjfg.powerrecycle.AdapterLoader;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.ui.recycleview.AdapterLoader;
 
 /**
  * Created by zhangjun on 2016-03-11.

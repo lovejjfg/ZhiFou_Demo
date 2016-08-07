@@ -27,14 +27,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.lovejjfg.powerrecycle.DefaultAnimator;
+import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
-import com.lovejjfg.zhifou.ui.recycleview.DefaultAnimator;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;

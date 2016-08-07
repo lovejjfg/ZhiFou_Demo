@@ -10,13 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.SpecifiedDateImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
-import com.lovejjfg.zhifou.ui.recycleview.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;

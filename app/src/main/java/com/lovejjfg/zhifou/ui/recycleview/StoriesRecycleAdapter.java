@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lovejjfg.powerrecycle.RefreshRecycleAdapter;
+import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.powerrecycle.holder.NewBottomViewHolder;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
