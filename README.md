@@ -4,7 +4,7 @@
 搜索的动画相关效果来自：
 [plaid](https://github.com/nickbutcher/plaid)
 
-![效果](https://github.com/lovejjfg/screenshort/blob/master/zhifou.gif?raw=true)
+![效果](https://github.com/lovejjfg/screenshort/blob/master/zhifou1.gif?raw=true)
 
 **本Demo仅限于相关学习和交流！！**
 
