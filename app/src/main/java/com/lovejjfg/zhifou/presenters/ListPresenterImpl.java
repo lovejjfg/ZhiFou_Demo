@@ -14,8 +14,9 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
-public class ListPresenterImpl implements ListPresenter, BasePresenter {
+public class ListPresenterImpl extends BasePresenterImpl implements ListPresenter {
     View mView;
     Activity activity;
     boolean isLoadingMore;
@@ -54,21 +55,6 @@ public class ListPresenterImpl implements ListPresenter, BasePresenter {
 //        activity.startActivity(i, options.toBundle());
 //    }
 
-    @Override
-    public void onDestroy() {
-
-
-    }
-
-    @Override
-    public void subscribe(Subscription subscriber) {
-
-    }
-
-    @Override
-    public void unSubscribe() {
-
-    }
 
     @Override
     public void onRefresh() {

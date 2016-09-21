@@ -22,7 +22,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by zhangjun on 2016-03-01.
  */
-public class DetailPresenterImpl implements DetailPresenter {
+public class DetailPresenterImpl extends BasePresenterImpl implements DetailPresenter {
 
     private boolean isLoading;
     View view;
@@ -95,18 +95,8 @@ public class DetailPresenterImpl implements DetailPresenter {
     public void onDestroy() {
         Log.i("TAG", "onDestroy: xxxxxxx");
 //        service.shutdownNow();
+        super.onDestroy();
         activity = null;
         view = null;
-
-    }
-
-    @Override
-    public void subscribe(Subscription subscriber) {
-
-    }
-
-    @Override
-    public void unSubscribe() {
-
     }
 }

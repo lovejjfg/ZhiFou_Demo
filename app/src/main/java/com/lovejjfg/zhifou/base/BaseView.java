@@ -5,6 +5,7 @@ package com.lovejjfg.zhifou.base;
  * There are some base methods for View in MVP.
  * You should make your ViewInterface Extend this..
  */
+@Deprecated
 public interface BaseView {
     void showLoading();
     void closeLoading();

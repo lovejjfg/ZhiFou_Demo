@@ -7,6 +7,7 @@ package com.lovejjfg.zhifou.base;
  * You should make your PresenterInterface Extend this.
  *
  */
+@Deprecated
 public interface BasePresenter {
     void onStart();
 

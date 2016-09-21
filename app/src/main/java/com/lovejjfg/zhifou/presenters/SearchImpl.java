@@ -16,7 +16,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by zhangjun on 2016-03-19.
  */
-public class SearchImpl implements SearchPresenter {
+public class SearchImpl extends BasePresenterImpl implements SearchPresenter {
     private static final String CHARSET = "UTF-8";
     private SearchView view;
     private String info;
@@ -66,4 +66,5 @@ public class SearchImpl implements SearchPresenter {
                     }
                 });
     }
+
 }
