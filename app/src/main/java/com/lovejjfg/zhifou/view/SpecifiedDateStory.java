@@ -56,12 +56,7 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                JumpUtils.jumpToDataPickerForResult(SpecifiedDateStory.this, view, 100);
-            }
-        });
+        fab.setOnClickListener(view -> JumpUtils.jumpToDataPickerForResult(SpecifiedDateStory.this, view, 100));
     }
 
     @Override

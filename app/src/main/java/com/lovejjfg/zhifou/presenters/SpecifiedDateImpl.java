@@ -36,24 +36,13 @@ public class SpecifiedDateImpl implements SpecifiedDatePresenter, BasePresenter 
 
         Subscription beforeSubscribe = BaseDataManager.getDailyApiService().getBeforeDailyStories(date)
                 .subscribeOn(Schedulers.io())//事件产生在子线程
-                .doOnSubscribe(new Action0() {//subscribe之后，事件发送前执行。
-                    @Override
-                    public void call() {
-                        view.isLoading(true);
-                    }
-                })
+                .doOnSubscribe(() -> view.isLoading(true))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<DailyStories>() {
-                    @Override
-                    public void call(DailyStories dailyStories) {
-                        view.onLoadMore(dailyStories);
-                        view.isLoading(false);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        view.isLoading(false);
-                    }
+                .subscribe(dailyStories -> {
+                    view.onLoadMore(dailyStories);
+                    view.isLoading(false);
+                }, throwable -> {
+                    view.isLoading(false);
                 });
         subscribe(beforeSubscribe);
 

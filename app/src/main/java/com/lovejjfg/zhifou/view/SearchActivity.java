@@ -470,12 +470,9 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
                 return true;
             }
         });
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && confirmSaveContainer.getVisibility() == View.VISIBLE) {
-                    hideSaveConfimation();
-                }
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && confirmSaveContainer.getVisibility() == View.VISIBLE) {
+                hideSaveConfimation();
             }
         });
     }
@@ -496,13 +493,10 @@ public class SearchActivity extends AppCompatActivity implements com.lovejjfg.zh
             if (noResults == null) {
                 noResults = (ProgressBar) ((ViewStub)
                         findViewById(R.id.stub_no_search_results)).inflate();
-                noResults.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        searchView.setQuery("", false);
-                        searchView.requestFocus();
-                        ImeUtils.showIme(searchView);
-                    }
+                noResults.setOnClickListener(v -> {
+                    searchView.setQuery("", false);
+                    searchView.requestFocus();
+                    ImeUtils.showIme(searchView);
                 });
             }
             String message = String.format(getString(R

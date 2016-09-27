@@ -38,12 +38,7 @@ public class BaseDataManager {
                     .client(new OkHttpClient.Builder()
                             .addNetworkInterceptor(
                                     new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                            .addInterceptor(new Interceptor() {
-                                @Override
-                                public Response intercept(Chain chain) throws IOException {
-                                    return chain.proceed(RequestUtils.createJustJsonRequest(chain.request()));
-                                }
-                            })
+                            .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
                             .build())
                     .build();
         }

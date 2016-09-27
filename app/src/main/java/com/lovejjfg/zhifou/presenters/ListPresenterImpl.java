@@ -66,12 +66,9 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
         if (!isLoading) {
             Subscription listSubscribe = BaseDataManager.getDailyApiService().getLatestDailyStories()
                     .subscribeOn(Schedulers.io())//事件产生在子线程
-                    .doOnSubscribe(new Action0() {//subscribe之后，事件发送前执行。
-                        @Override
-                        public void call() {
-                            mView.isLoading(true);
-                            isLoading = true;
-                        }
+                    .doOnSubscribe(() -> {
+                        mView.isLoading(true);
+                        isLoading = true;
                     })
                     .subscribeOn(AndroidSchedulers.mainThread())//事件产生在子线程
                     .observeOn(AndroidSchedulers.mainThread())//
@@ -104,29 +101,20 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
         if (!isLoadingMore) {
             Subscription beforeSubscribe = BaseDataManager.getDailyApiService().getBeforeDailyStories(date)
                     .subscribeOn(Schedulers.io())//事件产生在子线程
-                    .doOnSubscribe(new Action0() {//subscribe之后，事件发送前执行。
-                        @Override
-                        public void call() {
-                            mView.isLoadingMore(true);
-                            isLoadingMore = true;
-                            Log.e("TAG", "call: true");
-                        }
+                    .doOnSubscribe(() -> {
+                        mView.isLoadingMore(true);
+                        isLoadingMore = true;
+                        Log.e("TAG", "call: true");
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<DailyStories>() {
-                        @Override
-                        public void call(DailyStories dailyStories) {
-                            mView.onLoadMore(dailyStories);
-                            mView.isLoadingMore(false);
-                            Log.e("TAG", "call: false");
-                            isLoadingMore = false;
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            mView.onLoadError(throwable.toString());
-                            isLoadingMore = false;
-                        }
+                    .subscribe(dailyStories -> {
+                        mView.onLoadMore(dailyStories);
+                        mView.isLoadingMore(false);
+                        Log.e("TAG", "call: false");
+                        isLoadingMore = false;
+                    }, throwable -> {
+                        mView.onLoadError(throwable.toString());
+                        isLoadingMore = false;
                     });
             subscribe(beforeSubscribe);
         }

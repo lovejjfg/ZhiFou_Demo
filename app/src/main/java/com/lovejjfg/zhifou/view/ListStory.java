@@ -124,15 +124,12 @@ public class ListStory extends AppCompatActivity
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean b = UIUtils.doubleClick();
-                if (b) {
-                    Log.e("TAG", "onClick: 双击了！！");
-                    manager.scrollToPositionWithOffset(0, 0);
+        toolbar.setOnClickListener(v -> {
+            boolean b = UIUtils.doubleClick();
+            if (b) {
+                Log.e("TAG", "onClick: 双击了！！");
+                manager.scrollToPositionWithOffset(0, 0);
 
-                }
             }
         });
 

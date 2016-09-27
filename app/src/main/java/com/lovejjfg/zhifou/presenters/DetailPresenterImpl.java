@@ -46,34 +46,25 @@ public class DetailPresenterImpl extends BasePresenterImpl implements DetailPres
         if (!isLoading) {
             BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id))
                     .subscribeOn(Schedulers.io())
-                    .doOnSubscribe(new Action0() {
-                        @Override
-                        public void call() {
-                            view.isLoading(true);
-                            isLoading = true;
-                        }
+                    .doOnSubscribe(() -> {
+                        view.isLoading(true);
+                        isLoading = true;
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Story>() {
-                        @Override
-                        public void call(Story story) {
-                            isLoading = false;
-                            if (!TextUtils.isEmpty(story.getImage())) {
-                                view.onBindImage(story.getImage());
-                            }
-                            if (!TextUtils.isEmpty(story.getBody())) {
-                                String data = WebUtils.BuildHtmlWithCss(story.getBody(), story.getCssList(), false);
-                                view.onBindWebView(data);
-                            }
-                            if (!TextUtils.isEmpty(story.getTitle())) {
-                                view.onBindTittle(story.getTitle());
-                            }
+                    .subscribe(story -> {
+                        isLoading = false;
+                        if (!TextUtils.isEmpty(story.getImage())) {
+                            view.onBindImage(story.getImage());
                         }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            isLoading = false;
+                        if (!TextUtils.isEmpty(story.getBody())) {
+                            String data = WebUtils.BuildHtmlWithCss(story.getBody(), story.getCssList(), false);
+                            view.onBindWebView(data);
                         }
+                        if (!TextUtils.isEmpty(story.getTitle())) {
+                            view.onBindTittle(story.getTitle());
+                        }
+                    }, throwable -> {
+                        isLoading = false;
                     });
 
         }
