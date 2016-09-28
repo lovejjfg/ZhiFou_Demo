@@ -1,13 +1,39 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'AndResGuard'
 
+
+andResGuard {
+    mappingFile = file("./resource_mapping.txt")
+    use7zip = true
+    useSign = true
+    keepRoot = false
+    // add <yourpackagename>.R.drawable.icon into whitelist.
+    // because the launcher will get the icon with his name
+    whiteList = [
+            "R.mipmap.ic_launcher",
+            //https://docs.fabric.io/android/crashlytics/build-tools.html
+            "R.string.com.crashlytics.*"
+    ]
+    compressFilePattern = [
+            "*.png",
+            "*.jpg",
+            "*.jpeg",
+            "*.gif",
+            "resources.arsc"
+    ]
+    sevenzip {
+        artifact = 'com.tencent.mm:SevenZip:1.1.9'
+//        path = "/usr/local/bin/7za"
+//        path = "E:/android-sdk-windows/build-tools/24.0.0"
+    }
+}
 
 android {
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "com.lovejjfg.zhifou_demo"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
@@ -16,11 +42,32 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    signingConfigs {
+        release {
+            storeFile file("../zhifou.jks")
+            storePassword "886520"
+            keyAlias "zhifou"
+            keyPassword "886520"
+        }
+        debug {
+            storeFile file("../debug.keystore")
+            storePassword "androiddebug"
+            keyAlias "androiddebug"
+            keyPassword "androiddebug"
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig  signingConfigs.release
+        }
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig  signingConfigs.release
         }
     }
     compileOptions {
