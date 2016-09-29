@@ -19,22 +19,24 @@ import com.lovejjfg.zhifou.util.ListUtils;
 import java.security.PublicKey;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 /**
  * Created by Aspsine on 2015/3/11.
  */
 public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
     private static final String TAG = HeaderViewPagerHolder.class.getSimpleName();
+    @Bind(R.id.viewPager)
     public TopViewPager viewPager;
-    private SlidingCircleLayout indicator;
+    @Bind(R.id.scl)
+    SlidingCircleLayout indicator;
     private PagerAdapter mPagerAdapter;
 
     public HeaderViewPagerHolder(@Nullable View itemView, List<Story> stories) {
         super(itemView);
-
-         viewPager = (TopViewPager) itemView.findViewById(R.id.viewPager);
-
-        indicator = (SlidingCircleLayout) itemView.findViewById(R.id.scl);
+        ButterKnife.bind(this,itemView);
         if (ListUtils.isEmpty(stories)) {
             return;
         } else if (stories.size() < 2) {
@@ -95,12 +97,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
             final HeaderImageView iv = new HeaderImageView(container.getContext());
             final Story story = mStories.get(position);
             // TODO: 2016-03-15 header的点击处理
-            iv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    JumpUtils.jumpToDetail(((Activity) container.getContext()), iv, iv, Integer.valueOf(story.getId()));
-                }
-            });
+            iv.setOnClickListener(v -> JumpUtils.jumpToDetail(((Activity) container.getContext()), iv, iv, Integer.valueOf(story.getId())));
             Glide.with(container.getContext()).load(story.getImage()).into(iv.mImageView);
             iv.mTvTittle.setText(story.getTitle());
             container.addView(iv);

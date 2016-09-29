@@ -1,11 +1,9 @@
 package com.lovejjfg.zhifou.ui.recycleview.holder;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,14 +13,17 @@ import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.util.glide.CircleTransform;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 /**
  * Created by Aspsine on 2015/3/11.
  */
-public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//    public CardView card;
-    public FrameLayout card;
+public class StoryViewHolder extends RecyclerView.ViewHolder {
+    @Bind(R.id.text)
     public TextView text;
+    @Bind(R.id.theme)
     public TextView theme;
 
     public ImageView getImage() {
@@ -33,47 +34,19 @@ public class StoryViewHolder extends RecyclerView.ViewHolder implements View.OnC
         this.image = image;
     }
 
+    @Bind(R.id.image)
     public ImageView image;
+    @Bind(R.id.ivMultiPic)
     public ImageView ivMultiPic;
+    @Bind(R.id.line)
     public ImageView line;
-    public RelativeLayout rlContent;
     public Story mStory;
 
     public StoryViewHolder(View itemView) {
         super(itemView);
-
-
-//        card = (CardView) itemView.findViewById(R.id.card);
-        card = (FrameLayout) itemView.findViewById(R.id.card);
-        text = (TextView) itemView.findViewById(R.id.text);
-        image = (ImageView) itemView.findViewById(R.id.image);
-        ivMultiPic = (ImageView) itemView.findViewById(R.id.ivMultiPic);
-        rlContent = (RelativeLayout) itemView.findViewById(R.id.rl_content);
-        theme = (TextView) itemView.findViewById(R.id.theme);
-        line = (ImageView) itemView.findViewById(R.id.line);
-        card.setOnClickListener(this);
-        theme.setOnClickListener(this);
-//        CardView cardView = new CardView(itemView.getContext());
-
+        ButterKnife.bind(this, itemView);
     }
 
-    @Override
-    public void onClick(View v) {
-//        if (v.getId() == R.id.card) {
-//            IntentUtils.intentToStoryActivity((Activity) v.getContext(), mStory);
-//        } else if (v.getId() == R.id.theme) {
-//            final NavigationFragment navigationFragment = (NavigationFragment) ((NavigationDrawerActivity) itemView.getContext()).getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-//            if (navigationFragment != null && navigationFragment.isAdded()) {
-//                navigationFragment.openDrawer();
-//                v.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        navigationFragment.selectTheme(mStory.getTheme());
-//                    }
-//                }, 500);
-//            }
-//        }
-    }
 
     public void bindStoryView(Story story) {
         mStory = story;

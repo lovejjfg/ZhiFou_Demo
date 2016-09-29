@@ -8,17 +8,21 @@ import android.widget.TextView;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.util.DateUtils;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 /**
- * Created by Aspsine on 2015/3/11.
+ * Created by Joe on 2015/3/11.
+ * Email lovejjfg@gmail.com
  */
 public class DateViewHolder extends RecyclerView.ViewHolder {
+    @Bind(R.id.date)
     public TextView tvDate;
 
     public DateViewHolder(View itemView) {
         super(itemView);
-
-        tvDate = (TextView) itemView.findViewById(R.id.date);
+        ButterKnife.bind(this, itemView);
     }
 
     public void bindDateView(String date) {
