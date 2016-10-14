@@ -39,7 +39,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class DetailStory extends AppCompatActivity implements DetailPresenter.View {
-//    @Bind(R.id.container)
+    //    @Bind(R.id.container)
 //    CoordinatorLayout parent;
 //    @Bind(R.id.app_bar)
 //    AppBarLayout appBarLayout;
@@ -70,7 +70,11 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
         ButterKnife.bind(this);
         initView();
         detailPresenter = new DetailPresenterImpl(this);
-        detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
+        if (savedInstanceState == null) {
+            detailPresenter.onLoading(getIntent().getIntExtra(Constants.ID, -1));
+        } else {
+            mWeb.restoreState(savedInstanceState);
+        }
         dragDismissFrameLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -83,7 +87,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
         mScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                Log.i("TAG", "onScrollChange: "+scrollY);
+                Log.i("TAG", "onScrollChange: " + scrollY);
                 mHeaderImage.setOffset(-scrollY);
             }
         });
@@ -150,7 +154,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
     @Override
     public void isLoading(boolean isLoading) {
-        Log.i("TAG", "isLoading: "+isLoading);
+        Log.i("TAG", "isLoading: " + isLoading);
     }
 
     @Override
@@ -203,7 +207,7 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
                     .maximumColorCount(3)
                     .clearFilters()
                     .setRegion(0, 0, bitmap.getWidth() - 1, (int) (twentyFourDip / imageScale))
-                            // - 1 to work around https://code.google.com/p/android/issues/detail?id=191013
+                    // - 1 to work around https://code.google.com/p/android/issues/detail?id=191013
                     .generate(palette -> {
                         boolean isDark;
                         @ColorUtils.Lightness int lightness = ColorUtils.isDark(palette);
@@ -254,4 +258,12 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
 
         }
     };
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        int scrollY = mWeb.getScrollY();
+        Log.e("TAG", "onSaveInstanceState: " + scrollY);
+        super.onSaveInstanceState(outState);
+    }
+
 }

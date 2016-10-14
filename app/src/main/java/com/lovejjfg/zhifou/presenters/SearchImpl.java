@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.presenters;
 
+import android.os.Bundle;
+
 import com.lovejjfg.zhifou.data.BmobUtil;
 import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.lovejjfg.zhifou.view.SearchView;
@@ -67,4 +69,8 @@ public class SearchImpl extends BasePresenterImpl implements SearchPresenter {
                 });
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+    }
 }

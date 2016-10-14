@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.ui.recycleview;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -127,12 +129,9 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
                 assert item != null;
                 ((StoryViewHolder) holder).bindStoryView(item.getStory());
                 final Item finalItem = item;
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (null != listener) {
-                            listener.onItemClick(holder.itemView, ((StoryViewHolder) holder).getImage(), Integer.valueOf(finalItem.getStory().getId()));
-                        }
+                holder.itemView.setOnClickListener(v -> {
+                    if (null != listener) {
+                        listener.onItemClick(holder.itemView, ((StoryViewHolder) holder).getImage(), Integer.valueOf(finalItem.getStory().getId()));
                     }
                 });
                 break;
@@ -199,7 +198,7 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
         return null;
     }
 
-    public static class Item {
+    public static class Item implements Parcelable {
         private int type;
         private String date;
         private Story story;
@@ -236,5 +235,40 @@ public class StoriesRecycleAdapter extends RefreshRecycleAdapter<StoriesRecycleA
         public void setStories(List<Story> stories) {
             this.stories = stories;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.type);
+            dest.writeString(this.date);
+            dest.writeParcelable(this.story, flags);
+            dest.writeTypedList(this.stories);
+        }
+
+        public Item() {
+        }
+
+        protected Item(Parcel in) {
+            this.type = in.readInt();
+            this.date = in.readString();
+            this.story = in.readParcelable(Story.class.getClassLoader());
+            this.stories = in.createTypedArrayList(Story.CREATOR);
+        }
+
+        public static final Parcelable.Creator<Item> CREATOR = new Parcelable.Creator<Item>() {
+            @Override
+            public Item createFromParcel(Parcel source) {
+                return new Item(source);
+            }
+
+            @Override
+            public Item[] newArray(int size) {
+                return new Item[size];
+            }
+        };
     }
 }

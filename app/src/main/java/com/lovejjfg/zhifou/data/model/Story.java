@@ -1,14 +1,18 @@
 package com.lovejjfg.zhifou.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by lovejjfg on 2015/2/27.
  */
-public class Story {
+public class Story implements Parcelable {
     @Expose
     private List<String> images;
     @Expose
@@ -201,4 +205,70 @@ public class Story {
     public void setTheme(Theme theme) {
         this.theme = theme;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(this.images);
+        dest.writeString(this.type);
+        dest.writeString(this.id);
+        dest.writeString(this.gaPrefix);
+        dest.writeString(this.title);
+        dest.writeString(this.multiPic);
+        dest.writeString(this.image);
+        dest.writeString(this.shareUrl);
+        dest.writeString(this.body);
+        dest.writeString(this.imageSource);
+        dest.writeStringList(this.jsList);
+        dest.writeStringList(this.cssList);
+        dest.writeList(this.recommenders);
+        dest.writeParcelable(this.theme, flags);
+        dest.writeString(this.thumbnail);
+        dest.writeString(this.url);
+        dest.writeString(this.sectionThumbnail);
+        dest.writeString(this.sectionId);
+        dest.writeString(this.sectionName);
+    }
+
+    public Story() {
+    }
+
+    protected Story(Parcel in) {
+        this.images = in.createStringArrayList();
+        this.type = in.readString();
+        this.id = in.readString();
+        this.gaPrefix = in.readString();
+        this.title = in.readString();
+        this.multiPic = in.readString();
+        this.image = in.readString();
+        this.shareUrl = in.readString();
+        this.body = in.readString();
+        this.imageSource = in.readString();
+        this.jsList = in.createStringArrayList();
+        this.cssList = in.createStringArrayList();
+        this.recommenders = new ArrayList<Editor>();
+        in.readList(this.recommenders, Editor.class.getClassLoader());
+        this.theme = in.readParcelable(Theme.class.getClassLoader());
+        this.thumbnail = in.readString();
+        this.url = in.readString();
+        this.sectionThumbnail = in.readString();
+        this.sectionId = in.readString();
+        this.sectionName = in.readString();
+    }
+
+    public static final Parcelable.Creator<Story> CREATOR = new Parcelable.Creator<Story>() {
+        @Override
+        public Story createFromParcel(Parcel source) {
+            return new Story(source);
+        }
+
+        @Override
+        public Story[] newArray(int size) {
+            return new Story[size];
+        }
+    };
 }

@@ -2,11 +2,19 @@ package com.lovejjfg.zhifou.presenters;
 
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.data.model.Story;
+import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.util.JumpUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -21,11 +29,11 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     Activity activity;
     boolean isLoadingMore;
     boolean isLoading;
+    ArrayList<Story> stories;
 
     public ListPresenterImpl(View view) {
         this.mView = view;
         this.activity = (Activity) view;
-        onLoading();
     }
 
 
@@ -37,6 +45,22 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     @Override
     public void onResume() {
 
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            onLoading();
+        } else {
+            List<StoriesRecycleAdapter.Item> items = savedInstanceState.getParcelableArrayList(SAVED_ITEMS);
+            String date = savedInstanceState.getString(CURRENT_DATE);
+            if (items != null && items.size() > 0) {
+                mView.onReLoadItems(items);
+                mView.onReSetDate(date);
+            } else {
+                onLoading();
+            }
+        }
     }
 
     @Override
@@ -119,6 +143,11 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
             subscribe(beforeSubscribe);
         }
 
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
 
     }
 }

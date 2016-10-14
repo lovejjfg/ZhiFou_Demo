@@ -14,6 +14,8 @@ package com.lovejjfg.zhifou.presenters;/*
  * limitations under the License.
  */
 
+import android.os.Bundle;
+
 import rx.Subscriber;
 import rx.Subscription;
 
@@ -32,4 +34,6 @@ public interface BasePresenter {
     void subscribe(Subscription subscriber);
 
     void unSubscribe();
+
+    void onCreate(Bundle savedInstanceState);
 }

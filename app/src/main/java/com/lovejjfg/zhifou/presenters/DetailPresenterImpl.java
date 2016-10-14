@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.presenters;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -89,5 +90,10 @@ public class DetailPresenterImpl extends BasePresenterImpl implements DetailPres
         super.onDestroy();
         activity = null;
         view = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
     }
 }

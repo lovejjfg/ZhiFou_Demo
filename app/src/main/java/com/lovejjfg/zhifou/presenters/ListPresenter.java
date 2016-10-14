@@ -18,10 +18,17 @@
 
 package com.lovejjfg.zhifou.presenters;
 
+import android.os.Bundle;
+
 import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.view.LoadingView;
 
+import java.util.List;
+
 public interface ListPresenter  {
+    String SAVED_ITEMS = "SAVEDINSTANCEITEMS";
+    String CURRENT_DATE = "CURRENT_DATE";
 
     void onItemClicked(android.view.View itemView, android.view.View image, int id);
 
@@ -31,6 +38,8 @@ public interface ListPresenter  {
 
     void onLoadMore(String mDate);
 
+    void onSaveInstanceState(Bundle outState);
+
     interface View extends LoadingView {
 
         void onLoadMore(DailyStories stories);
@@ -39,5 +48,8 @@ public interface ListPresenter  {
         void onLoadError(String errorCode);
 
 
+        void onReLoadItems(List<StoriesRecycleAdapter.Item> items);
+
+        void onReSetDate(String date);
     }
 }

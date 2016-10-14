@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -38,6 +39,12 @@ import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.lovejjfg.zhifou.presenters.ListPresenter.CURRENT_DATE;
+import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
@@ -66,35 +73,27 @@ public class ListStory extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final View view = findViewById(R.id.view);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent ev) {
-                switch (ev.getAction()) {
-                    case MotionEvent.ACTION_DOWN://有事件先拦截再说！！
-                        startX = (int) ev.getRawX();
-                        startY = (int) ev.getRawY();
-                        view.getParent().requestDisallowInterceptTouchEvent(true);
+        view.setOnTouchListener((v, ev) -> {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN://有事件先拦截再说！！
+                    startX = (int) ev.getRawX();
+                    startY = (int) ev.getRawY();
+                    view.getParent().requestDisallowInterceptTouchEvent(true);
+                    break;
+                case MotionEvent.ACTION_MOVE://移动的时候
+                    int endX = (int) ev.getRawX();
+                    int endY = (int) ev.getRawY();
+                    //判断四种情况：
+                    //3.上下互动，需要ListView来响应。
+                    if (Math.abs(endX - startX) < (Math.abs(endY - startY))) {
+                        view.getParent().requestDisallowInterceptTouchEvent(false);
                         break;
-                    case MotionEvent.ACTION_MOVE://移动的时候
-                        int endX = (int) ev.getRawX();
-                        int endY = (int) ev.getRawY();
-                        //判断四种情况：
-                        //3.上下互动，需要ListView来响应。
-                        if (Math.abs(endX - startX) < (Math.abs(endY - startY))) {
-                            view.getParent().requestDisallowInterceptTouchEvent(false);
-                            break;
-                        }
-                }
+                    }
+            }
 
-                return adapter.headerViewPagerHolder.viewPager.dispatchTouchEvent(ev);
-            }
+            return adapter.headerViewPagerHolder.viewPager.dispatchTouchEvent(ev);
         });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                adapter.headerViewPagerHolder.viewPager.performClick();
-            }
-        });
+        view.setOnClickListener(v -> adapter.headerViewPagerHolder.viewPager.performClick());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("首页");
@@ -114,6 +113,7 @@ public class ListStory extends AppCompatActivity
         mRecyclerView.setOnScrollListener(this);
 
         mMainPresenter = new ListPresenterImpl(this);
+        mMainPresenter.onCreate(savedInstanceState);
         dialog = new Dialog(this);
         View inflate = LayoutInflater.from(this).inflate(R.layout.layout_bar, null);
         bar = (ProgressBar) inflate.findViewById(R.id.pb);
@@ -132,6 +132,17 @@ public class ListStory extends AppCompatActivity
 
             }
         });
+       mRecyclerView.getRecycle().addOnScrollListener(new RecyclerView.OnScrollListener() {
+           @Override
+           public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+               if (dy > 5) {
+                   fab.hide();
+               } else if (dy < -5) {
+                   fab.show();
+               }
+           }
+       });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -201,6 +212,18 @@ public class ListStory extends AppCompatActivity
     public void onLoadError(String errorCode) {
         Log.e("TAG", "onLoadError: " + errorCode);
         adapter.loadMoreError();
+    }
+
+    @Override
+    public void onReLoadItems(List<StoriesRecycleAdapter.Item> items) {
+        adapter.setList(items);
+
+    }
+
+    @Override
+    public void onReSetDate(String date) {
+        Log.e("TAG", "onReSetDate: " + date);
+        mDate = date;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -307,5 +330,15 @@ public class ListStory extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        List<StoriesRecycleAdapter.Item> list = adapter.getList();
+        ArrayList<StoriesRecycleAdapter.Item> items = new ArrayList<>();
+        items.addAll(list);
+        outState.putParcelableArrayList(SAVED_ITEMS, items);
+        outState.putString(CURRENT_DATE, mDate);
+        super.onSaveInstanceState(outState);
     }
 }

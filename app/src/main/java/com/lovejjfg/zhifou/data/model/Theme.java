@@ -1,13 +1,17 @@
 package com.lovejjfg.zhifou.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by 张俊 on 2016/2/21.
  */
-public class Theme {
+public class Theme implements Parcelable {
     @Expose
     private String color;
     @Expose
@@ -98,4 +102,50 @@ public class Theme {
     public void setEditors(List<Editor> editors) {
         this.editors = editors;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.color);
+        dest.writeString(this.thumbnail);
+        dest.writeString(this.image);
+        dest.writeString(this.background);
+        dest.writeString(this.description);
+        dest.writeString(this.id);
+        dest.writeString(this.name);
+        dest.writeTypedList(this.stories);
+        dest.writeList(this.editors);
+    }
+
+    public Theme() {
+    }
+
+    protected Theme(Parcel in) {
+        this.color = in.readString();
+        this.thumbnail = in.readString();
+        this.image = in.readString();
+        this.background = in.readString();
+        this.description = in.readString();
+        this.id = in.readString();
+        this.name = in.readString();
+        this.stories = in.createTypedArrayList(Story.CREATOR);
+        this.editors = new ArrayList<Editor>();
+        in.readList(this.editors, Editor.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Theme> CREATOR = new Parcelable.Creator<Theme>() {
+        @Override
+        public Theme createFromParcel(Parcel source) {
+            return new Theme(source);
+        }
+
+        @Override
+        public Theme[] newArray(int size) {
+            return new Theme[size];
+        }
+    };
 }

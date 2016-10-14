@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.presenters;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
@@ -75,6 +76,11 @@ public class SpecifiedDateImpl implements SpecifiedDatePresenter, BasePresenter 
 
     @Override
     public void unSubscribe() {
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
 
     }
 }
