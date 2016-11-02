@@ -1,11 +1,17 @@
 package com.lovejjfg.zhifou.util;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,6 +114,22 @@ public class UIUtils {
         mHits[mHits.length - 1] = SystemClock.uptimeMillis();
         //双击事件的时间间隔500ms
         return mHits[0] >= (SystemClock.uptimeMillis() - 500);
+    }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static void checkDontkeep(Activity context) {
+        int alwaysFinish = Settings.Global.getInt(context.getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);
+        if (alwaysFinish == 1) {
+            Dialog dialog;
+            dialog = new AlertDialog.Builder(context)
+                    .setMessage(
+                            "由于您已开启‘不保留活动’,导致部分功能无法正常使用.我们建议您点击左下方'设置'按钮,在'开发者选项'中关闭'不保留活动'功能.")
+                    .setNegativeButton("取消", (dialog1, which) -> dialog1.dismiss()).setPositiveButton("设置", (dialog12, which) -> {
+                        Intent intent = new Intent(
+                                Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+                        context.startActivity(intent);
+                    }).create();
+            dialog.show();
+        }
     }
 
 }
