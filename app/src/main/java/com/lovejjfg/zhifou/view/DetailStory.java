@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
@@ -27,13 +26,11 @@ import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
 import com.lovejjfg.zhifou.presenters.DetailPresenterImpl;
 import com.lovejjfg.zhifou.ui.widget.ElasticDragDismissFrameLayout;
-import com.lovejjfg.zhifou.ui.widget.ForegroundImageView;
 import com.lovejjfg.zhifou.ui.widget.ParallaxScrimageView;
 import com.lovejjfg.zhifou.util.AnimUtils;
 import com.lovejjfg.zhifou.util.ColorUtils;
 import com.lovejjfg.zhifou.util.GlideUtils;
 import com.lovejjfg.zhifou.util.ViewUtils;
-import com.lovejjfg.zhifou.util.glide.ColorFilterTransformation;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -168,13 +165,12 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
                 .load(image)
 //                .listener(shotLoadListener)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .priority(Priority.IMMEDIATE)
-//                .thumbnail(0.1f)
+                .priority(Priority.IMMEDIATE)//加载的优先级
+//                .thumbnail(0.1f)//缩略图
 //                .fitCenter()
 //                .bitmapTransform()
 //                .bitmapTransform(new ColorFilterTransformation(getApplicationContext(), Color.RED))
                 .into(mHeaderImage);
-
         mHeaderImage.setVisibility(View.VISIBLE);
     }
 

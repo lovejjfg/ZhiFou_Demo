@@ -24,6 +24,8 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import static android.R.attr.id;
+
 public class ListPresenterImpl extends BasePresenterImpl implements ListPresenter {
     View mView;
     Activity activity;

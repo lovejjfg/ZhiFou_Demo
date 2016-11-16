@@ -2,7 +2,6 @@ package com.lovejjfg.zhifou.view;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,11 +21,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
@@ -49,24 +45,17 @@ import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
 
-    private static final int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private static final int RC_SEARCH = 11;
     private SwipeRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
     private String mDate;
-    //    private SwipeRefreshLayout mSwip;
     private String mTitle;
     private double lastTitlePos;
     private FloatingActionButton fab;
-    private ProgressBar bar;
-    private int i;
-    private Dialog dialog;
     private Toolbar toolbar;
     private View searchMenuView;
-    private int startX;
-    private int startY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +81,6 @@ public class ListStory extends AppCompatActivity
 
         mMainPresenter = new ListPresenterImpl(this);
         mMainPresenter.onCreate(savedInstanceState);
-        dialog = new Dialog(this);
-        View inflate = LayoutInflater.from(this).inflate(R.layout.layout_bar, null);
-        bar = (ProgressBar) inflate.findViewById(R.id.pb);
-
-
-        dialog.addContentView(inflate, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
         toolbar.setOnClickListener(v -> {
@@ -110,16 +91,16 @@ public class ListStory extends AppCompatActivity
 
             }
         });
-       mRecyclerView.getRecycle().addOnScrollListener(new RecyclerView.OnScrollListener() {
-           @Override
-           public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-               if (dy > 5) {
-                   fab.hide();
-               } else if (dy < -5) {
-                   fab.show();
-               }
-           }
-       });
+        mRecyclerView.getRecycle().addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 5) {
+                    fab.hide();
+                } else if (dy < -5) {
+                    fab.show();
+                }
+            }
+        });
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -134,7 +115,6 @@ public class ListStory extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
