@@ -16,7 +16,6 @@ import com.lovejjfg.zhifou.ui.widget.TopViewPager;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.ListUtils;
 
-import java.security.PublicKey;
 import java.util.List;
 
 import butterknife.Bind;
@@ -36,7 +35,7 @@ public class HeaderViewPagerHolder extends RecyclerView.ViewHolder {
 
     public HeaderViewPagerHolder(@Nullable View itemView, List<Story> stories) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
         if (ListUtils.isEmpty(stories)) {
             return;
         } else if (stories.size() < 2) {

@@ -11,14 +11,12 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.EdgeEffectCompat;
 import android.support.v4.widget.ScrollerCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewParent;
 import android.webkit.WebView;
 import android.widget.AbsListView;
-import android.widget.FrameLayout;
 
 /**
  * Created by 张俊 on 2016/3/12.
@@ -93,7 +91,7 @@ public class NestedWebView extends WebView implements NestedScrollingParent, Nes
     }
 
     private void init(Context context) {
-        mScroller =  ScrollerCompat.create(context, null);
+        mScroller = ScrollerCompat.create(context, null);
     }
 
     /*  NestedScrollingParent*/
@@ -437,8 +435,7 @@ public class NestedWebView extends WebView implements NestedScrollingParent, Nes
 
                     if ((Math.abs(initialVelocity) > mMinimumVelocity)) {
                         flingWithNestedDispatch(-initialVelocity);
-                    }
-                    else if (mScroller.springBack(getScrollX(), getScrollY(), 0, 0, 0,
+                    } else if (mScroller.springBack(getScrollX(), getScrollY(), 0, 0, 0,
                             getScrollRange())) {
                         ViewCompat.postInvalidateOnAnimation(this);
                     }
@@ -473,7 +470,7 @@ public class NestedWebView extends WebView implements NestedScrollingParent, Nes
             mVelocityTracker.addMovement(vtev);
         }
         vtev.recycle();
-        return  true;
+        return true;
     }
 
     /**
@@ -508,6 +505,7 @@ public class NestedWebView extends WebView implements NestedScrollingParent, Nes
             mVelocityTracker = VelocityTracker.obtain();
         }
     }
+
     private void initOrResetVelocityTracker() {
         if (mVelocityTracker == null) {
             mVelocityTracker = VelocityTracker.obtain();
@@ -522,8 +520,10 @@ public class NestedWebView extends WebView implements NestedScrollingParent, Nes
             mVelocityTracker = null;
         }
     }
+
     private EdgeEffectCompat mEdgeGlowTop;
     private EdgeEffectCompat mEdgeGlowBottom;
+
     private void ensureGlows() {
         if (ViewCompat.getOverScrollMode(this) != ViewCompat.OVER_SCROLL_NEVER) {
             if (mEdgeGlowTop == null) {

@@ -1,14 +1,12 @@
 package com.lovejjfg.zhifou.ui.recycleview;
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.SearchResult;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.ui.recycleview.holder.StoryViewHolder;
@@ -109,7 +107,7 @@ public class SearchStoriesAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.image.setVisibility(View.GONE);
         } else {
             holder.image.setVisibility(View.VISIBLE);
-            Glide.with( holder.image.getContext()).load(imageUrl).into( holder.image);
+            Glide.with(holder.image.getContext()).load(imageUrl).into(holder.image);
         }
     }
 

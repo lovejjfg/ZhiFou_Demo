@@ -2,11 +2,7 @@ package com.lovejjfg.zhifou.data;
 
 import com.lovejjfg.zhifou.data.api.DailyApiService;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -25,7 +21,7 @@ public class BaseDataManager {
     private static final String URL_CONTACT = "https://api.bmob.cn/1/classes/Contacts/";
     private static final String APPLICATION_ID = "f090e25bef0697ae9a8d2f06d08c0dad";
     private static final String API_KEY = "b55f225809b92ba6093a2b69a39f38f8";
-//    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    //    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static Retrofit userApi;
     // TODO: 2016-03-21 完成Retrofit2.0的升级，这个是什么情况
 
@@ -77,8 +73,6 @@ public class BaseDataManager {
 //                .build()
 //                .create(BombApiService.class);
 //    }
-
-
 
 
 }

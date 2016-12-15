@@ -5,7 +5,6 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +24,7 @@ public class StoryViewHolder extends RecyclerView.ViewHolder {
     public TextView text;
     @Bind(R.id.theme)
     public TextView theme;
+    private boolean isUpdateByHand;
 
     public ImageView getImage() {
         return image;
@@ -78,6 +78,7 @@ public class StoryViewHolder extends RecyclerView.ViewHolder {
             image.setVisibility(View.VISIBLE);
             Glide.with(image.getContext())
                     .load(imageUrl)
+//                    .skipMemoryCache(isUpdateByHand)
                     .error(R.mipmap.girl)
                     .placeholder(R.mipmap.ic_launcher)
                     .crossFade(R.anim.fade_out_rapidly, 5000)

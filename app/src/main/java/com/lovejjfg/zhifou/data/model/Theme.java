@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Theme implements Parcelable {
     @Expose
     private String id;
     @Expose
+    @SerializedName("name")
     private String name;
     @Expose
     private List<Story> stories;

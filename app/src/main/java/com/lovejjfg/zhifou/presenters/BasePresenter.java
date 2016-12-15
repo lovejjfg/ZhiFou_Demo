@@ -16,11 +16,10 @@ package com.lovejjfg.zhifou.presenters;/*
 
 import android.os.Bundle;
 
-import rx.Subscriber;
 import rx.Subscription;
 
 /**
- * Android lifecycle callbacks from activities/fragments are linked to the Presenters by this 
+ * Android lifecycle callbacks from activities/fragments are linked to the Presenters by this
  * behavior interface. Linking callbacks is declared as an optional behavior and not a need for
  * every presenter.
  *
@@ -28,7 +27,9 @@ import rx.Subscription;
  */
 public interface BasePresenter {
     void onStart();
+
     void onResume();
+
     void onDestroy();
 
     void subscribe(Subscription subscriber);

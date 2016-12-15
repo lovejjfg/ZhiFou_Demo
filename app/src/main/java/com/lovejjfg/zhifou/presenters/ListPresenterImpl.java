@@ -3,8 +3,6 @@ package com.lovejjfg.zhifou.presenters;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
@@ -19,12 +17,7 @@ import java.util.List;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
-
-import static android.R.attr.id;
 
 public class ListPresenterImpl extends BasePresenterImpl implements ListPresenter {
     View mView;

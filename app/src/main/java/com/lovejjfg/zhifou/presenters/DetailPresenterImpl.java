@@ -6,18 +6,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
-import com.lovejjfg.zhifou.data.model.DailyStories;
-import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.util.WebUtils;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**

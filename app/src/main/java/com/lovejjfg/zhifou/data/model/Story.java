@@ -14,25 +14,31 @@ import java.util.List;
  */
 public class Story implements Parcelable {
     @Expose
+    @SerializedName("images")
     private List<String> images;
     @Expose
+    @SerializedName("type")
     private String type;
     @Expose
+    @SerializedName("id")
     private String id;
     @Expose
     @SerializedName("ga_prefix")
     private String gaPrefix;
     @Expose
+    @SerializedName("title")
     private String title;
     @Expose
     @SerializedName("multipic")
     private String multiPic;
     @Expose
+    @SerializedName("image")
     private String image;
     @Expose
     @SerializedName("share_url")
     private String shareUrl;
     @Expose
+    @SerializedName("body")
     private String body;
     @Expose
     @SerializedName("image_source")
@@ -44,8 +50,10 @@ public class Story implements Parcelable {
     @SerializedName("css")
     private List<String> cssList;
     @Expose
+    @SerializedName("recommenders")
     private List<Editor> recommenders;
     @Expose
+    @SerializedName("theme")
     private  Theme theme;
 
     private String thumbnail;

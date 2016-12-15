@@ -5,16 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.view.SpecifiedDateView;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**

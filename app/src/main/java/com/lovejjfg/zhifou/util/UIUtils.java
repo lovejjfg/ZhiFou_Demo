@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
@@ -115,6 +114,7 @@ public class UIUtils {
         //双击事件的时间间隔500ms
         return mHits[0] >= (SystemClock.uptimeMillis() - 500);
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void checkDontkeep(Activity context) {
         int alwaysFinish = Settings.Global.getInt(context.getContentResolver(), Settings.Global.ALWAYS_FINISH_ACTIVITIES, 0);

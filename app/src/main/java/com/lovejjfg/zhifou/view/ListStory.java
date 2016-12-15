@@ -44,7 +44,7 @@ import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
 
 public class ListStory extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
-
+    private static final String TAG = ListStory.class.getSimpleName();
     private static final int RC_SEARCH = 11;
     private SwipeRefreshRecycleView mRecyclerView;
     private ListPresenterImpl mMainPresenter;
@@ -158,12 +158,15 @@ public class ListStory extends AppCompatActivity
     public void onLoadMore(DailyStories stories) {
         adapter.appendList(stories);
         mDate = stories.getDate();
+        Log.e(TAG, "onLoadMore: " + mDate);
     }
 
     @Override
     public void onLoad(DailyStories stories) {
         adapter.setList(stories);
         mDate = stories.getDate();
+        Log.e(TAG, "onLoad: " + mDate);
+        Log.e(TAG, "onLoad: "+stories.toString() );
     }
 
     @Override
