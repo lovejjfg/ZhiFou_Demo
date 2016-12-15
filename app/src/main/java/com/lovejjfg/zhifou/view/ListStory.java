@@ -3,6 +3,8 @@ package com.lovejjfg.zhifou.view;
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
@@ -102,7 +105,6 @@ public class ListStory extends AppCompatActivity
             }
         });
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -111,6 +113,15 @@ public class ListStory extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        TextView version = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_version);
+        try {
+            PackageManager pm = getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(getPackageName(), 0);
+            Log.e(TAG, "onCreate:" + pi.versionName);
+            version.setText(pi.versionName);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: ", e);
+        }
     }
 
     @Override
@@ -166,7 +177,7 @@ public class ListStory extends AppCompatActivity
         adapter.setList(stories);
         mDate = stories.getDate();
         Log.e(TAG, "onLoad: " + mDate);
-        Log.e(TAG, "onLoad: "+stories.toString() );
+        Log.e(TAG, "onLoad: " + stories.toString());
     }
 
     @Override
