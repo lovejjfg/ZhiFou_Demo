@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'AndResGuard'
+apply plugin: 'com.antfortune.freeline'
 
 // gradlew resguardRelease
 andResGuard {
@@ -44,6 +45,10 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
+    lintOptions {
+        abortOnError false
+        disable "ResourceType"
+    }
     signingConfigs {
         release {
             storeFile file("../zhifou.jks")
@@ -53,9 +58,9 @@ android {
         }
         debug {
             storeFile file("../debug.keystore")
-            storePassword "androiddebug"
-            keyAlias "androiddebug"
-            keyPassword "androiddebug"
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
         }
     }
 
@@ -63,14 +68,15 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            debuggable true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig  signingConfigs.release
         }
-        debug{
+        debug {
+            applicationIdSuffix ".debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig  signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {

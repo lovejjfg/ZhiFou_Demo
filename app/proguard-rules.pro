@@ -104,3 +104,7 @@
 
 # lambda
 -dontwarn java.lang.invoke.*
+
+#-keepattributes InnerClasses
+#-dontwarn InnerClasses
+#-dontoptimize
