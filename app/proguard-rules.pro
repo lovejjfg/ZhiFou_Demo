@@ -108,3 +108,8 @@
 #-keepattributes InnerClasses
 #-dontwarn InnerClasses
 #-dontoptimize
+
+# WeChat
+#-keep class com.tencent.mm.sdk.** {
+#   *;
+#}
