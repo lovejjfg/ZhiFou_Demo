@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'AndResGuard'
 apply plugin: 'com.antfortune.freeline'
+apply plugin: 'com.neenbedankt.android-apt'
 
 // gradlew resguardRelease
 andResGuard {
@@ -75,6 +76,7 @@ android {
         debug {
             applicationIdSuffix ".debug"
             minifyEnabled false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
@@ -109,6 +111,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile project(':circlepoint')
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
+
+    // Dagger dependencies
+    apt "com.google.dagger:dagger-compiler:$project.daggerVersion"
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile "com.google.dagger:dagger:$project.daggerVersion"
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'

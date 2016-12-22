@@ -1,12 +1,14 @@
 package com.lovejjfg.zhifou.data;
 
+import javax.inject.Inject;
+
 /**
  * Created by 张俊 on 2016/3/13.
  */
-public class Person {
+public class Person  extends AbsPerson{
     private String name;
     private String birthday;
-
+    @Inject
     public Person(String birthday, String name) {
         this.birthday = birthday;
         this.name = name;

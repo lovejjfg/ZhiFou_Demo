@@ -51,5 +51,7 @@ public interface ListPresenter  {
         void onReLoadItems(List<StoriesRecycleAdapter.Item> items);
 
         void onReSetDate(String date);
+
+        void setPresenter(ListPresenter presenter);
     }
 }

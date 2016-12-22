@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-def initMinshengGradleEnvironment() {
+def initGradleEnvironment() {
 
     Properties properties = new Properties()
     boolean isHasFile = false
@@ -31,9 +31,10 @@ def initMinshengGradleEnvironment() {
     gradle.ext.apikey = properties.getProperty('bintray.apikey')
 }
 
-initMinshengGradleEnvironment()
+initGradleEnvironment()
 ext {
     gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
     gitCommitCount = 100 +
             Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+    daggerVersion = '2.2'
 }

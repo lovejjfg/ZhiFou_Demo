@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
+import com.lovejjfg.zhifou.data.api.DailyApiService;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
@@ -13,6 +14,8 @@ import com.lovejjfg.zhifou.util.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import rx.Subscriber;
 import rx.Subscription;
@@ -25,10 +28,21 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     boolean isLoadingMore;
     boolean isLoading;
     ArrayList<Story> stories;
+    private DailyApiService dailyApiService;
 
-    public ListPresenterImpl(View view) {
+    @Inject
+    public ListPresenterImpl(View view,DailyApiService dailyApiService,int number,String name) {
         this.mView = view;
         this.activity = (Activity) view;
+        this.dailyApiService = dailyApiService;
+        Log.e("TAG", "ListPresenterImpl: " + number);
+        Log.e("TAG", "ListPresenterImpl: " + name);
+    }
+
+
+    @Inject
+    void setupListeners() {
+        mView.setPresenter(this);
     }
 
 
@@ -83,7 +97,8 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     @Override
     public void onLoading() {
         if (!isLoading) {
-            Subscription listSubscribe = BaseDataManager.getDailyApiService().getLatestDailyStories()
+//            dailyApiService = BaseDataManager.getDailyApiService();
+            Subscription listSubscribe = dailyApiService.getLatestDailyStories()
                     .subscribeOn(Schedulers.io())//事件产生在子线程
                     .doOnSubscribe(() -> {
                         mView.isLoading(true);
@@ -118,7 +133,7 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     @Override
     public void onLoadMore(String date) {
         if (!isLoadingMore) {
-            Subscription beforeSubscribe = BaseDataManager.getDailyApiService().getBeforeDailyStories(date)
+            Subscription beforeSubscribe = dailyApiService.getBeforeDailyStories(date)
                     .subscribeOn(Schedulers.io())//事件产生在子线程
                     .doOnSubscribe(() -> {
                         mView.isLoadingMore(true);

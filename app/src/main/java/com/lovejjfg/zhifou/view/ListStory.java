@@ -30,9 +30,12 @@ import android.widget.TextView;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.base.App;
+import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
+import com.lovejjfg.zhifou.presenters.ListStoryPresenterModule;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
@@ -45,6 +48,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.inject.Inject;
+
 import static com.lovejjfg.zhifou.presenters.ListPresenter.CURRENT_DATE;
 import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
 
@@ -53,7 +58,14 @@ public class ListStory extends AppCompatActivity
     private static final String TAG = ListStory.class.getSimpleName();
     private static final int RC_SEARCH = 11;
     private SwipeRefreshRecycleView mRecyclerView;
-    private ListPresenterImpl mMainPresenter;
+    @Inject
+    ListPresenterImpl mMainPresenter;
+    @Inject
+    String name;
+
+    @Inject
+    Person person;
+
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
     private String mDate;
@@ -84,8 +96,19 @@ public class ListStory extends AppCompatActivity
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setOnScrollListener(this);
-
-        mMainPresenter = new ListPresenterImpl(this);
+        Log.e(TAG, "onCreate: " + name);
+        ListStoryComponent storyComponent = DaggerListStoryComponent.builder()
+                .appComponent(((App) getApplication()).getAppComponent())
+                .listStoryPresenterModule(new ListStoryPresenterModule(this))
+                .build();
+        storyComponent.getName("嘻嘻嘻嘻嘻");
+        storyComponent.getName("XXX");
+        Log.e(TAG, "onCreate: " + name);
+        storyComponent
+                .inject(this);
+        Log.e(TAG, "onCreate: " + person);
+        Log.e(TAG, "onCreate: " + name);
+//        mMainPresenter = new ListPresenterImpl(this);
         mMainPresenter.onCreate(savedInstanceState);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
@@ -199,6 +222,11 @@ public class ListStory extends AppCompatActivity
     public void onReSetDate(String date) {
         Log.e("TAG", "onReSetDate: " + date);
         mDate = date;
+    }
+
+    @Override
+    public void setPresenter(ListPresenter presenter) {
+        Log.e(TAG, "setPresenter: ");
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
