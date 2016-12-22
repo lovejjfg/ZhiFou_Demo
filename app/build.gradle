@@ -40,7 +40,7 @@ android {
         versionCode project.gitCommitCount
         versionName project.gitTag
         //只保留对应的国际化
-        resConfigs "zh","en"
+        resConfigs "zh", "en"
     }
     dexOptions {
         javaMaxHeapSize "4g"
@@ -70,7 +70,7 @@ android {
             minifyEnabled true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig  signingConfigs.release
+            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
@@ -113,4 +113,22 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
+    //  Robolectric
+    testCompile "org.robolectric:robolectric:3.1.2"
+
+    //  AssertJ
+    testCompile 'com.squareup.assertj:assertj-android:1.1.0'
+
+    //  PowerMock + Mockito
+    testCompile 'org.powermock:powermock-module-junit4:1.6.5'
+    testCompile "org.powermock:powermock-module-junit4-rule:1.6.5"
+    testCompile 'org.powermock:powermock-api-mockito:1.6.5'
+    testCompile "org.powermock:powermock-classloading-xstream:1.6.5"
+
+
+
+    testCompile "com.android.support:support-annotations:${supportLibVersion}"
+
+
 }
