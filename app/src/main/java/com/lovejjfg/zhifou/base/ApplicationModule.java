@@ -5,6 +5,7 @@ import android.content.Context;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -30,10 +31,17 @@ public final class ApplicationModule {
     DailyApiService provideDailyApiService() {
         return BaseDataManager.getDailyApiService();
     }
-
+//todo  每种类型只能提供一个
     @Singleton
     @Provides
+    @Named("number")
     int provideNumber() {
         return 5;
     }
+    @Provides
+    @Named("age")
+    int provideAge() {
+        return 500;
+    }
+
 }

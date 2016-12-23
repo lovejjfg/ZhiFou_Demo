@@ -1,12 +1,11 @@
 package com.lovejjfg.zhifou.presenters;
 
-import com.lovejjfg.zhifou.data.AbsPerson;
-import com.lovejjfg.zhifou.data.Person;
-
 import javax.inject.Singleton;
 
+import dagger.MapKey;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.StringKey;
 
 @Singleton
 @Module
@@ -26,11 +25,6 @@ public class ListStoryPresenterModule {
     @Provides
     String provideString() {
         return "Test1111";
-    }
-
-    @Provides
-    AbsPerson providePerson(Person person) {
-        return person;
     }
 
 

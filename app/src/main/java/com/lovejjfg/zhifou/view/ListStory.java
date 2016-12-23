@@ -43,12 +43,14 @@ import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+
+import dagger.Lazy;
+import dagger.Provides;
 
 import static com.lovejjfg.zhifou.presenters.ListPresenter.CURRENT_DATE;
 import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
@@ -62,9 +64,14 @@ public class ListStory extends AppCompatActivity
     ListPresenterImpl mMainPresenter;
     @Inject
     String name;
+//    @Inject
+//    @Named("sub")
+//    String sub;
+    @Inject
+    Lazy<Person> person;//延迟加载
 
     @Inject
-    Person person;
+    Provider<Person> mEntryProvider;
 
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
@@ -84,7 +91,6 @@ public class ListStory extends AppCompatActivity
         getSupportActionBar().setTitle("首页");
         mRecyclerView = (SwipeRefreshRecycleView) findViewById(R.id.srrv);
         manager = new GridLayoutManager(this, 1);
-
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         manager.setSmoothScrollbarEnabled(true);
         mRecyclerView.setLayoutManager(manager);
@@ -101,12 +107,21 @@ public class ListStory extends AppCompatActivity
                 .appComponent(((App) getApplication()).getAppComponent())
                 .listStoryPresenterModule(new ListStoryPresenterModule(this))
                 .build();
+        SubComponent subComponent = storyComponent.getSubComponent(new SubModule(this));
+        subComponent.inject(this);
+        String string = subComponent.getString();
+        Log.e(TAG, "onCreate: " + string);
         storyComponent.getName("嘻嘻嘻嘻嘻");
         storyComponent.getName("XXX");
         Log.e(TAG, "onCreate: " + name);
-        storyComponent
-                .inject(this);
-        Log.e(TAG, "onCreate: " + person);
+        storyComponent.inject(this);
+
+        Person person = mEntryProvider.get();
+        Person person1 = mEntryProvider.get();
+        String string1 = subComponent.getString();
+        Log.e(TAG, "onCreate: " + string1);
+
+        Log.e(TAG, "onCreate: " + this.person);
         Log.e(TAG, "onCreate: " + name);
 //        mMainPresenter = new ListPresenterImpl(this);
         mMainPresenter.onCreate(savedInstanceState);
