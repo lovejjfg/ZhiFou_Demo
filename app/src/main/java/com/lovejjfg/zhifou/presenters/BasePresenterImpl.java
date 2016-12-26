@@ -16,6 +16,13 @@ public abstract class BasePresenterImpl implements BasePresenter {
     }
 
     @Override
+    public void removeSubscribe(Subscription subscriber) {
+        if (mCompositeSubscription != null) {
+            mCompositeSubscription.remove(subscriber);
+        }
+    }
+
+    @Override
     public void onResume() {
 
     }
@@ -39,4 +46,5 @@ public abstract class BasePresenterImpl implements BasePresenter {
             mCompositeSubscription.unsubscribe();
         }
     }
+
 }

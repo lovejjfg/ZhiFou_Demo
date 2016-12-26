@@ -36,5 +36,7 @@ public interface BasePresenter {
 
     void unSubscribe();
 
+    void removeSubscribe(Subscription subscriber);
+
     void onCreate(Bundle savedInstanceState);
 }
