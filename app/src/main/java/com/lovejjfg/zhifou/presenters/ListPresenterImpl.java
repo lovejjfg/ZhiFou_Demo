@@ -18,9 +18,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class ListPresenterImpl extends BasePresenterImpl implements ListPresenter {
@@ -32,7 +35,7 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     private DailyApiService dailyApiService;
 
     @Inject
-    public ListPresenterImpl(View view, DailyApiService dailyApiService, @Named("number") int number, String name, @Named("age")int age) {
+    public ListPresenterImpl(View view, DailyApiService dailyApiService, @Named("number") int number, String name, @Named("age") int age) {
         this.mView = view;
         this.activity = (Activity) view;
         this.dailyApiService = dailyApiService;
@@ -96,8 +99,13 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
 
     }
 
+    // TODO: 2016/12/26 封装重复的逻辑
+    // 1、错误异常的统一处理封装
+    // 2、弹框 Toast的统一封装
+    // 3、相关回调的统一封装
     @Override
     public void onLoading() {
+
         if (!isLoading) {
 //            dailyApiService = BaseDataManager.getDailyApiService();
             Subscription listSubscribe = dailyApiService.getLatestDailyStories()
@@ -106,31 +114,23 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
                         mView.isLoading(true);
                         isLoading = true;
                     })
-                    .subscribeOn(AndroidSchedulers.mainThread())//事件产生在子线程
-                    .observeOn(AndroidSchedulers.mainThread())//
-                    .subscribe(new Subscriber<DailyStories>() {
-                        @Override
-                        public void onCompleted() {
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
+                    .subscribeOn(AndroidSchedulers.mainThread())//配合doOnSubscribe子线程
 
-                        @Override
-                        public void onError(Throwable e) {
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
-
-                        @Override
-                        public void onNext(DailyStories dailyStories) {
-                            mView.onLoad(dailyStories);
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
-                    });
+                    .observeOn(AndroidSchedulers.mainThread())//订阅在主线程
+                    .subscribe(dailyStories -> {
+                        mView.onLoad(dailyStories);
+                        refreshView();
+                    }, e -> refreshView(), this::refreshView);
             subscribe(listSubscribe);
+            Log.e("TAG", "onLoading: " + listSubscribe);
         }
     }
+
+    private void refreshView() {
+        mView.isLoading(false);
+        isLoading = false;
+    }
+
 
     @Override
     public void onLoadMore(String date) {

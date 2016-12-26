@@ -46,11 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Provider;
 
 import dagger.Lazy;
-import dagger.Provides;
 
 import static com.lovejjfg.zhifou.presenters.ListPresenter.CURRENT_DATE;
 import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
@@ -64,7 +62,7 @@ public class ListStory extends AppCompatActivity
     ListPresenterImpl mMainPresenter;
     @Inject
     String name;
-//    @Inject
+    //    @Inject
 //    @Named("sub")
 //    String sub;
     @Inject
