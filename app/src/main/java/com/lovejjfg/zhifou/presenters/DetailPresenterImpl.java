@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
+import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.util.WebUtils;
 
 import rx.android.schedulers.AndroidSchedulers;

@@ -3,6 +3,7 @@ package com.lovejjfg.zhifou.base;
 import android.app.Application;
 import android.util.Log;
 
+import com.antfortune.freeline.FreelineCore;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
@@ -17,6 +18,7 @@ public class App extends Application {
     int name;
     @Override
     public void onCreate() {
+        FreelineCore.init(this);
         super.onCreate();
 
         mAppComponent = DaggerAppComponent.builder()

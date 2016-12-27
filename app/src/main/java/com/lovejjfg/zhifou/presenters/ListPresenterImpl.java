@@ -14,6 +14,7 @@ import com.lovejjfg.zhifou.util.JumpUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,7 +32,6 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     Activity activity;
     boolean isLoadingMore;
     boolean isLoading;
-    ArrayList<Story> stories;
     private DailyApiService dailyApiService;
 
     @Inject

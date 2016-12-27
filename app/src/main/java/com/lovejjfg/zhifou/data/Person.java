@@ -13,6 +13,8 @@ public class Person  extends AbsPerson{
         this.birthday = birthday;
         this.name = name;
     }
+    public Person() {
+    }
 
     public String getBirthday() {
         return birthday;
