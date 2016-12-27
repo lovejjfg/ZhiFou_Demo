@@ -25,7 +25,7 @@ andResGuard {
             "resources.arsc"
     ]
     sevenzip {
-        artifact = 'com.tencent.mm:SevenZip:1.1.9'
+        artifact = 'com.tencent.mm:SevenZip:1.1.16'
 //        path = "/usr/local/bin/7za"
 //        path = "E:/android-sdk-windows/build-tools/24.0.0"
     }
@@ -70,6 +70,7 @@ android {
             shrinkResources true
             minifyEnabled true
             debuggable false
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -77,6 +78,7 @@ android {
             applicationIdSuffix ".debug"
             minifyEnabled false
             debuggable true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
         }
@@ -85,7 +87,10 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
 }
+
+
 ext {
     supportLibVersion = '25.0.0'
 }
@@ -118,7 +123,7 @@ dependencies {
     compile "com.google.dagger:dagger:$project.daggerVersion"
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
     //  Robolectric
