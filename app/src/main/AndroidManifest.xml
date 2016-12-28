@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lovejjfg.zhifou">
+<manifest package="com.lovejjfg.zhifou"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <!--buggle-->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
 
     <application
         android:name=".base.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:supportsRtl="true"
         android:label="@string/app_name"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.ListStory"
             android:theme="@style/AppDrawerLayout">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".view.DatePick"
-            android:theme="@style/TransparentAppCompatTheme" />
+            android:theme="@style/TransparentAppCompatTheme"/>
         <activity
             android:name=".view.DetailStory"
-            android:theme="@style/AppTheme.Detail" />
+            android:theme="@style/AppTheme.Detail"/>
         <!-- <activity -->
         <!-- android:name=".view.DetailStory1" -->
         <!-- android:theme="@style/AppTheme.Detail" /> -->
         <activity
             android:name=".view.SpecifiedDateStory"
             android:label="@string/title_activity_specified_date_story"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".view.SearchActivity"
-            android:theme="@style/ZhiFou.Translucent.Search" />
+            android:theme="@style/ZhiFou.Translucent.Search"/>
         <!-- <activity android:name=".view.sticky"/> -->
-        <activity android:name=".view.ScrollingActivity" />
+        <activity android:name=".view.ScrollingActivity"/>
     </application>
 
 </manifest>

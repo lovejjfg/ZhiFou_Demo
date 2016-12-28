@@ -3,7 +3,16 @@ apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'AndResGuard'
 apply plugin: 'com.antfortune.freeline'
 apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'bugly'
 
+//bugly {
+//    appId = "0c34744d13"
+//    appKey = "5d74b616-d806-49f1-b986-9245259d3f3d"
+////    upload = true
+////    uploadMapping = true
+////    uploadSymbol = false
+////    debug = true
+//}
 // gradlew resguardRelease
 andResGuard {
     mappingFile = file("./resource_mapping.txt")
@@ -30,7 +39,6 @@ andResGuard {
 //        path = "E:/android-sdk-windows/build-tools/24.0.0"
     }
 }
-
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -42,6 +50,10 @@ android {
         versionName project.gitTag
         //只保留对应的国际化
         resConfigs "zh", "en"
+        ndk {
+            // bugly设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     dexOptions {
         javaMaxHeapSize "4g"
@@ -69,17 +81,19 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
-            debuggable false
+            debuggable true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Boolean", "IS_DEBUG", "false"
             signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
-            minifyEnabled false
+            minifyEnabled true
             debuggable true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "Boolean", "IS_DEBUG", "true"
             signingConfig signingConfigs.debug
         }
     }
@@ -122,9 +136,9 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile "com.google.dagger:dagger:$project.daggerVersion"
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 
     //  Robolectric
     testCompile "org.robolectric:robolectric:3.1.2"
@@ -141,6 +155,11 @@ dependencies {
 
 
     testCompile "com.android.support:support-annotations:${supportLibVersion}"
+
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
 
 
 }

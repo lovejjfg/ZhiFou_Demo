@@ -1,10 +1,13 @@
 package com.lovejjfg.zhifou.data;
 
+import android.support.annotation.Keep;
+
 import javax.inject.Inject;
 
 /**
  * Created by 张俊 on 2016/3/13.
  */
+@Keep
 public class Person  extends AbsPerson{
     private String name;
     private String birthday;

@@ -14,6 +14,7 @@ buildscript {
         classpath 'com.antfortune.freeline:gradle:0.8.3'
         // Better IDE support for annotations (so Android Studio interacts better with Dagger)
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+//        classpath 'com.tencent.bugly:symtabfileuploader:latest.release'
     }
 }
 
@@ -26,6 +27,13 @@ subprojects {
     project ->
         apply from:
                 rootProject.getRootDir().getAbsolutePath() + "/util.gradle"
+
+        gradle.projectsEvaluated {
+            tasks.withType(JavaCompile) {
+//                options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+                options.compilerArgs << "-Xmaxerrs" << "500"
+            }
+        }
 }
 
 task clean(type: Delete) {
