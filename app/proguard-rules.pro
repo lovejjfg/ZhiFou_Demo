@@ -46,11 +46,12 @@
     java.lang.Object readResolve();
 }
 
-#-keep class com.lovejjfg.zhifou.data.model.** { *; }
+#实体类是否被混淆
+#-keep class com.ejupay.sdk.core.** { *; }
 
-#Fragment不需要在AndroidManifest.xml中注册，需要额外保护下
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.app.Fragment
+##Fragment不需要在AndroidManifest.xml中注册，需要额外保护下
+#-keep public class * extends android.support.v4.app.Fragment
+#-keep public class * extends android.app.Fragment
 
 # 保持测试相关的代码
 -dontnote junit.framework.**
@@ -72,6 +73,7 @@
     @butterknife.* <methods>;
 }
 
+# okhttp
 -dontwarn com.squareup.okhttp3.**
 -keep class com.squareup.okhttp3.* { *;}
 -dontwarn okio.**
@@ -110,6 +112,26 @@
 #-dontoptimize
 
 # WeChat
-#-keep class com.tencent.mm.sdk.** {
-#   *;
+-dontwarn com.tencent.**
+#-keep class com.tencent.** { *; }
+#bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+
+#alipay
+-dontwarn com.alipay.**
+-keep class com.alipay.** { *; }
+
+
+##EventBus
+#-keepattributes *Annotation*
+#-keepclassmembers class ** {
+#    @org.greenrobot.eventbus.Subscribe <methods>;
 #}
+#-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+#
+## Only required if you use AsyncExecutor
+#-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+#    <init>(java.lang.Throwable);
+#}
+
