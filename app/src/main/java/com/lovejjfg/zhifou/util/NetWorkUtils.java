@@ -8,8 +8,26 @@ import android.net.NetworkInfo;
  * Created by Aspsine on 2015/3/13.
  */
 public class NetWorkUtils {
-    public static final boolean isNetWorkAvailable(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    private static NetWorkUtils sInstance;
+    private static Context mContext;
+
+    private NetWorkUtils() {
+
+    }
+
+    public static NetWorkUtils getsInstance(Context context) {
+        if (sInstance == null) {
+            synchronized (NetWorkUtils.class) {
+                sInstance = new NetWorkUtils();
+            }
+        }
+        mContext = context;
+        return sInstance;
+
+    }
+
+    public static final boolean isNetWorkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (cm != null) {
             NetworkInfo[] info = cm.getAllNetworkInfo();
             if (info != null) {
@@ -21,6 +39,13 @@ public class NetWorkUtils {
             }
         }
         return false;
+    }
+
+    public boolean isNetworkConnected() {
+        ConnectivityManager mConnectivityManager = (ConnectivityManager) mContext
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+        return mNetworkInfo != null && mNetworkInfo.isAvailable();
     }
 
 
