@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
+import com.lovejjfg.zhifou.util.CacheControlnterceptor;
 import com.lovejjfg.zhifou.util.LoggingInterceptor;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 
@@ -39,55 +40,18 @@ public class BaseDataManager {
     private static final String API_KEY = "b55f225809b92ba6093a2b69a39f38f8";
     //    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static Retrofit userApi;
-    // TODO: 2016-03-21 完成Retrofit2.0的升级，这个是什么情况
 
     private static <T> T createApi(Class<T> clazz) {
         if (userApi == null) {
-//            CacheControl cacheControl = new CacheControl.Builder()
-//                    .maxStale(365, TimeUnit.DAYS)
-//                    .build();
             int cacheSize = 10 * 1024 * 1024;// 10 MiB
             Cache cache = new Cache(App.CacheDirectory, cacheSize);
-
-            Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = chain -> {
-
-                Request request = chain.request();
-                if (!App.netWorkUtils.isNetworkConnected()) {
-                    Log.e(TAG, "createApi: 没有网络创建带cache的request！！");
-                    request = request.newBuilder()
-                            .cacheControl(CacheControl.FORCE_CACHE)
-                            .build();
-                }
-                Response originalResponse = chain.proceed(request);
-                /**
-                 * Only accept the response if it is in the cache. If the response isn't cached, a {@code 504
-                 * Unsatisfiable Request} response will be returned.
-                 */
-                if (!App.netWorkUtils.isNetworkConnected()) {
-                    Log.e(TAG, "createApi: 依然没有网络的response！！");
-                    String cacheControl = request.cacheControl().toString();
-                    Log.e(TAG, "createApi: " + cacheControl);
-                     originalResponse.newBuilder()
-                            .removeHeader("Pragma")
-                            .header("Cache-Control", "public, only-if-cached, max-stale=66")
-                            .build();
-                } else {
-                    Log.e(TAG, "createApi: 有网了的response！！");
-                     originalResponse.newBuilder()
-                            .removeHeader("Pragma")
-                            .header("Cache-Control", "public, only-if-cached, max-stale=55")
-                            .build();
-                }
-                Log.e(TAG, "createApi:headers " + originalResponse.headers());
-                return originalResponse;
-            };
             userApi = new Retrofit.Builder()
                     .baseUrl(API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(new OkHttpClient.Builder()
                             .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
-                            .addInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)
+                            .addInterceptor(new CacheControlnterceptor())
                             .addInterceptor(new LoggingInterceptor())
                             .cache(cache)
                             .build())
