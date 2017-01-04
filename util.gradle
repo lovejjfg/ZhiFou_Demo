@@ -33,16 +33,33 @@ def initGradleEnvironment() {
 
 initGradleEnvironment()
 
-String initVersion() {
-    def versionName = 'git describe --tags'.execute([], project.rootDir).text.trim()
-    def indexOf = versionName.indexOf("-", 0)
-    versionName = indexOf != -1 ? versionName.substring(0, indexOf) : versionName
-    println versionName
-    return versionName
+String initTag() {
+    try {
+        def versionName = 'git describe --tags'.execute([], project.rootDir).text.trim()
+        def indexOf = versionName.indexOf("-", 0)
+        versionName = indexOf != -1 ? versionName.substring(0, indexOf) : versionName
+        println versionName
+        return versionName
+    } catch (e) {
+        println e.toString()
+        return  "1.0.0"
+    }
+
+}
+
+int initCount() {
+    try {
+        return 100 +
+                Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+    } catch (e) {
+        println e.toString()
+        return 100
+    }
 }
 
 ext {
-    gitTag = initVersion()
-    gitCommitCount = 100 +
-            Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+    gitTag = initTag()
+    gitCommitCount = initCount()
 }
+
+

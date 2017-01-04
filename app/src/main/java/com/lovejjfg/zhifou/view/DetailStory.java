@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.presenters.DetailPresenter;
@@ -35,7 +36,7 @@ import com.lovejjfg.zhifou.util.ViewUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DetailStory extends AppCompatActivity implements DetailPresenter.View {
+public class DetailStory extends SupportActivity implements DetailPresenter.View<DetailPresenter> {
     //    @Bind(R.id.container)
 //    CoordinatorLayout parent;
 //    @Bind(R.id.app_bar)
@@ -150,16 +151,6 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
     }
 
     @Override
-    public void isLoading(boolean isLoading) {
-        Log.i("TAG", "isLoading: " + isLoading);
-    }
-
-    @Override
-    public void isLoadingMore(boolean isLoadingMore) {
-
-    }
-
-    @Override
     public void onBindImage(String image) {
         Glide.with(getApplicationContext())
                 .load(image)
@@ -262,4 +253,8 @@ public class DetailStory extends AppCompatActivity implements DetailPresenter.Vi
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public DetailPresenter setPresenter() {
+        return detailPresenter;
+    }
 }

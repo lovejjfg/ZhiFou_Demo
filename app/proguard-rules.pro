@@ -32,7 +32,7 @@
 -allowaccessmodification
 
 #将文件来源重命名为“SourceFile”字符串
--renamesourcefileattribute SourceFile
+-renamesourcefileattribute Unknown
 #保留行号
 -keepattributes SourceFile,LineNumberTable
 
@@ -90,6 +90,7 @@
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 
+
 # RxJava
 -keep class rx.* { *; }
 -dontwarn rx.internal.**
@@ -134,4 +135,29 @@
 #-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
 #    <init>(java.lang.Throwable);
 #}
+
+
+# Glide specific rules #
+# https://github.com/bumptech/glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
+    **[] $VALUES;
+    public *;
+}
+
+
+## GSON 2.2.4 specific rules ##
+
+# Gson uses generic type information stored in a class file when working with fields. Proguard
+# removes such information by default, so configure it to keep all of it.
+-keepattributes Signature
+
+# For using GSON @Expose annotation
+-keepattributes *Annotation*
+
+-keepattributes EnclosingMethod
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
 

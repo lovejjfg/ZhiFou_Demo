@@ -1,1 +1,1 @@
-include 'circlepoint', ':app', ':circlepoint'
+include 'circlepoint', ':app', ':SViewLibrary'

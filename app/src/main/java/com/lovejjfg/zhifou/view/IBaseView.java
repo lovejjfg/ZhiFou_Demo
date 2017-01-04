@@ -14,6 +14,7 @@ package com.lovejjfg.zhifou.view;/*
  * limitations under the License.
  */
 
+import com.lovejjfg.sview.ISupportView;
 import com.lovejjfg.zhifou.presenters.BasePresenter;
 
 /**
@@ -21,22 +22,6 @@ import com.lovejjfg.zhifou.presenters.BasePresenter;
  * *
  * Created by jorge on 24/01/15.
  */
-public interface LoadingView<P extends BasePresenter, T> extends IBaseView<P> {
-    /**
-     * 是否loading。
-     */
-    void isLoading(boolean isLoading);
-
-    /**
-     * 是否显示正在加载更多
-     */
-    void isLoadingMore(boolean isLoadingMore);
-
-    void onLoadMore(T stories);
-
-    void onLoad(T stories);
-
-    void onLoadError(String errorCode);
-
-
+public interface IBaseView<P extends BasePresenter> extends ISupportView {
+    P setPresenter();
 }

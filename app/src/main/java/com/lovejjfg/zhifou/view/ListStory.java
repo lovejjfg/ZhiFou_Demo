@@ -13,7 +13,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +28,9 @@ import android.widget.TextView;
 
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
@@ -38,22 +39,21 @@ import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
+import com.lovejjfg.zhifou.util.logger.Logger;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static com.lovejjfg.zhifou.presenters.ListPresenter.CURRENT_DATE;
 import static com.lovejjfg.zhifou.presenters.ListPresenter.SAVED_ITEMS;
 
-public class ListStory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
+public class ListStory extends SupportActivity
+        implements NavigationView.OnNavigationItemSelectedListener, ListPresenter.View<ListPresenter, DailyStories>, View.OnClickListener, OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SwipeRefreshRecycleView.OnScrollListener {
     private static final String TAG = ListStory.class.getSimpleName();
     private static final int RC_SEARCH = 11;
     private SwipeRefreshRecycleView mRecyclerView;
-    private ListPresenterImpl mMainPresenter;
+    private ListPresenter mMainPresenter;
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
     private String mDate;
@@ -65,6 +65,14 @@ public class ListStory extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        try {
+            Person person = Person.class.getConstructor(String.class, String.class).newInstance("zhangsan", "xxxxx");
+            Log.e("TAG", "onCreate: " + person);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: ", e);
+//            Person p = new Person("error", "zhijie");
+//            Log.e(TAG, "onCreate: " + p);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,7 +93,7 @@ public class ListStory extends AppCompatActivity
         mRecyclerView.setOnRefreshListener(this);
         mRecyclerView.setOnScrollListener(this);
 
-        mMainPresenter = new ListPresenterImpl(this);
+        mMainPresenter = setPresenter();
         mMainPresenter.onCreate(savedInstanceState);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
@@ -168,15 +176,19 @@ public class ListStory extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onLoadMore(DailyStories stories) {
+        Logger.json(stories.toString());
         adapter.appendList(stories);
         mDate = stories.getDate();
         Log.e(TAG, "onLoadMore: " + mDate);
     }
 
+
     @Override
     public void onLoad(DailyStories stories) {
+        Logger.json(stories.toString());
         adapter.setList(stories);
         mDate = stories.getDate();
         Log.e(TAG, "onLoad: " + mDate);
@@ -232,6 +244,7 @@ public class ListStory extends AppCompatActivity
     public void isLoadingMore(final boolean loading) {
 //        adapter.isLoadingMore(loading);
     }
+
 
 //    @Override
 //    public void onRefresh() {
@@ -315,5 +328,11 @@ public class ListStory extends AppCompatActivity
         outState.putParcelableArrayList(SAVED_ITEMS, items);
         outState.putString(CURRENT_DATE, mDate);
         super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public ListPresenter setPresenter() {
+        return new ListPresenterImpl(this);
     }
 }

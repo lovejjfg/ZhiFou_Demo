@@ -39,7 +39,6 @@ public class DetailPresenterImpl extends BasePresenterImpl implements DetailPres
             BaseDataManager.getDailyApiService().getStoryDetail(String.valueOf(id))
                     .subscribeOn(Schedulers.io())
                     .doOnSubscribe(() -> {
-                        view.isLoading(true);
                         isLoading = true;
                     })
                     .observeOn(AndroidSchedulers.mainThread())

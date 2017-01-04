@@ -14,7 +14,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by zhangjun on 2016-03-19.
  */
-public class SpecifiedDateImpl implements SpecifiedDatePresenter, BasePresenter {
+public class SpecifiedDateImpl implements SpecifiedDatePresenter {
 
     SpecifiedDateView view;
     Activity activity;

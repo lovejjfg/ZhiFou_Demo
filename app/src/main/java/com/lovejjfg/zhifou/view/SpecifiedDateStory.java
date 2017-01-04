@@ -11,17 +11,20 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
+import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.base.BaseActivity;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.SpecifiedDateImpl;
+import com.lovejjfg.zhifou.presenters.SpecifiedDatePresenter;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.SpecifiedStoriesAdapter;
 import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
-public class SpecifiedDateStory extends AppCompatActivity implements OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView {
+public class SpecifiedDateStory extends SupportActivity implements OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView<SpecifiedDatePresenter,DailyStories> {
 
     private SwipeRefreshRecycleView mRecycleView;
     private SpecifiedStoriesAdapter adapter;
@@ -82,6 +85,11 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
     }
 
     @Override
+    public void onLoad(DailyStories stories) {
+
+    }
+
+    @Override
     public void onLoadError(String errorCode) {
 
     }
@@ -108,5 +116,10 @@ public class SpecifiedDateStory extends AppCompatActivity implements OnItemClick
                 toolbar.setTitle(DateUtils.getMainPageDate(showDate));
             }
         }
+    }
+
+    @Override
+    public SpecifiedDatePresenter setPresenter() {
+        return null;
     }
 }

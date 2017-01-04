@@ -5,3 +5,5 @@
 .DS_Store
 /build
 /captures
+libs/
+src/main/res/drawable/

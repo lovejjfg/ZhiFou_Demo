@@ -18,7 +18,7 @@
 
 package com.lovejjfg.zhifou.presenters;
 
-import com.lovejjfg.zhifou.view.LoadingView;
+import com.lovejjfg.zhifou.view.IBaseView;
 
 public interface DetailPresenter extends BasePresenter {
 
@@ -26,7 +26,7 @@ public interface DetailPresenter extends BasePresenter {
 
     void onLoading(int id);
 
-    interface View extends LoadingView {
+    interface View<P extends BasePresenter> extends IBaseView<P> {
 
         void onBindImage(String image);
 

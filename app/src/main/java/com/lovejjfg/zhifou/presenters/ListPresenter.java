@@ -22,11 +22,12 @@ import android.os.Bundle;
 
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
+import com.lovejjfg.zhifou.view.IBaseView;
 import com.lovejjfg.zhifou.view.LoadingView;
 
 import java.util.List;
 
-public interface ListPresenter  {
+public interface ListPresenter  extends BasePresenter{
     String SAVED_ITEMS = "SAVEDINSTANCEITEMS";
     String CURRENT_DATE = "CURRENT_DATE";
 
@@ -40,13 +41,7 @@ public interface ListPresenter  {
 
     void onSaveInstanceState(Bundle outState);
 
-    interface View extends LoadingView {
-
-        void onLoadMore(DailyStories stories);
-        void onLoad(DailyStories stories);
-
-        void onLoadError(String errorCode);
-
+    interface View<P extends BasePresenter, T> extends LoadingView<P, T> {
 
         void onReLoadItems(List<StoriesRecycleAdapter.Item> items);
 
