@@ -1,25 +1,12 @@
 package com.lovejjfg.zhifou.data;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.util.Log;
-
 import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
-import com.lovejjfg.zhifou.util.CacheControlnterceptor;
+import com.lovejjfg.zhifou.util.CacheControlInterceptor;
 import com.lovejjfg.zhifou.util.LoggingInterceptor;
-import com.lovejjfg.zhifou.util.NetWorkUtils;
-
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -51,7 +38,7 @@ public class BaseDataManager {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(new OkHttpClient.Builder()
                             .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
-                            .addInterceptor(new CacheControlnterceptor())
+                            .addInterceptor(new CacheControlInterceptor())
                             .addInterceptor(new LoggingInterceptor())
                             .cache(cache)
                             .build())

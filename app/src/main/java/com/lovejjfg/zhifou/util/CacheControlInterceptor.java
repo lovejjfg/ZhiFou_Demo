@@ -3,7 +3,6 @@ package com.lovejjfg.zhifou.util;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.base.App;
-import com.lovejjfg.zhifou.util.logger.Logger;
 
 import java.io.IOException;
 
@@ -17,8 +16,8 @@ import okhttp3.Response;
  * Email lovejjfg@gmail.com
  */
 
-public class CacheControlnterceptor implements Interceptor {
-    private static final String TAG = CacheControlnterceptor.class.getSimpleName();
+public class CacheControlInterceptor implements Interceptor {
+    private static final String TAG = CacheControlInterceptor.class.getSimpleName();
 
     @Override
     public Response intercept(Chain chain) throws IOException {
