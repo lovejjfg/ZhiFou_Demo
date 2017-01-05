@@ -1,11 +1,10 @@
 package com.lovejjfg.zhifou.base;
 
 import android.app.Application;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.antfortune.freeline.FreelineCore;
+import com.lovejjfg.sview.utils.ToastUtil;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -25,8 +24,10 @@ public class App extends Application {
         super.onCreate();
         FreelineCore.init(this);
         LeakCanary.install(this);
-        CacheDirectory = new File(getApplicationContext().getCacheDir(),"responses");
+        CacheDirectory = new File(getApplicationContext().getCacheDir(), "responses");
         netWorkUtils = NetWorkUtils.getsInstance(this);
+        ToastUtil.initToast(getApplicationContext());
+        Log.e("TAG", "APP:onCreate初始化。。。 ");
     }
 
 //    public static boolean getWifiStatus(Context context) {

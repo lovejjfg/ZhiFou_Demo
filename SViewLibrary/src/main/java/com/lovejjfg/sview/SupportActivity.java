@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lovejjfg.sview.utils.FragmentsUtil;
 import com.lovejjfg.sview.utils.KeyBoardUtil;
+import com.lovejjfg.sview.utils.ToastUtil;
 
 
 /**
@@ -81,7 +83,7 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
 
     @Override
     public void showToast(String toast) {
-
+        ToastUtil.showToast(this, toast);
     }
 
     @Override

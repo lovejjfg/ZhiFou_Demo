@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
+import com.lovejjfg.sview.utils.ToastUtil;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.base.BaseActivity;
 import com.lovejjfg.zhifou.constant.Constants;
@@ -24,7 +25,7 @@ import com.lovejjfg.zhifou.util.DateUtils;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 
-public class SpecifiedDateStory extends SupportActivity implements OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView<SpecifiedDatePresenter,DailyStories> {
+public class SpecifiedDateStory extends SupportActivity implements OnItemClickListener, SwipeRefreshRecycleView.OnRefreshLoadMoreListener, SpecifiedDateView<SpecifiedDatePresenter, DailyStories> {
 
     private SwipeRefreshRecycleView mRecycleView;
     private SpecifiedStoriesAdapter adapter;
@@ -91,7 +92,7 @@ public class SpecifiedDateStory extends SupportActivity implements OnItemClickLi
 
     @Override
     public void onLoadError(String errorCode) {
-
+        showToast(errorCode);
     }
 
     @Override

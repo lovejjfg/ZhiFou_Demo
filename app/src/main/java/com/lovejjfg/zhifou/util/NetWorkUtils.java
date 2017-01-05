@@ -19,9 +19,9 @@ public class NetWorkUtils {
         if (sInstance == null) {
             synchronized (NetWorkUtils.class) {
                 sInstance = new NetWorkUtils();
+                mContext = context;
             }
         }
-        mContext = context;
         return sInstance;
 
     }

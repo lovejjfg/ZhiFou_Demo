@@ -34,6 +34,7 @@ public class CacheControlInterceptor implements Interceptor {
          * Unsatisfiable Request} response will be returned.
          */
         String cacheControl = request.cacheControl().toString();
+        Log.e(TAG, "intercept: " + cacheControl);
         if (!App.netWorkUtils.isNetworkConnected()) {
             Log.e(TAG, "createApi: 依然没有网络的response！！");
             originalResponse.newBuilder()

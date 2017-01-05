@@ -199,6 +199,7 @@ public class ListStory extends SupportActivity
     public void onLoadError(String errorCode) {
         Log.e("TAG", "onLoadError: " + errorCode);
         adapter.loadMoreError();
+        showToast(errorCode);
     }
 
     @Override

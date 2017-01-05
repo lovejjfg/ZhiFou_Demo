@@ -2,13 +2,18 @@ package com.lovejjfg.zhifou.presenters;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
+import com.lovejjfg.zhifou.data.model.DailyStories;
+import com.lovejjfg.zhifou.util.ErrorUtil;
 import com.lovejjfg.zhifou.view.SpecifiedDateView;
 
+import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -37,7 +42,10 @@ public class SpecifiedDateImpl implements SpecifiedDatePresenter {
                     view.onLoadMore(dailyStories);
                     view.isLoading(false);
                 }, throwable -> {
+                    Log.e("TAG", "onLoading: ", throwable);
+                    ErrorUtil.handleError(view, throwable, true, false);
                     view.isLoading(false);
+                    // TODO: 2017/1/4 code error
                 });
         subscribe(beforeSubscribe);
 
