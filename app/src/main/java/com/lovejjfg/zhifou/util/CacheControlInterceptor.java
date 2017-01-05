@@ -3,6 +3,7 @@ package com.lovejjfg.zhifou.util;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.base.App;
+import com.lovejjfg.zhifou.util.logger.Logger;
 
 import java.io.IOException;
 

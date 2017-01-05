@@ -1,5 +1,6 @@
 package com.lovejjfg.zhifou.util;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.lovejjfg.zhifou.data.BaseException;
@@ -23,6 +24,7 @@ public class ErrorUtil {
 
 
     public static void handleError(IBaseView view, Throwable throwable, boolean showToast, boolean showDialog) {
+        Log.e("TAG", "handleError: ", throwable);
         if (throwable instanceof HttpException) {
             int code = ((HttpException) throwable).code();
             if (code == 504) {
@@ -36,7 +38,9 @@ public class ErrorUtil {
             if (showToast) {
                 view.showToast(((BaseException) throwable).message());
             }
+            return;
         }
+        view.showToast("未处理的异常：" + throwable.toString());
 
     }
 }

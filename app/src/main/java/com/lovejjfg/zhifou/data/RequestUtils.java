@@ -29,6 +29,7 @@ public class RequestUtils {
                 .addHeader("X-Bmob-REST-API-Key", API_KEY)
                 .build();
     }
+
     public static Request createJustJsonRequest(Request request) {
         return request.newBuilder()
                 .addHeader("Content-Type", TYPE_JSON)

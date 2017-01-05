@@ -2,20 +2,25 @@ package com.lovejjfg.zhifou.data;
 
 import android.util.Log;
 
-import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Result;
 import com.lovejjfg.zhifou.util.CacheControlInterceptor;
 import com.lovejjfg.zhifou.util.LoggingInterceptor;
 
-import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.Cookie;
+import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -24,7 +29,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -48,17 +52,69 @@ public class BaseDataManager {
         if (userApi == null) {
             int cacheSize = 10 * 1024 * 1024;// 10 MiB
             Cache cache = new Cache(App.CacheDirectory, cacheSize);
+            CookieManager cookieManager = new CookieManager();
+            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+            // TODO: 2017/1/5 cookie是显示在header里面的吗
+            CookieJar cookieJar = new CookieJar() {
+                private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
+                @Override
+                public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                    Cookie.Builder b =
+                            new Cookie.Builder()
+                                    .domain("zhihu.com")
+                                    .path("/")
+                                    .name("testName")
+                                    .value("saveFromResponse")
+                                    .httpOnly()
+                                    .secure();
+                    cookies.add(b.build());
+                    cookieStore.put(url.host(), cookies);
+                    Log.e(TAG, "saveFromResponse: " + cookies.toString());
+                }
+
+                @Override
+                public List<Cookie> loadForRequest(HttpUrl url) {
+                    List<Cookie> cookies = cookieStore.get(url.host());
+                    if (cookies == null) {
+                        cookies = new ArrayList<>();
+                    }
+                    Cookie.Builder b =
+                            new Cookie.Builder()
+                                    .domain("zhihu.com")
+                                    .path("/")
+                                    .name("testName")
+                                    .value("loadForRequest");
+//                            .httpOnly()
+//                            .secure()
+                    cookies.add(b.build());
+                    Log.e(TAG, "loadForRequest: " + cookies.toString());
+                    return cookies;
+                }
+            };
+
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                @Override
+                public void log(String message) {
+                    Log.e(TAG, "log: " + message);
+                }
+            });
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
             // TODO: 2017/1/4 缓存不刷新数据的节奏？
             userApi = new Retrofit.Builder()
                     .baseUrl(API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(new OkHttpClient.Builder()
+//                            .cookieJar(cookieJar)
+                            .cache(cache)
                             .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
                             .addInterceptor(new CacheControlInterceptor())
                             .addInterceptor(new LoggingInterceptor())
-                            .cache(cache)
+//                            .addInterceptor(loggingInterceptor)
+                            .connectTimeout(15, TimeUnit.SECONDS)
+                            .writeTimeout(15, TimeUnit.SECONDS)
+                            .readTimeout(15, TimeUnit.SECONDS)
                             .build())
                     .build();
 
@@ -67,18 +123,6 @@ public class BaseDataManager {
         }
         return userApi.create(clazz);
     }
-//        if (restAdapter == null) {
-//            synchronized (BaseDataManager.class) {
-//                if (restAdapter == null) {
-//                    restAdapter = new RestAdapter.Builder()
-//                            .setEndpoint(api)
-//                            .setConverter(new GsonConverter(new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()))
-//                            .setLogLevel(BuildConfig.DEBUG ? RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
-//                            .build();
-//                }
-//            }
-//        }
-//        return restAdapter.create(clazz);
 
     public static DailyApiService getDailyApiService() {
         return createApi(DailyApiService.class);
