@@ -1,0 +1,165 @@
+{
+  "code": 0,
+  "message": "ok",
+  "data": {
+    "date": "20170104",
+    "stories": [
+      {
+        "images": [
+          "http://pic2.zhimg.com/270251016486c3319ce843808b730ba1.jpg"
+        ],
+        "type": 0,
+        "id": 9122110,
+        "ga_prefix": "010416",
+        "title": "「性格」和「疾病」之间是否存在着确切的联系？"
+      },
+      {
+        "images": [
+          "http://pic4.zhimg.com/0933e23f7c4e25ba5914f50ac055d6f3.jpg"
+        ],
+        "type": 0,
+        "id": 9121989,
+        "ga_prefix": "010415",
+        "title": "衣服发型一换就认不出来，影视剧这么演不是侮辱智商吗？"
+      },
+      {
+        "images": [
+          "http://pic2.zhimg.com/4a2192f8414f8900309459e54719c4d9.jpg"
+        ],
+        "type": 0,
+        "id": 9121798,
+        "ga_prefix": "010414",
+        "title": "如何做一次有效的绩效考核面谈？"
+      },
+      {
+        "images": [
+          "http://pic2.zhimg.com/c0872ea589848435e3162cad0bb938bd.jpg"
+        ],
+        "type": 0,
+        "id": 9120322,
+        "ga_prefix": "010413",
+        "title": "神秘的 Master，让棋坛回想起被 AlphaGo 支配的恐惧"
+      },
+      {
+        "title": "大误 · 拍电影捡了条狗",
+        "ga_prefix": "010412",
+        "images": [
+          "http://pic4.zhimg.com/76c4e1a3df63212556bf39e1a3bcee17.jpg"
+        ],
+        "multipic": true,
+        "type": 0,
+        "id": 9121031
+      },
+      {
+        "images": [
+          "http://pic4.zhimg.com/62385f900ad2232a14481729947f4c73.jpg"
+        ],
+        "type": 0,
+        "id": 9120282,
+        "ga_prefix": "010411",
+        "title": "去杠杆化（率）是什么意思？"
+      },
+      {
+        "title": "用大白话来捋一捋哥特式建筑的前世今生",
+        "ga_prefix": "010410",
+        "images": [
+          "http://pic1.zhimg.com/f9d6b1c292366ae99d99720d84828998.jpg"
+        ],
+        "multipic": true,
+        "type": 0,
+        "id": 9120788
+      },
+      {
+        "images": [
+          "http://pic1.zhimg.com/cccfe3fe559f65d02ae1f5c22641554c.jpg"
+        ],
+        "type": 0,
+        "id": 9117454,
+        "ga_prefix": "010410",
+        "title": "危机与转型，1980 年代的日本经济对我们有何启示？"
+      },
+      {
+        "images": [
+          "http://pic2.zhimg.com/270aa541d0b36620aed705633bfeb759.jpg"
+        ],
+        "type": 0,
+        "id": 9120292,
+        "ga_prefix": "010408",
+        "title": "如何给孩子挑选合适的绘本？"
+      },
+      {
+        "images": [
+          "http://pic3.zhimg.com/323f26997f46f07c9400806b02f1851e.jpg"
+        ],
+        "type": 0,
+        "id": 9118326,
+        "ga_prefix": "010407",
+        "title": "一年里最适合换工作的时候，可能就是这两个月了"
+      },
+      {
+        "images": [
+          "http://pic2.zhimg.com/59b08f379278144ba1c2c38273fcd211.jpg"
+        ],
+        "type": 0,
+        "id": 9119302,
+        "ga_prefix": "010407",
+        "title": "女孩儿是如何成为「像女孩儿一样」的？"
+      },
+      {
+        "images": [
+          "http://pic1.zhimg.com/46f8a19e2b4bf038936c0e9a16119c3c.jpg"
+        ],
+        "type": 0,
+        "id": 9119189,
+        "ga_prefix": "010407",
+        "title": "AirPods 简单又好用，背后是苹果的各种黑科技"
+      },
+      {
+        "images": [
+          "http://pic2.zhimg.com/11b33143e8baa482c27f38f7356510c5.jpg"
+        ],
+        "type": 0,
+        "id": 9117461,
+        "ga_prefix": "010406",
+        "title": "瞎扯 · 如何正确地吐槽"
+      }
+    ],
+    "top_stories": [
+      {
+        "image": "http://pic1.zhimg.com/a6e6f8262440a82e4764b3b6f4534b68.jpg",
+        "type": 0,
+        "id": 9120322,
+        "ga_prefix": "010413",
+        "title": "神秘的 Master，让棋坛回想起被 AlphaGo 支配的恐惧"
+      },
+      {
+        "image": "http://pic1.zhimg.com/f95d25cda1f41b5f17ab6adceb23c724.jpg",
+        "type": 0,
+        "id": 9121798,
+        "ga_prefix": "010414",
+        "title": "如何做一次有效的绩效考核面谈？"
+      },
+      {
+        "image": "http://pic2.zhimg.com/d915f10d4c02f60f587447801654b8a5.jpg",
+        "type": 0,
+        "id": 9118326,
+        "ga_prefix": "010407",
+        "title": "一年里最适合换工作的时候，可能就是这两个月了"
+      },
+      {
+        "image": "http://pic1.zhimg.com/22bab03fc9598bf1c98114e486e67f94.jpg",
+        "type": 0,
+        "id": 9119189,
+        "ga_prefix": "010407",
+        "title": "AirPods 简单又好用，背后是苹果的各种黑科技"
+      },
+      {
+        "image": "http://pic1.zhimg.com/82c77ad7d28511b97d6681fa926aad40.jpg",
+        "type": 0,
+        "id": 9119126,
+        "ga_prefix": "010317",
+        "title": "知乎好问题 · 为什么接纳自己是一件很重要的事？"
+      }
+    ]
+  }
+}
