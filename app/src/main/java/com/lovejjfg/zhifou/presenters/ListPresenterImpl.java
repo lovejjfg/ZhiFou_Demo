@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
-import com.lovejjfg.zhifou.data.model.Result;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.data.model.Story;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
@@ -16,21 +15,16 @@ import com.lovejjfg.zhifou.util.JumpUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class ListPresenterImpl extends BasePresenterImpl implements ListPresenter {
-    View mView;
+    View<ListPresenter, DailyStories> mView;
     Activity activity;
     boolean isLoadingMore;
     boolean isLoading;
     ArrayList<Story> stories;
 
-    public ListPresenterImpl(View view) {
+    public ListPresenterImpl(View<ListPresenter, DailyStories> view) {
         this.mView = view;
         this.activity = (Activity) view;
     }
@@ -88,34 +82,17 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     public void onLoading() {
         mView.showToast("开始加载！");
         if (!isLoading) {
-            Subscription listSubscribe = BaseDataManager.getDailyApiService().getLatestDailyStories()
-                    .subscribeOn(Schedulers.io())//事件产生在子线程
-                    .doOnSubscribe(() -> {
-                        mView.isLoading(true);
-                        isLoading = true;
-                    })
-                    .subscribeOn(AndroidSchedulers.mainThread())//事件产生在子线程
-                    .observeOn(AndroidSchedulers.mainThread())//
-                    .subscribe(new Subscriber<DailyStories>() {
-                        @Override
-                        public void onCompleted() {
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
-
-                        @Override
-                        public void onNext(DailyStories dailyStories) {
-                            mView.onLoad(dailyStories);
-                            mView.isLoading(false);
-                            isLoading = false;
-                        }
-                    });
+            Subscription listSubscribe = BaseDataManager.handleNormalService(BaseDataManager.getDailyApiService().getLatestDailyStories(), dailyStories -> {
+                mView.onLoad(dailyStories);
+                mView.isLoading(false);
+                isLoading = false;
+            }, throwable -> {
+                ErrorUtil.handleError(mView, throwable, true, false);
+                isLoadingMore = false;
+            }, () -> {
+                mView.isLoading(true);
+                isLoading = true;
+            });
             subscribe(listSubscribe);
         }
     }
@@ -123,9 +100,10 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     @Override
     public void onLoadMore(String date) {
         if (!isLoadingMore) {
-            Subscription subscription = BaseDataManager.handleService(BaseDataManager.getDailyApiService().getList("https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/dev/BaseModel.json"),
+            Subscription subscription = BaseDataManager.handleNormalService(BaseDataManager.getDailyApiService().getBeforeDailyStories(date),
                     dailyStories -> {
                         mView.isLoadingMore(true);
+                        mView.onLoadMore(dailyStories);
                         isLoadingMore = false;
                         Log.e("TAG", "call: true");
                     }, throwable -> {

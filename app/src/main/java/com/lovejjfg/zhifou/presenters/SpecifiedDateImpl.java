@@ -34,19 +34,14 @@ public class SpecifiedDateImpl implements SpecifiedDatePresenter {
     @Override
     public void onLoading(String date) {
 
-        Subscription beforeSubscribe = BaseDataManager.getDailyApiService().getBeforeDailyStories(date)
-                .subscribeOn(Schedulers.io())//事件产生在子线程
-                .doOnSubscribe(() -> view.isLoading(true))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(dailyStories -> {
-                    view.onLoadMore(dailyStories);
-                    view.isLoading(false);
-                }, throwable -> {
-                    Log.e("TAG", "onLoading: ", throwable);
-                    ErrorUtil.handleError(view, throwable, true, false);
-                    view.isLoading(false);
-                    // TODO: 2017/1/4 code error
-                });
+        Subscription beforeSubscribe = BaseDataManager.handleNormalService(BaseDataManager.getDailyApiService().getBeforeDailyStories(date), dailyStories -> {
+            view.onLoadMore(dailyStories);
+            view.isLoading(false);
+        }, throwable -> {
+            Log.e("TAG", "onLoading: ", throwable);
+            ErrorUtil.handleError(view, throwable, true, false);
+            view.isLoading(false);
+        }, () -> view.isLoading(true));
         subscribe(beforeSubscribe);
 
     }

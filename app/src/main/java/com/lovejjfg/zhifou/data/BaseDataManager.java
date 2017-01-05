@@ -10,6 +10,10 @@ import com.lovejjfg.zhifou.data.model.Result;
 import com.lovejjfg.zhifou.util.CacheControlInterceptor;
 import com.lovejjfg.zhifou.util.LoggingInterceptor;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -44,6 +48,7 @@ public class BaseDataManager {
         if (userApi == null) {
             int cacheSize = 10 * 1024 * 1024;// 10 MiB
             Cache cache = new Cache(App.CacheDirectory, cacheSize);
+
             // TODO: 2017/1/4 缓存不刷新数据的节奏？
             userApi = new Retrofit.Builder()
                     .baseUrl(API)
@@ -143,7 +148,7 @@ public class BaseDataManager {
                 .subscribe(callSuccess, callError);
     }
 
-    public static <R> Subscription handleService1(Observable<R> observable, Action1<R> callSuccess, Action1<Throwable> callError, Action0 doOnSubscribe) {
+    public static <R> Subscription handleNormalService(Observable<R> observable, Action1<R> callSuccess, Action1<Throwable> callError, Action0 doOnSubscribe) {
         return observable
                 .subscribeOn(Schedulers.io())//事件产生在子线程
                 .doOnSubscribe(doOnSubscribe)

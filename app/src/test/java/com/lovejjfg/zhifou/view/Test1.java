@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -92,13 +94,13 @@ public class Test1 {
 
     @Test
     public void getParameterUpperBound() throws Exception {
-        List<String> list  = createProxy(List.class);
+        List<String> list = createProxy(List.class);
         boolean xxxxx = list.add("xxxxx");
         System.out.println(xxxxx);
 
     }
 
-    private <T> T createProxy(Class<T> tClass){
+    private <T> T createProxy(Class<T> tClass) {
         //noinspection unchecked
         return (T) Proxy.newProxyInstance(tClass.getClassLoader(), new Class[]{tClass}, new InvocationHandler() {
             @Override
@@ -112,7 +114,6 @@ public class Test1 {
             }
         });
     }
-
 
 
 }

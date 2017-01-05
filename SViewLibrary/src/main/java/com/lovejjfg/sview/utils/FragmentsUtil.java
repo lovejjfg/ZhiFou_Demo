@@ -108,6 +108,9 @@ public class FragmentsUtil {
     @Nullable
     public SupportFragment getTopFragment() {
         List<Fragment> fragments = manager.getFragments();
+        if (fragments == null) {
+            return null;
+        }
         int size = fragments.size();
         for (int i = size - 1; i >= 0; i--) {
             Fragment f = fragments.get(i);
