@@ -66,14 +66,14 @@ android {
 
     buildTypes {
         release {
-            shrinkResources true
-            minifyEnabled true
-            debuggable false
+            shrinkResources false
+            minifyEnabled false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
         debug {
-            applicationIdSuffix ".debug"
+//            applicationIdSuffix ".debug"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
@@ -83,7 +83,15 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
 }
+
 
 
 dependencies {

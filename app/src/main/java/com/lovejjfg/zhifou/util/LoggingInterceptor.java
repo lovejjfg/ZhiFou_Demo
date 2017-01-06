@@ -2,7 +2,6 @@ package com.lovejjfg.zhifou.util;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.lovejjfg.zhifou.util.logger.Logger;
 
 import java.io.IOException;
@@ -25,6 +24,7 @@ import okio.BufferedSource;
 public class LoggingInterceptor implements Interceptor {
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final String TAG = LoggingInterceptor.class.getSimpleName();
+
     @Override
     public Response intercept(Interceptor.Chain chain) throws IOException {
         Request request = chain.request();
@@ -52,10 +52,8 @@ public class LoggingInterceptor implements Interceptor {
             try {
                 charset = contentType.charset(UTF8);
             } catch (UnsupportedCharsetException e) {
-                Log.e(TAG, "intercept: "+"");
-                Log.e(TAG, "intercept: "+"Couldn't decode the response body; charset is likely malformed.");
-                Log.e(TAG, "intercept: "+"<-- END HTTP");
-
+                Log.e(TAG, "intercept: " + "Couldn't decode the response body; charset is likely malformed.");
+                Log.e(TAG, "intercept: " + "<-- END HTTP");
                 return response;
             }
         }
@@ -64,7 +62,7 @@ public class LoggingInterceptor implements Interceptor {
             Logger.json(buffer.clone().readString(charset));
         }
 
-        Log.e(TAG, "intercept: "+"<-- END HTTP (" + buffer.size() + "-byte body)");
+        Log.e(TAG, "intercept: " + "<-- END HTTP (" + buffer.size() + "-byte body)");
         return response;
     }
 }

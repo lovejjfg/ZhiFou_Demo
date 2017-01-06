@@ -26,10 +26,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.BDNotifyListener;
+import com.baidu.location.LocationClient;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
@@ -96,12 +101,59 @@ public class ListStory extends SupportActivity
         mMainPresenter.onCreate(savedInstanceState);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        LocationClient mLocationClient = ((App) getApplication()).mLocationClient;
+        mLocationClient.registerLocationListener(location -> {
+            StringBuffer sb = new StringBuffer(256);
+            sb.append("time : ");
+            sb.append(location.getTime());
+            sb.append("\nlocation:").append(location.getCity()).append("-").append(location.getAddrStr()).append("-").append(location.getBuildingName());
+            sb.append("\ncode : ");
+            sb.append(location.getLocType());
+            sb.append("\nlatitude : ");
+            sb.append(location.getLatitude());
+            sb.append("\nlongitude : ");
+            sb.append(location.getLongitude());
+            sb.append("\nradius : ");
+            sb.append(location.getRadius());
+            Log.e(TAG, "onCreate: " + sb.toString());
+        });
+
+        BDNotifyListener bdNotifyListener = new BDNotifyListener() {
+            @Override
+            public void onNotify(BDLocation location, float v) {
+                Log.e(TAG, "onNotify: 目的地" + "(纬度：31.284717,经度： 121.463564)");
+                Log.e(TAG, "onNotify:经度 " + location.getLongitude());
+                Log.e(TAG, "onNotify:纬度 " + location.getLatitude());
+                Log.e(TAG, "onNotify: 已经到达位置！！" + v);
+                showToast("已经到达指定位置!");
+                mLocationClient.stop();
+            }
+        };
+        //  latitude lontitude             31.284711  121.463577
+        bdNotifyListener.SetNotifyLocation(31.284717, 121.463564, 1500, "gps");
+        mLocationClient.registerNotify(bdNotifyListener);
         toolbar.setOnClickListener(v -> {
             boolean b = UIUtils.doubleClick();
             if (b) {
                 Log.e("TAG", "onClick: 双击了！！");
                 mRecyclerView.getRecycle().smoothScrollToPosition(0);
+                if (mLocationClient.isStarted()) {
+                    Log.e(TAG, "onCreate: 已经开启，再次定位");
+                    mLocationClient.requestLocation();
+                } else {
+                    Log.e(TAG, "onCreate: 未开启，首次开启");
+                    mLocationClient.start();
+                }
 
+            }
+        });
+
+        mLocationClient.registerNotifyLocationListener(new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation location) {
+                Log.e(TAG, "registerNotifyLocationListener: 接受到定位了！！");
+                Log.e(TAG, "onNotify:《经度1》 " + location.getLongitude());
+                Log.e(TAG, "onNotify:《纬度1》 " + location.getLatitude());
             }
         });
         mRecyclerView.getRecycle().addOnScrollListener(new RecyclerView.OnScrollListener() {
