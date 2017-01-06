@@ -14,13 +14,11 @@ import com.lovejjfg.zhifou.util.JumpUtils;
 import java.util.Calendar;
 
 public class DatePick extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_pick);
         final boolean isFirst = getIntent().getBooleanExtra(Constants.FIRST, true);
-//        initDialog();
         final DatePicker mDatePicker = (DatePicker) findViewById(R.id.date_picker);
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -29,7 +27,7 @@ public class DatePick extends AppCompatActivity {
         if (mDatePicker != null) {
             mDatePicker.init(year, month, day, (view, year1, monthOfYear, dayOfMonth) -> {
                 int chooseMonth = monthOfYear + 1;
-                int chooseDay= dayOfMonth + 1;
+                int chooseDay = dayOfMonth + 1;
                 Log.e("截止：", year1 + "年" + +chooseMonth + "月" + dayOfMonth + "日");
                 String date = String.format("%d%2d%2d", year1, chooseMonth, chooseDay).replace(" ", "0");
                 String showDate = String.format("%d%2d%2d", year1, chooseMonth, dayOfMonth).replace(" ", "0");
@@ -39,7 +37,7 @@ public class DatePick extends AppCompatActivity {
                     i.putExtra(Constants.SHOW_DATE, showDate);
                     setResult(200, i);
                     if (isFirst) {
-                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date,showDate);
+                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date, showDate);
                     }
                     finishAfterTransition();
                     Log.e("DATE-->", String.format("%d-%2d-%2d", year1, chooseMonth, dayOfMonth).replace(" ", "0"));

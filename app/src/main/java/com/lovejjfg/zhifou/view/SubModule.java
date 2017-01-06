@@ -2,6 +2,8 @@ package com.lovejjfg.zhifou.view;
 
 import android.content.Context;
 
+import com.lovejjfg.zhifou.base.ActivityScope;
+import com.lovejjfg.zhifou.base.SubScope;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 
 import javax.inject.Named;
@@ -10,7 +12,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Singleton
 @Module
 public class SubModule {
 
@@ -23,7 +24,7 @@ public class SubModule {
 
     @Provides
     @Named("sub")
-    String provideString() {
+    String provideSubString() {
         return "sub";
     }
 

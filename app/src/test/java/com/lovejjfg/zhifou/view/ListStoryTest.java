@@ -1,5 +1,7 @@
 package com.lovejjfg.zhifou.view;
 
+import com.lovejjfg.zhifou.BuildConfig;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +17,7 @@ import static org.junit.Assert.assertNotNull;
  * Email lovejjfg@gmail.com
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 23, manifest = Config.NONE)
+@Config(constants = BuildConfig.class,sdk = 21)
 public class ListStoryTest {
 
     private ListStory listStory;

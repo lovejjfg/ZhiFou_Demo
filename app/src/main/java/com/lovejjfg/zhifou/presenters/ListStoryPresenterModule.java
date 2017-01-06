@@ -1,11 +1,10 @@
 package com.lovejjfg.zhifou.presenters;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
-import dagger.MapKey;
 import dagger.Module;
 import dagger.Provides;
-import dagger.multibindings.StringKey;
 
 @Singleton
 @Module
@@ -22,10 +21,22 @@ public class ListStoryPresenterModule {
         return mView;
     }
 
+    //    @Provides
+//    Lazy<String> provideLazyString() {
+//
+//        return () -> "lazy1111";
+//    }
     @Provides
+    @Named("name")
     String provideString() {
-        return "Test1111";
+        return "Joe";
     }
+    @Provides
+    @Named("birth")
+    String provideBirthString() {
+        return "19921025";
+    }
+
 
 
 }

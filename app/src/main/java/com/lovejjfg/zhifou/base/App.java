@@ -6,6 +6,7 @@ import android.util.Log;
 import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by Joe on 2016-04-05
@@ -13,8 +14,11 @@ import javax.inject.Inject;
  */
 public class App extends Application {
     AppComponent mAppComponent;
+
     @Inject
-    int name;
+    @Named("age")
+    int age;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,7 +26,8 @@ public class App extends Application {
         mAppComponent = DaggerAppComponent.builder()
                 .applicationModule(new ApplicationModule((getApplicationContext())))
                 .build();
-        Log.e("TAG", "onCreate: " + name);
+        mAppComponent.inject(this);
+        Log.e("TAG", "AppOnCreate: " + age);
 
         LeakCanary.install(this);
     }

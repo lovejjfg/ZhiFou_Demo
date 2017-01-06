@@ -12,12 +12,8 @@ public interface ListStoryComponent {
 
     String getName(String name);
 
-//    AbsPerson getPerson();
-
     ListPresenter.View getView();
 
     SubComponent getSubComponent(SubModule module);
 
-
-    void inject(ListStory view);
 }
