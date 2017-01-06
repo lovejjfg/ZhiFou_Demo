@@ -125,12 +125,12 @@ public class ListStory extends SupportActivity
                 Log.e(TAG, "onNotify:经度 " + location.getLongitude());
                 Log.e(TAG, "onNotify:纬度 " + location.getLatitude());
                 Log.e(TAG, "onNotify: 已经到达位置！！" + v);
-                showToast("已经到达指定位置!");
+                showToast("已经到达指定位置!!  "+v+"米");
                 mLocationClient.stop();
             }
         };
         //  latitude lontitude             31.284711  121.463577
-        bdNotifyListener.SetNotifyLocation(31.284717, 121.463564, 1500, "gps");
+        bdNotifyListener.SetNotifyLocation(31.284717, 121.463564, 3000, "gps");
         mLocationClient.registerNotify(bdNotifyListener);
         toolbar.setOnClickListener(v -> {
             boolean b = UIUtils.doubleClick();
