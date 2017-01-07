@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.antfortune.freeline.FreelineCore;
 import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.lovejjfg.sview.utils.ToastUtil;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 import com.squareup.leakcanary.LeakCanary;
@@ -20,7 +19,6 @@ public class App extends Application {
 
     public static File CacheDirectory;
     public static NetWorkUtils netWorkUtils;
-    public LocationClient mLocationClient = null;
 //    public BDLocationListener myListener = new MyLocationListener();
 
     @Override
