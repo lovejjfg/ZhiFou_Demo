@@ -30,6 +30,11 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.BDNotifyListener;
 import com.baidu.location.LocationClient;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.navi.BaiduMapNavigation;
+import com.baidu.mapapi.utils.DistanceUtil;
+import com.baidu.mapapi.utils.SpatialRelationUtil;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
@@ -42,6 +47,7 @@ import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
+import com.lovejjfg.zhifou.util.BaiduMapUtil;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 import com.lovejjfg.zhifou.util.logger.Logger;
@@ -66,6 +72,11 @@ public class ListStory extends SupportActivity
     private FloatingActionButton fab;
     private Toolbar toolbar;
     private View searchMenuView;
+    private static final double LONGITUDE = 121.463484;//经度
+    private static final double LATITUDE = 31.28484;//纬度
+    private static final int DISTANCE = 500;//距离
+//    private LocationClient mLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +112,8 @@ public class ListStory extends SupportActivity
         mMainPresenter.onCreate(savedInstanceState);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-        LocationClient mLocationClient = ((App) getApplication()).mLocationClient;
-        mLocationClient.registerLocationListener(location -> {
+//        mLocationClient = ((App) getApplication()).mLocationClient;
+        BaiduMapUtil.registerLocationListener(location -> {
             StringBuffer sb = new StringBuffer(256);
             sb.append("time : ");
             sb.append(location.getTime());
@@ -116,6 +127,16 @@ public class ListStory extends SupportActivity
             sb.append("\nradius : ");
             sb.append(location.getRadius());
             Log.e(TAG, "onCreate: " + sb.toString());
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            double distance = DistanceUtil.getDistance(latLng, new LatLng(LATITUDE, LONGITUDE));
+            Log.e(TAG, "onCreate: 测量距离：" + distance);
+            //判断点pt是否在，以pCenter为中心点，radius为半径的圆内。
+            boolean circleContainsPoint = SpatialRelationUtil.isCircleContainsPoint(new LatLng(LATITUDE, LONGITUDE), DISTANCE, latLng);
+            showToast(circleContainsPoint ? "到达指定的范围:" + distance : "未到达指定的范围:" + distance);
+            if (circleContainsPoint) {
+                BaiduMapUtil.stopClient();
+            }
+
         });
 
         BDNotifyListener bdNotifyListener = new BDNotifyListener() {
@@ -125,37 +146,38 @@ public class ListStory extends SupportActivity
                 Log.e(TAG, "onNotify:经度 " + location.getLongitude());
                 Log.e(TAG, "onNotify:纬度 " + location.getLatitude());
                 Log.e(TAG, "onNotify: 已经到达位置！！" + v);
-                showToast("已经到达指定位置!!  "+v+"米");
-                mLocationClient.stop();
+                showToast("已经到达指定位置!!  " + v + "米");
+                BaiduMapUtil.stopClient();
             }
         };
         //  latitude lontitude             31.284711  121.463577
-        bdNotifyListener.SetNotifyLocation(31.284717, 121.463564, 3000, "gps");
-        mLocationClient.registerNotify(bdNotifyListener);
+        BaiduMapUtil.registerNotify(bdNotifyListener);
         toolbar.setOnClickListener(v -> {
             boolean b = UIUtils.doubleClick();
             if (b) {
                 Log.e("TAG", "onClick: 双击了！！");
                 mRecyclerView.getRecycle().smoothScrollToPosition(0);
-                if (mLocationClient.isStarted()) {
+//                bdNotifyListener.SetNotifyLocation(LATITUDE, LONGITUDE, DISTANCE, "bd09ll");
+                if (BaiduMapUtil.isStarted()) {
                     Log.e(TAG, "onCreate: 已经开启，再次定位");
-                    mLocationClient.requestLocation();
+                    BaiduMapUtil.requestLocation();
                 } else {
                     Log.e(TAG, "onCreate: 未开启，首次开启");
-                    mLocationClient.start();
+                    BaiduMapUtil.start();
                 }
-
+            } else {
+                startActivity(new Intent(this, MapActivity.class));
             }
         });
 
-        mLocationClient.registerNotifyLocationListener(new BDLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation location) {
-                Log.e(TAG, "registerNotifyLocationListener: 接受到定位了！！");
-                Log.e(TAG, "onNotify:《经度1》 " + location.getLongitude());
-                Log.e(TAG, "onNotify:《纬度1》 " + location.getLatitude());
-            }
-        });
+//        mLocationClient.registerNotifyLocationListener(new BDLocationListener() {
+//            @Override
+//            public void onReceiveLocation(BDLocation location) {
+//                Log.e(TAG, "registerNotifyLocationListener: 接受到定位了！！");
+//                Log.e(TAG, "onNotify:《经度1》 " + location.getLongitude());
+//                Log.e(TAG, "onNotify:《纬度1》 " + location.getLatitude());
+//            }
+//        });
         mRecyclerView.getRecycle().addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -285,6 +307,8 @@ public class ListStory extends SupportActivity
     protected void onDestroy() {
         super.onDestroy();
         mMainPresenter.onDestroy();
+        BaiduMapUtil.stopClient();
+
     }
 
     @Override

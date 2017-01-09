@@ -7,7 +7,9 @@ import com.antfortune.freeline.FreelineCore;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
 import com.lovejjfg.sview.utils.ToastUtil;
+import com.lovejjfg.zhifou.util.BaiduMapUtil;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -21,7 +23,7 @@ public class App extends Application {
 
     public static File CacheDirectory;
     public static NetWorkUtils netWorkUtils;
-    public LocationClient mLocationClient = null;
+//    public LocationClient mLocationClient = null;
 //    public BDLocationListener myListener = new MyLocationListener();
 
     @Override
@@ -33,7 +35,9 @@ public class App extends Application {
         netWorkUtils = NetWorkUtils.getsInstance(this);
         ToastUtil.initToast(getApplicationContext());
         Log.e("TAG", "APP:onCreate初始化。。。 ");
-        mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+//        mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
+//        SDKInitializer.initialize(getApplicationContext());
+        BaiduMapUtil.initLocationClient(getApplicationContext());
 //        mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initLocation();
     }
@@ -53,7 +57,7 @@ public class App extends Application {
         option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
         option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
-        mLocationClient.setLocOption(option);
+        BaiduMapUtil.setLocOption(option);
     }
 
 //    public static boolean getWifiStatus(Context context) {
