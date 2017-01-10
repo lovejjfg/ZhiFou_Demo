@@ -66,8 +66,8 @@ android {
 
     buildTypes {
         release {
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -131,7 +131,6 @@ dependencies {
     testCompile "org.powermock:powermock-module-junit4-rule:1.6.5"
     testCompile 'org.powermock:powermock-api-mockito:1.6.5'
     testCompile "org.powermock:powermock-classloading-xstream:1.6.5"
-
 
 
     testCompile "com.android.support:support-annotations:${SUPPORT_V7_VERSION}"

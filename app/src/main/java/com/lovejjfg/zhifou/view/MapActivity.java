@@ -5,7 +5,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
@@ -45,6 +51,8 @@ import butterknife.OnClick;
 public class MapActivity extends SupportActivity {
     @Bind(R.id.map_view)
     MapView mapView;
+    @Bind(R.id.view_location)
+    View mLocation;
 
     private BaiduMap mBaiduMap;
     private static final String TAG = MapActivity.class.getSimpleName();
@@ -62,6 +70,8 @@ public class MapActivity extends SupportActivity {
     private ArrayList<BitmapDescriptor> icons = new ArrayList<>();
     private LatLng currentLatLng;
     private LatLng locationLatlng;
+    private TranslateAnimation finishAnimation;
+    private TranslateAnimation startAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,8 @@ public class MapActivity extends SupportActivity {
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         initSenser();
+        initStartAnim();
+        initFinishAnim();
         mBaiduMap = mapView.getMap();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
@@ -173,26 +185,52 @@ public class MapActivity extends SupportActivity {
 
         };
         //地图状态改变相关接口
-//        mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
-//            @Override
-//            public void onMapStatusChangeStart(MapStatus mapStatus) {
-//                Log.e(TAG, "onMapStatusChangeStart: ..");
-//
-//            }
-//
-//            @Override
-//            public void onMapStatusChange(MapStatus mapStatus) {
-//                float zoom = mapStatus.zoom;
-//                Log.e(TAG, "onMapStatusChange: .." + zoom);
-//            }
-//
-//            @Override
-//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
-//                Log.e(TAG, "onMapStatusChangeFinish: .." + mapStatus.zoom);
-//            }
-//        });
+        mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
+            @Override
+            public void onMapStatusChangeStart(MapStatus mapStatus) {
+                Log.e(TAG, "onMapStatusChangeStart: ..");
+//                TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, mLocation.getBottom() - 10);
+//                animation.setDuration(20);
+//                mLocation.setAnimation(animation);
+//                animation.setFillAfter(true);
+//                animation.start();
+                mLocation.startAnimation(startAnimation);
+
+
+            }
+
+            @Override
+            public void onMapStatusChange(MapStatus mapStatus) {
+                float zoom = mapStatus.zoom;
+                Log.e(TAG, "onMapStatusChange: .." + zoom);
+            }
+
+            @Override
+            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+                Log.e(TAG, "onMapStatusChangeFinish: .." + mapStatus.zoom);
+                //// TODO: 2017/1/10 show info when selected.
+                mLocation.startAnimation(finishAnimation);
+            }
+        });
         BaiduMapUtil.registerLocationListener(locationListener);
         BaiduMapUtil.start();
+    }
+
+    @NonNull
+    private TranslateAnimation initStartAnim() {
+        startAnimation = new TranslateAnimation(0, 0, 0, -10);
+        startAnimation.setDuration(100);
+        startAnimation.setFillAfter(true);
+        return startAnimation;
+    }
+
+    @NonNull
+    private TranslateAnimation initFinishAnim() {
+        finishAnimation = new TranslateAnimation(0, 0, 0, -30);
+        finishAnimation.setDuration(300);
+        finishAnimation.setInterpolator(new DecelerateInterpolator());
+        finishAnimation.setFillAfter(false);
+        return finishAnimation;
     }
 
     private void initIcons() {
@@ -222,7 +260,7 @@ public class MapActivity extends SupportActivity {
     public void onClick() {
         updateMap = true;
         BaiduMapUtil.requestLocation();
-        startActivity(MapSearchActivity.createStartIntent(this, getWindow().getDecorView().getRight(), 0, locationLatlng));
+//        startActivity(MapSearchActivity.createStartIntent(this, getWindow().getDecorView().getRight(), 0, locationLatlng));
     }
 
     @Override

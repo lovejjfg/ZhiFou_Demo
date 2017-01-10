@@ -15,11 +15,13 @@
     </com.baidu.mapapi.map.MapView>
 
     <View
+        android:id="@+id/view_location"
         android:layout_gravity="center"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:visibility="gone"
-        android:background="@mipmap/location"
+        android:layout_marginBottom="15dp"
+        android:visibility="visible"
+        android:background="@mipmap/icon_gcoding"
         />
     <Button
         android:id="@+id/location"
