@@ -26,20 +26,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.BDNotifyListener;
-import com.baidu.location.LocationClient;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.navi.BaiduMapNavigation;
-import com.baidu.mapapi.utils.DistanceUtil;
-import com.baidu.mapapi.utils.SpatialRelationUtil;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
@@ -47,7 +37,6 @@ import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
 import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
-import com.lovejjfg.zhifou.util.BaiduMapUtil;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 import com.lovejjfg.zhifou.util.logger.Logger;
@@ -112,59 +101,13 @@ public class ListStory extends SupportActivity
         mMainPresenter.onCreate(savedInstanceState);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(this);
-//        mLocationClient = ((App) getApplication()).mLocationClient;
-        BaiduMapUtil.registerLocationListener(location -> {
-            StringBuffer sb = new StringBuffer(256);
-            sb.append("time : ");
-            sb.append(location.getTime());
-            sb.append("\nlocation:").append(location.getCity()).append("-").append(location.getAddrStr()).append("-").append(location.getBuildingName());
-            sb.append("\ncode : ");
-            sb.append(location.getLocType());
-            sb.append("\nlatitude : ");
-            sb.append(location.getLatitude());
-            sb.append("\nlongitude : ");
-            sb.append(location.getLongitude());
-            sb.append("\nradius : ");
-            sb.append(location.getRadius());
-            Log.e(TAG, "onCreate: " + sb.toString());
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            double distance = DistanceUtil.getDistance(latLng, new LatLng(LATITUDE, LONGITUDE));
-            Log.e(TAG, "onCreate: 测量距离：" + distance);
-            //判断点pt是否在，以pCenter为中心点，radius为半径的圆内。
-            boolean circleContainsPoint = SpatialRelationUtil.isCircleContainsPoint(new LatLng(LATITUDE, LONGITUDE), DISTANCE, latLng);
-            showToast(circleContainsPoint ? "到达指定的范围:" + distance : "未到达指定的范围:" + distance);
-            if (circleContainsPoint) {
-                BaiduMapUtil.stopClient();
-            }
 
-        });
-
-        BDNotifyListener bdNotifyListener = new BDNotifyListener() {
-            @Override
-            public void onNotify(BDLocation location, float v) {
-                Log.e(TAG, "onNotify: 目的地" + "(纬度：31.284717,经度： 121.463564)");
-                Log.e(TAG, "onNotify:经度 " + location.getLongitude());
-                Log.e(TAG, "onNotify:纬度 " + location.getLatitude());
-                Log.e(TAG, "onNotify: 已经到达位置！！" + v);
-                showToast("已经到达指定位置!!  " + v + "米");
-                BaiduMapUtil.stopClient();
-            }
-        };
-        //  latitude lontitude             31.284711  121.463577
-        BaiduMapUtil.registerNotify(bdNotifyListener);
         toolbar.setOnClickListener(v -> {
             boolean b = UIUtils.doubleClick();
             if (b) {
                 Log.e("TAG", "onClick: 双击了！！");
                 mRecyclerView.getRecycle().smoothScrollToPosition(0);
 //                bdNotifyListener.SetNotifyLocation(LATITUDE, LONGITUDE, DISTANCE, "bd09ll");
-                if (BaiduMapUtil.isStarted()) {
-                    Log.e(TAG, "onCreate: 已经开启，再次定位");
-                    BaiduMapUtil.requestLocation();
-                } else {
-                    Log.e(TAG, "onCreate: 未开启，首次开启");
-                    BaiduMapUtil.start();
-                }
             } else {
                 startActivity(new Intent(this, MapActivity.class));
             }
@@ -307,7 +250,6 @@ public class ListStory extends SupportActivity
     protected void onDestroy() {
         super.onDestroy();
         mMainPresenter.onDestroy();
-        BaiduMapUtil.stopClient();
 
     }
 

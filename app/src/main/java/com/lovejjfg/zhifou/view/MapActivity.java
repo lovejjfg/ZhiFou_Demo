@@ -1,9 +1,14 @@
 package com.lovejjfg.zhifou.view;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.baidu.location.BDLocationListener;
+import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -13,14 +18,25 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.Overlay;
-import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.PoiInfo;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
+import com.baidu.mapapi.search.poi.PoiIndoorResult;
+import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.utils.DistanceUtil;
-import com.baidu.mapapi.utils.SpatialRelationUtil;
 import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.util.BaiduMapUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,13 +51,24 @@ public class MapActivity extends SupportActivity {
     private static final double LONGITUDE = 121.463484;//经度
     private static final double LATITUDE = 31.28484;//纬度
     private static final int DISTANCE = 500;//距离
-    private Marker marker;
+    private boolean isFirst = true;
+    private float targetDegree;
+    private SensorManager mSensorManager;
+    private Sensor mAcceleSensor;
+    private Sensor mMagneticSensor;
+    private boolean updateMap = true;
+    private PoiSearch mPoiSearch;
+    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<BitmapDescriptor> icons = new ArrayList<>();
+    private LatLng currentLatLng;
+    private LatLng locationLatlng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        initSenser();
         mBaiduMap = mapView.getMap();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
@@ -49,8 +76,14 @@ public class MapActivity extends SupportActivity {
         mBaiduMap.setTrafficEnabled(true);
         //开启城市热力图
 //        mBaiduMap.setBaiduHeatMapEnabled(true);
+        initIcons();
 
-        mBaiduMap.setMyLocationEnabled(true);
+
+//        mPoiSearch.searchInCity((new PoiCitySearchOption())
+//                .city("上海")
+//                .keyword("美食")
+//                .pageNum(10));
+
         BDLocationListener locationListener = location -> {
             StringBuffer sb = new StringBuffer(256);
             sb.append("time : ");
@@ -65,81 +98,228 @@ public class MapActivity extends SupportActivity {
             sb.append("\nradius : ");
             sb.append(location.getRadius());
             Log.e(TAG, "onCreate: " + sb.toString());
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            double distance = DistanceUtil.getDistance(latLng, new LatLng(LATITUDE, LONGITUDE));
+            locationLatlng = new LatLng(location.getLatitude(), location.getLongitude());
+            double distance = DistanceUtil.getDistance(locationLatlng, new LatLng(LATITUDE, LONGITUDE));
             Log.e(TAG, "onCreate: 测量距离：" + distance);
             //判断点pt是否在，以pCenter为中心点，radius为半径的圆内。
-            boolean circleContainsPoint = SpatialRelationUtil.isCircleContainsPoint(new LatLng(LATITUDE, LONGITUDE), DISTANCE, latLng);
-            showToast(circleContainsPoint ? "到达指定的范围:" + distance : "未到达指定的范围:" + distance);
+//            boolean circleContainsPoint = SpatialRelationUtil.isCircleContainsPoint(new LatLng(LATITUDE, LONGITUDE), DISTANCE, currentLatLng);
+//            showToast(circleContainsPoint ? "到达指定的范围:" + distance : "未到达指定的范围:" + distance);
 //            if (circleContainsPoint) {
 //                BaiduMapUtil.stopClient();
 //            }
-            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.icon_location);
-            if (marker != null) {
-                marker.remove();
+//            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.icon_location);
+//            if (marker != null) {
+//                marker.remove();
+//            }
+//            MarkerOptions options = new MarkerOptions()
+//                    .zIndex(20)
+//                    .draggable(true)
+//                    .icon(icon);
+//                    .position(currentLatLng);
+//            marker = (Marker) (mBaiduMap.addOverlay(options));
+
+            // 开启定位图层
+            mBaiduMap.setMyLocationEnabled(true);
+            // 构造定位数据
+            Log.e(TAG, "onCreate: 方向是：" + targetDegree);
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    // 此处设置开发者获取到的方向信息，顺时针0-360
+                    .direction(targetDegree).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+            // 设置定位数据
+            mBaiduMap.setMyLocationData(locData);
+            if (isFirst) {
+                isFirst = false;
+                // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+                BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory
+                        .fromResource(R.mipmap.arrow);
+                MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.NORMAL, true, bitmapDescriptor);
+                mBaiduMap.setMyLocationConfigeration(config);
+
+
+                //设定中心点坐标
+                //LatLng cenpt = new LatLng(30.663791,104.07281);
+//                mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
+//                    public void onMarkerDrag(Marker marker) {
+//                        //拖拽中
+//                        Log.e(TAG, "onMarkerDrag: 拖拽中..");
+//                    }
+//
+//                    public void onMarkerDragEnd(Marker marker) {
+//                        //拖拽结束
+//                        Log.e(TAG, "onMarkerDrag: 拖拽结束..");
+//
+//                    }
+//
+//                    public void onMarkerDragStart(Marker marker) {
+//                        //开始拖拽
+//                        Log.e(TAG, "onMarkerDrag: 开始拖拽..");
+//                    }
             }
-            MarkerOptions options =  new MarkerOptions()
-                    .zIndex(20)
-                    .draggable(true)
-                    .icon(icon)
-                    .position(latLng);
-            marker = (Marker) (mBaiduMap.addOverlay(options));
 
-            mBaiduMap.setOnMarkerDragListener(new BaiduMap.OnMarkerDragListener() {
-                public void onMarkerDrag(Marker marker) {
-                    //拖拽中
-                    Log.e(TAG, "onMarkerDrag: 拖拽中..");
-                }
-
-                public void onMarkerDragEnd(Marker marker) {
-                    //拖拽结束
-                    Log.e(TAG, "onMarkerDrag: 拖拽结束..");
-
-                }
-
-                public void onMarkerDragStart(Marker marker) {
-                    //开始拖拽
-                    Log.e(TAG, "onMarkerDrag: 开始拖拽..");
-                }
-            });
-
-            //设定中心点坐标
-            //LatLng cenpt = new LatLng(30.663791,104.07281);
+            if (updateMap) {
+                updateMap = false;
+                MapStatus mMapStatus = new MapStatus.Builder()
+                        .target(currentLatLng == null ? locationLatlng : currentLatLng)
+                        .zoom(mBaiduMap.getMaxZoomLevel() - 4)
+                        .build();
+                //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+                MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+                //改变地图状态
+                mBaiduMap.animateMapStatus(mMapStatusUpdate);
+            }
             //定义地图状态
-            MapStatus mMapStatus = new MapStatus.Builder()
-                    .target(latLng)
-                    .zoom(mBaiduMap.getMaxZoomLevel() - 2)
-                    .build();
-            //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
 
-            MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-            //改变地图状态
-            mBaiduMap.setMapStatus(mMapStatusUpdate);
         };
         //地图状态改变相关接口
-        mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
-            @Override
-            public void onMapStatusChangeStart(MapStatus mapStatus) {
-                Log.e(TAG, "onMapStatusChangeStart: ..");
-
-            }
-
-            @Override
-            public void onMapStatusChange(MapStatus mapStatus) {
-                Log.e(TAG, "onMapStatusChange: ..");
-            }
-
-            @Override
-            public void onMapStatusChangeFinish(MapStatus mapStatus) {
-                Log.e(TAG, "onMapStatusChangeFinish: ..");
-            }
-        });
+//        mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
+//            @Override
+//            public void onMapStatusChangeStart(MapStatus mapStatus) {
+//                Log.e(TAG, "onMapStatusChangeStart: ..");
+//
+//            }
+//
+//            @Override
+//            public void onMapStatusChange(MapStatus mapStatus) {
+//                float zoom = mapStatus.zoom;
+//                Log.e(TAG, "onMapStatusChange: .." + zoom);
+//            }
+//
+//            @Override
+//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+//                Log.e(TAG, "onMapStatusChangeFinish: .." + mapStatus.zoom);
+//            }
+//        });
         BaiduMapUtil.registerLocationListener(locationListener);
-        BaiduMapUtil.requestLocation();
+        BaiduMapUtil.start();
     }
+
+    private void initIcons() {
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_marka));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markb));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markc));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markd));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_marke));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markf));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markg));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markh));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_marki));
+        icons.add(BitmapDescriptorFactory.fromResource(R.mipmap.icon_markj));
+    }
+
+    private float[] mMageneticValues = new float[3];
+    private float[] mAcceleValues = new float[3];
+
+    private void initSenser() {
+        mSensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
+        mAcceleSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+    }
+
 
     @OnClick(R.id.location)
     public void onClick() {
+        updateMap = true;
         BaiduMapUtil.requestLocation();
+        startActivity(MapSearchActivity.createStartIntent(this, getWindow().getDecorView().getRight(), 0, locationLatlng));
+    }
+
+    @Override
+    protected void onStart() {
+        BaiduMapUtil.start();
+        mSensorManager.registerListener(mOrientationSensorEventListener, mAcceleSensor, SensorManager.SENSOR_DELAY_NORMAL); //注册加速度传感器监听
+        mSensorManager.registerListener(mOrientationSensorEventListener, mMagneticSensor, SensorManager.SENSOR_DELAY_NORMAL);//注册磁场传感器监听
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        BaiduMapUtil.stopClient();
+        mSensorManager.unregisterListener(mOrientationSensorEventListener);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBaiduMap.setMyLocationEnabled(false);
+        mapView.onDestroy();
+        mapView = null;
+        super.onDestroy();
+    }
+
+
+    private SensorEventListener mOrientationSensorEventListener = new SensorEventListener() {
+
+        @Override
+        public void onAccuracyChanged(Sensor arg0, int arg1) {
+            Log.d(TAG, " onAccuracyChanged()");
+        }
+
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+
+            int sensorType = event.sensor.getType();
+            Log.d(TAG, " onSensorChanged()  sensorType = " + sensorType);
+            //通过加速度传感器的mAcceleValues和磁场传感器的mMageneticValues，来计算方位传感器的value
+
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+                mAcceleValues = event.values;
+            }
+
+            if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
+                mMageneticValues = event.values;
+            }
+            calculateOrientation();
+        }
+    };
+
+    public void calculateOrientation() {
+        float[] values = new float[3];
+        float[] R = new float[9];
+        SensorManager.getRotationMatrix(R, null, mAcceleValues, mMageneticValues);
+        SensorManager.getOrientation(R, values);
+        values[0] = (float) Math.toDegrees(values[0]);
+        Log.d(TAG, " calculateOrientation() values[0]=" + values[0]);
+        float newDegree = (-values[0] + 360.0f) % 360;
+        targetDegree = Math.abs(targetDegree - newDegree) > 1 ? newDegree : targetDegree;
+
+    }
+
+
+    public void onGetPoiResult(PoiResult poiResult) {
+        if (poiResult.getAllPoi() != null) {
+            resetMarks();
+            List<PoiInfo> allPoi = poiResult.getAllPoi();
+            if (allPoi != null) {
+                currentLatLng = allPoi.get(0).location;
+                for (int i = 0; i < allPoi.size(); i++) {
+                    MarkerOptions options = new MarkerOptions().position(allPoi.get(i).location)
+                            .animateType(MarkerOptions.MarkerAnimateType.grow)
+                            .icon(icons.get(i));
+                    markers.add((Marker) mBaiduMap.addOverlay(options));
+                }
+            }
+        }
+
+    }
+
+    public void onGetPoiResult(PoiInfo poiResult) {
+        resetMarks();
+
+        MarkerOptions options = new MarkerOptions().position(poiResult.location)
+                .animateType(MarkerOptions.MarkerAnimateType.grow)
+                .icon(icons.get(0));
+        markers.add((Marker) mBaiduMap.addOverlay(options));
+
+    }
+
+    private void resetMarks() {
+        for (Marker marker : markers) {
+            marker.remove();
+        }
+        markers.clear();
     }
 }

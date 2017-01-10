@@ -73,6 +73,10 @@
 
         <activity android:name=".view.MapActivity">
         </activity>
+
+        <activity
+            android:name=".view.MapSearchActivity"
+            android:theme="@style/ZhiFou.Translucent.Search"/>
     </application>
 
 </manifest>

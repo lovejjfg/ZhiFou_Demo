@@ -3,6 +3,7 @@ package com.lovejjfg.zhifou.util;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.BDNotifyListener;
 import com.baidu.location.LocationClient;
@@ -22,6 +23,10 @@ public class BaiduMapUtil {
             SDKInitializer.initialize(context.getApplicationContext());
             mLocationClient = new LocationClient(context.getApplicationContext());
         }
+    }
+
+    public static BDLocation getLastLocation() {
+        return mLocationClient.getLastKnownLocation();
     }
 
     public static void initSDK(Context context) {
@@ -46,7 +51,7 @@ public class BaiduMapUtil {
         if (mLocationClient == null) {
             throw new RuntimeException("please call initLocationClient() method at first!");
         }
-        mLocationClient.requestNotifyLocation();
+//        mLocationClient.requestNotifyLocation();
         if (mLocationClient.isStarted()) {
             mLocationClient.requestLocation();
         } else {
@@ -77,6 +82,9 @@ public class BaiduMapUtil {
     }
 
     public static void start() {
+        if (isStarted()) {
+            return;
+        }
         mLocationClient.start();
     }
 }
