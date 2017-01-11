@@ -320,8 +320,9 @@ public class MapActivity extends SupportActivity {
         SensorManager.getRotationMatrix(R, null, mAcceleValues, mMageneticValues);
         SensorManager.getOrientation(R, values);
         values[0] = (float) Math.toDegrees(values[0]);
-        Log.d(TAG, " calculateOrientation() values[0]=" + values[0]);
-        float newDegree = (-values[0] + 360.0f) % 360;
+        Log.e(TAG, " calculateOrientation() values[0]=" + values[0]);
+        float newDegree = (values[0] + 360.0f) % 360;
+        Log.e(TAG, " calculateOrientation() newDegree=" +newDegree);
         targetDegree = Math.abs(targetDegree - newDegree) > 1 ? newDegree : targetDegree;
 
     }

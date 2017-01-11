@@ -20,7 +20,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginBottom="15dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:background="@mipmap/icon_gcoding"
         />
     <Button
