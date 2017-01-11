@@ -9,6 +9,7 @@ import com.lovejjfg.sview.utils.ToastUtil;
 import com.lovejjfg.zhifou.util.BaiduMapUtil;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
 
@@ -28,6 +29,7 @@ public class App extends Application {
         super.onCreate();
         FreelineCore.init(this);
         LeakCanary.install(this);
+        CrashReport.initCrashReport(getApplicationContext(), "0c34744d13", true);
         CacheDirectory = new File(getApplicationContext().getCacheDir(), "responses");
         netWorkUtils = NetWorkUtils.getsInstance(this);
         ToastUtil.initToast(getApplicationContext());

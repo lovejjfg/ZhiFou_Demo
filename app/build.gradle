@@ -135,5 +135,8 @@ dependencies {
 
     testCompile "com.android.support:support-annotations:${SUPPORT_V7_VERSION}"
 
+    //bugly
+    compile 'com.tencent.bugly:crashreport:latest.release'
+
 
 }
