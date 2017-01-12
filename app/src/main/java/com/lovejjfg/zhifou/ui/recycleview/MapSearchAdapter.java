@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
  */
 public class MapSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final String TAG = MapSearchAdapter.class.getSimpleName();
-    protected List<PoiInfo> mItems;
+    public List<PoiInfo> mItems;
     private OnItemClickListener listener;
     private boolean isLoading;
     private Story story;

@@ -40,6 +40,7 @@ import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
 import com.lovejjfg.zhifou.util.UIUtils;
 import com.lovejjfg.zhifou.util.logger.Logger;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,7 @@ public class ListStory extends SupportActivity
             Log.e("TAG", "onCreate: " + person);
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e);
-//            Person p = new Person("error", "zhijie");
-//            Log.e(TAG, "onCreate: " + p);
+            CrashReport.postCatchedException(e);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

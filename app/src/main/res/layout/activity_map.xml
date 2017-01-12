@@ -20,15 +20,38 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginBottom="15dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:background="@mipmap/icon_gcoding"
         />
     <Button
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right|center"
         android:text="重新定位"
         />
+    <Button
+        android:id="@+id/location1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:text="重新定位"
+        />
+    <com.lovejjfg.zhifou.ui.widget.BottomSheet
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            android:clipToPadding="false"
+             />
+
+    </com.lovejjfg.zhifou.ui.widget.BottomSheet>
 
 
 </FrameLayout>

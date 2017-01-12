@@ -1,20 +1,23 @@
 package com.lovejjfg.zhifou.view;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 import com.baidu.location.BDLocationListener;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -29,9 +32,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.core.PoiInfo;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiDetailSearchOption;
 import com.baidu.mapapi.search.poi.PoiIndoorResult;
 import com.baidu.mapapi.search.poi.PoiNearbySearchOption;
 import com.baidu.mapapi.search.poi.PoiResult;
@@ -39,6 +40,8 @@ import com.baidu.mapapi.search.poi.PoiSearch;
 import com.baidu.mapapi.utils.DistanceUtil;
 import com.lovejjfg.sview.SupportActivity;
 import com.lovejjfg.zhifou.R;
+import com.lovejjfg.zhifou.ui.recycleview.MapSearchAdapter;
+import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.util.BaiduMapUtil;
 
 import java.util.ArrayList;
@@ -48,11 +51,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MapActivity extends SupportActivity {
+public class MapActivity extends SupportActivity implements OnItemClickListener {
     @Bind(R.id.map_view)
     MapView mapView;
     @Bind(R.id.view_location)
     View mLocation;
+    @Bind(R.id.recycle_view)
+    RecyclerView mRecyclerView;
 
     private BaiduMap mBaiduMap;
     private static final String TAG = MapActivity.class.getSimpleName();
@@ -72,6 +77,7 @@ public class MapActivity extends SupportActivity {
     private LatLng locationLatlng;
     private TranslateAnimation finishAnimation;
     private TranslateAnimation startAnimation;
+    private MapSearchAdapter mapSearchAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,9 @@ public class MapActivity extends SupportActivity {
         initSenser();
         initStartAnim();
         initFinishAnim();
+        mapView.showZoomControls(false);
+        mapView.showScaleControl(false);
+
         mBaiduMap = mapView.getMap();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
@@ -88,7 +97,17 @@ public class MapActivity extends SupportActivity {
         mBaiduMap.setTrafficEnabled(true);
         //开启城市热力图
 //        mBaiduMap.setBaiduHeatMapEnabled(true);
+        mBaiduMap.showMapPoi(true);
+        //显示指南针
+        mBaiduMap.setCompassPosition(new Point(100, 100));
+        mBaiduMap.setCompassIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.arrow));
+
+        mapSearchAdapter = new MapSearchAdapter();
+        mapSearchAdapter.setOnItemClickListener(this);
+        mRecyclerView.setAdapter(mapSearchAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         initIcons();
+        initSearch();
 
 
 //        mPoiSearch.searchInCity((new PoiCitySearchOption())
@@ -202,25 +221,50 @@ public class MapActivity extends SupportActivity {
             @Override
             public void onMapStatusChange(MapStatus mapStatus) {
                 float zoom = mapStatus.zoom;
-                Log.e(TAG, "onMapStatusChange: .." + zoom);
+//                Log.e(TAG, "onMapStatusChange: .." + zoom);
             }
 
             @Override
             public void onMapStatusChangeFinish(MapStatus mapStatus) {
-                Log.e(TAG, "onMapStatusChangeFinish: .." + mapStatus.zoom);
+//                Log.e(TAG, "onMapStatusChangeFinish: .." + mapStatus.zoom);
                 //// TODO: 2017/1/10 show info when selected.
                 mLocation.startAnimation(finishAnimation);
+//                mPoiSearch.searchNearby(new PoiNearbySearchOption().keyword("美食").location(mapStatus.target).pageNum(10).radius(2000));
             }
         });
         BaiduMapUtil.registerLocationListener(locationListener);
         BaiduMapUtil.start();
     }
 
+    private void initSearch() {
+        mPoiSearch = PoiSearch.newInstance();
+        OnGetPoiSearchResultListener poiListener = new OnGetPoiSearchResultListener() {
+            @Override
+            public void onGetPoiResult(PoiResult poiResult) {
+                Log.e(TAG, "onGetPoiResult: ....." + poiResult.getAllPoi().size());
+                mapSearchAdapter.setList(poiResult.getAllPoi());
+                finishAnimation.cancel();
+            }
+
+            @Override
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+                Log.e(TAG, "onGetPoiDetailResult: " + poiDetailResult.getName());
+            }
+
+            @Override
+            public void onGetPoiIndoorResult(PoiIndoorResult poiIndoorResult) {
+                Log.e(TAG, "onGetPoiIndoorResult: " + poiIndoorResult.getmArrayPoiInfo().toString());
+            }
+        };
+
+        mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
+
+    }
+
     @NonNull
     private TranslateAnimation initStartAnim() {
         startAnimation = new TranslateAnimation(0, 0, 0, -10);
         startAnimation.setDuration(100);
-        startAnimation.setFillAfter(true);
         return startAnimation;
     }
 
@@ -230,6 +274,7 @@ public class MapActivity extends SupportActivity {
         finishAnimation.setDuration(300);
         finishAnimation.setInterpolator(new DecelerateInterpolator());
         finishAnimation.setFillAfter(false);
+//        finishAnimation.setRepeatCount(Integer.MAX_VALUE);
         return finishAnimation;
     }
 
@@ -283,6 +328,7 @@ public class MapActivity extends SupportActivity {
     protected void onDestroy() {
         mBaiduMap.setMyLocationEnabled(false);
         mapView.onDestroy();
+        mPoiSearch.destroy();
         mapView = null;
         super.onDestroy();
     }
@@ -299,8 +345,8 @@ public class MapActivity extends SupportActivity {
         @Override
         public void onSensorChanged(SensorEvent event) {
 
-            int sensorType = event.sensor.getType();
-            Log.d(TAG, " onSensorChanged()  sensorType = " + sensorType);
+//            int sensorType = event.sensor.getType();
+//            Log.d(TAG, " onSensorChanged()  sensorType = " + sensorType);
             //通过加速度传感器的mAcceleValues和磁场传感器的mMageneticValues，来计算方位传感器的value
 
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -320,10 +366,8 @@ public class MapActivity extends SupportActivity {
         SensorManager.getRotationMatrix(R, null, mAcceleValues, mMageneticValues);
         SensorManager.getOrientation(R, values);
         values[0] = (float) Math.toDegrees(values[0]);
-        Log.e(TAG, " calculateOrientation() values[0]=" + values[0]);
         float newDegree = (values[0] + 360.0f) % 360;
-        Log.e(TAG, " calculateOrientation() newDegree=" +newDegree);
-        targetDegree = Math.abs(targetDegree - newDegree) > 1 ? newDegree : targetDegree;
+        targetDegree = Math.abs(targetDegree - newDegree) > 2 ? newDegree : targetDegree;
 
     }
 
@@ -360,5 +404,10 @@ public class MapActivity extends SupportActivity {
             marker.remove();
         }
         markers.clear();
+    }
+
+    @Override
+    public void onItemClick(View itemView, ImageView image, int id) {
+        onGetPoiResult(mapSearchAdapter.mItems.get(id));
     }
 }
