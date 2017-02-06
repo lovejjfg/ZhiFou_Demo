@@ -40,6 +40,7 @@ public class Test1 {
     }
 
     public <T> void onBackPressed(List<T> list) throws Exception {
+
         Gson gson = new Gson();
         String str = gson.toJson(list);
         System.out.println(str);
