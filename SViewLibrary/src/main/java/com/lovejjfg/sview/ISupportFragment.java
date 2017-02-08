@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
  * Email lovejjfg@gmail.com
  */
 
-public interface ISupportFragment extends ISupportView {
+public interface ISupportFragment  {
     void initFragments(Bundle savedInstanceState, SupportFragment fragment);
 
     @Nullable

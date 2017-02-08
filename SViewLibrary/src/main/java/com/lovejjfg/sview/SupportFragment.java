@@ -14,7 +14,7 @@ import android.view.ViewGroup;
  * Email lovejjfg@gmail.com
  */
 
-public abstract class SupportFragment extends Fragment implements ISupportFragment {
+public abstract class SupportFragment extends Fragment implements ISupportFragment ,ISupportView{
     public static final String ARG_SECTION_NUMBER = "section_number";
     public static final String ARG_IS_HIDDEN = "ARG_IS_HIDDEN";
     public static final String ARG_CONTAINER = "ARG_CONTAINER_ID";

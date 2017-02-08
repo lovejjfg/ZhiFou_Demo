@@ -196,7 +196,7 @@ public class BaseDataManager {
         return observable
                 .subscribeOn(Schedulers.io())//事件产生在子线程
                 .doOnSubscribe(doOnSubscribe)
-                .subscribeOn(AndroidSchedulers.mainThread())//事件产生在子线程
+                .subscribeOn(AndroidSchedulers.mainThread())//doOnSubscribe产生在主线程
                 .observeOn(AndroidSchedulers.mainThread())//
                 .subscribe(callSuccess, callError);
     }

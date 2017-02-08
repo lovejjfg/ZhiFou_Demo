@@ -18,7 +18,7 @@ import com.lovejjfg.sview.utils.ToastUtil;
  * Email lovejjfg@gmail.com
  */
 
-public abstract class SupportActivity extends AppCompatActivity implements ISupportFragment {
+public abstract class SupportActivity extends AppCompatActivity implements ISupportFragment,ISupportView {
 
     public FragmentsUtil fragmentsUtil;
 
