@@ -33,6 +33,7 @@ import com.baidu.location.LocationClient;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
+import com.lovejjfg.sview.utils.ShakeHelper;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.Person;

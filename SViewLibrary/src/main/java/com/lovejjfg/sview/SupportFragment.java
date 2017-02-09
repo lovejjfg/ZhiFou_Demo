@@ -2,6 +2,7 @@ package com.lovejjfg.sview;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 /**
  * Created by Joe on 2016/10/13.
  * Email lovejjfg@gmail.com
  */
 
-public abstract class SupportFragment extends Fragment implements ISupportFragment ,ISupportView{
+public abstract class SupportFragment extends Fragment implements ISupportFragment {
     public static final String ARG_SECTION_NUMBER = "section_number";
     public static final String ARG_IS_HIDDEN = "ARG_IS_HIDDEN";
     public static final String ARG_CONTAINER = "ARG_CONTAINER_ID";
@@ -22,6 +25,7 @@ public abstract class SupportFragment extends Fragment implements ISupportFragme
     public String tagName;
     @Nullable
     private SupportActivity activity;
+    public boolean isRoot;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -110,6 +114,20 @@ public abstract class SupportFragment extends Fragment implements ISupportFragme
     }
 
     @Override
+    public void addToParent(int containerViewId, @NonNull SupportFragment parent, int pos, SupportFragment... children) {
+        if (activity != null) {
+            activity.addToParent(containerViewId, parent,pos, children);
+        }
+    }
+
+    @Override
+    public void replaceToParent(int containerViewId, @NonNull SupportFragment parent, SupportFragment... children) {
+        if (activity != null) {
+            activity.replaceToParent(containerViewId, parent, children);
+        }
+    }
+
+    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         Log.e(TAG, "setUserVisibleHint: " + tagName + ";isVisible:" + isVisibleToUser);
         super.setUserVisibleHint(isVisibleToUser);
@@ -135,7 +153,7 @@ public abstract class SupportFragment extends Fragment implements ISupportFragme
 
     @Nullable
     @Override
-    public SupportFragment getTopFragment() {
+    public List<Fragment> getTopFragment() {
         if (activity != null) {
             return activity.getTopFragment();
         }
@@ -152,7 +170,7 @@ public abstract class SupportFragment extends Fragment implements ISupportFragme
     }
 
     @Override
-    public void loadRoot(int containerViewId, SupportFragment root) {
+    public void loadRoot(int containerViewId, SupportFragment... root) {
         if (activity != null) {
             activity.loadRoot(containerViewId, root);
         }

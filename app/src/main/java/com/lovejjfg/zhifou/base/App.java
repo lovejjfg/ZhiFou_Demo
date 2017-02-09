@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import com.antfortune.freeline.FreelineCore;
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.lovejjfg.sview.utils.ToastUtil;

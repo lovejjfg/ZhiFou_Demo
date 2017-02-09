@@ -2,15 +2,17 @@ package com.lovejjfg.sview;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lovejjfg.sview.utils.FragmentsUtil;
 import com.lovejjfg.sview.utils.KeyBoardUtil;
-import com.lovejjfg.sview.utils.ToastUtil;
+import com.lovejjfg.sview.utils.ShakeHelper;
+
+import java.util.List;
 
 
 /**
@@ -18,15 +20,40 @@ import com.lovejjfg.sview.utils.ToastUtil;
  * Email lovejjfg@gmail.com
  */
 
-public abstract class SupportActivity extends AppCompatActivity implements ISupportFragment,ISupportView {
+public abstract class SupportActivity extends AppCompatActivity implements ISupportFragment {
 
     public FragmentsUtil fragmentsUtil;
+    private ShakeHelper shakeHelper;
+
+    @Override
+    public void addToParent(int containerViewId, @NonNull SupportFragment parent, int pos, SupportFragment... children) {
+        fragmentsUtil.addToParent(containerViewId, parent, pos, children);
+    }
+
+    @Override
+    public void replaceToParent(int containerViewId, @NonNull SupportFragment parent, SupportFragment... children) {
+        fragmentsUtil.replaceToParent(containerViewId, parent, children);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        shakeHelper = ShakeHelper.initShakeHelper(this);
         super.onCreate(savedInstanceState);
         fragmentsUtil = new FragmentsUtil(getSupportFragmentManager());
     }
+
+    @Override
+    protected void onPause() {
+        shakeHelper.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        shakeHelper.onStart();
+        super.onStart();
+    }
+
 
     public FragmentsUtil getFragmentsUtil() {
         return fragmentsUtil;
@@ -39,8 +66,8 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
 
     @Nullable
     @Override
-    public SupportFragment getTopFragment() {
-        return fragmentsUtil.getTopFragment();
+    public List<Fragment> getTopFragment() {
+        return fragmentsUtil.getTopFragments();
     }
 
     @Nullable
@@ -50,8 +77,8 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
     }
 
     @Override
-    public void loadRoot(int containerViewId, SupportFragment root) {
-        fragmentsUtil.loadRoot(containerViewId, root);
+    public void loadRoot(int containerViewId, SupportFragment... root) {
+        fragmentsUtil.loadRoot(containerViewId, 0, root);
     }
 
     @Override
@@ -83,12 +110,12 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
 
     @Override
     public void showToast(String toast) {
-        ToastUtil.showToast(this, toast);
+
     }
 
     @Override
-    public void showToast(@StringRes int StringId) {
-        showToast(getString(StringId));
+    public void showToast(int StringId) {
+
     }
 
     @Override
@@ -119,8 +146,15 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
 
     @Override
     public boolean finishSelf() {
-        SupportFragment topFragment = getTopFragment();
-        if (topFragment == null || !topFragment.finishSelf()) {
+        List<Fragment> topFragments = getTopFragment();
+
+        if (topFragments != null && !topFragments.isEmpty()) {
+            for (Fragment fragment : topFragments) {
+                if (fragment instanceof SupportFragment) {
+                    ((SupportFragment) fragment).finishSelf();
+                    // TODO: 2017/2/8 如果多个Fragment可见的时候相关处理
+                }
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 finishAfterTransition();
             } else {
