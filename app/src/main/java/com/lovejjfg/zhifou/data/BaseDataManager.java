@@ -152,7 +152,7 @@ public class BaseDataManager {
                     R data = result.getData();
                     int code = result.getCode();
                     if (code != 200) {
-                        new BaseException(code, "发生错误了！！");
+                        new BaseException(code, "发生错误了！！"+result.getMsg());
                     }
                     return data;
                 })

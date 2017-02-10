@@ -31,12 +31,12 @@ andResGuard {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 25
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
         versionCode project.gitCommitCount
         versionName project.gitTag
         //只保留对应的国际化
@@ -47,7 +47,7 @@ android {
     }
     lintOptions {
         abortOnError false
-        disable "ResourceType"
+//        disable "ResourceType"
     }
     signingConfigs {
         release {
@@ -85,12 +85,13 @@ android {
     }
 
     sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
+//        main {
+//            jniLibs.srcDirs = ['libs']
+//        }
     }
 
 }
+
 
 
 

@@ -1,10 +1,9 @@
 package com.lovejjfg.zhifou.view;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lovejjfg.zhifou.base.Utils;
+import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.Person;
 
 import junit.framework.Assert;
@@ -20,10 +19,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Joe on 2016/12/21.
@@ -97,6 +93,14 @@ public class Test1 {
         List<String> list = createProxy(List.class);
         boolean xxxxx = list.add("xxxxx");
         System.out.println(xxxxx);
+
+    }
+
+    @Test
+    public void testBaseModel() throws Exception {
+        // https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json
+        BaseDataManager.handleService(BaseDataManager.getDailyApiService().getList("https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json")
+                , dailyStories -> System.out.println(dailyStories.toString()), throwable -> System.out.println(throwable.toString()));
 
     }
 

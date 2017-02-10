@@ -1,5 +1,6 @@
 package com.lovejjfg.sview;
 
+import android.support.annotation.StringRes;
 import android.view.View;
 
 
