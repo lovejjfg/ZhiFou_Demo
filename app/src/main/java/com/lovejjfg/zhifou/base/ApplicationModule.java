@@ -1,6 +1,7 @@
 package com.lovejjfg.zhifou.base;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.api.DailyApiService;
@@ -31,17 +32,19 @@ public final class ApplicationModule {
     DailyApiService provideDailyApiService() {
         return BaseDataManager.getDailyApiService();
     }
-//todo  每种类型只能提供一个
+
     @Singleton
     @Provides
     @Named("number")
     int provideNumber() {
         return 5;
     }
+
     @Provides
     @Named("age")
     int provideAge() {
         return 500;
     }
+
 
 }

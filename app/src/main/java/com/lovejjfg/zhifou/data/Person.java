@@ -3,6 +3,7 @@ package com.lovejjfg.zhifou.data;
 import android.support.annotation.Keep;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Created by 张俊 on 2016/3/13.
@@ -12,7 +13,7 @@ public class Person  extends AbsPerson{
     private String name;
     private String birthday;
     @Inject
-    public Person(String birthday, String name) {
+    public Person(@Named("birth") String birthday, @Named("name") String name) {
         this.birthday = birthday;
         this.name = name;
     }

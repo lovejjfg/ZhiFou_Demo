@@ -35,12 +35,12 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     private DailyApiService dailyApiService;
 
     @Inject
-    public ListPresenterImpl(View view, DailyApiService dailyApiService, @Named("number") int number, String name, @Named("age") int age) {
+    public ListPresenterImpl(View view, DailyApiService dailyApiService, @Named("number") int number, @Named("age")int age) {
         this.mView = view;
         this.activity = (Activity) view;
         this.dailyApiService = dailyApiService;
         Log.e("TAG", "ListPresenterImpl: " + number);
-        Log.e("TAG", "ListPresenterImpl: " + name);
+//        Log.e("TAG", "ListPresenterImpl: " + name);
         Log.e("TAG", "ListPresenterImpl: " + age);
     }
 

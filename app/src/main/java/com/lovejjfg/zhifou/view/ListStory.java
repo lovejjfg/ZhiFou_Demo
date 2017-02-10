@@ -32,6 +32,7 @@ import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.zhifou.R;
 import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.Person;
+import com.lovejjfg.zhifou.data.api.DailyApiService;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
 import com.lovejjfg.zhifou.presenters.ListPresenterImpl;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 
 import dagger.Lazy;
@@ -61,15 +63,18 @@ public class ListStory extends AppCompatActivity
     @Inject
     ListPresenterImpl mMainPresenter;
     @Inject
-    String name;
+    @Named("sub")
+    Lazy<String> name;
     //    @Inject
 //    @Named("sub")
 //    String sub;
     @Inject
-    Lazy<Person> person;//延迟加载
-
+    Person person;//延迟加载
     @Inject
     Provider<Person> mEntryProvider;
+
+    @Inject
+    DailyApiService service;
 
     private GridLayoutManager manager;
     private StoriesRecycleAdapter adapter;
@@ -107,17 +112,19 @@ public class ListStory extends AppCompatActivity
                 .build();
         SubComponent subComponent = storyComponent.getSubComponent(new SubModule(this));
         subComponent.inject(this);
-        String string = subComponent.getString();
-        Log.e(TAG, "onCreate: " + string);
-        storyComponent.getName("嘻嘻嘻嘻嘻");
-        storyComponent.getName("XXX");
-        Log.e(TAG, "onCreate: " + name);
-        storyComponent.inject(this);
+//        String string = subComponent.getString();
+//        Log.e(TAG, "onCreate: " + string);
+//        storyComponent.getName("嘻嘻嘻嘻嘻");
+//        storyComponent.getName("XXX");
+//        storyComponent.inject(this);
+        Log.e(TAG, "onCreate: " + name.get());
 
         Person person = mEntryProvider.get();
         Person person1 = mEntryProvider.get();
-        String string1 = subComponent.getString();
-        Log.e(TAG, "onCreate: " + string1);
+        Person person2 = mEntryProvider.get();
+        Person person3 = mEntryProvider.get();
+//        String string1 = subComponent.getString();
+//        Log.e(TAG, "onCreate: " + string1);
 
         Log.e(TAG, "onCreate: " + this.person);
         Log.e(TAG, "onCreate: " + name);

@@ -9,6 +9,9 @@ import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+
+import retrofit2.http.HEAD;
 
 /**
  * Created by Joe on 2016-04-05
@@ -16,6 +19,7 @@ import javax.inject.Inject;
  */
 public class App extends Application {
     AppComponent mAppComponent;
+
     @Inject
     int name;
 
