@@ -52,61 +52,13 @@ public class BaseDataManager {
         if (userApi == null) {
             int cacheSize = 10 * 1024 * 1024;// 10 MiB
             Cache cache = new Cache(App.CacheDirectory, cacheSize);
-            CookieManager cookieManager = new CookieManager();
-            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-            // TODO: 2017/1/5 cookie是显示在header里面的吗
-            CookieJar cookieJar = new CookieJar() {
-                private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
-
-                @Override
-                public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                    Cookie.Builder b =
-                            new Cookie.Builder()
-                                    .domain("zhihu.com")
-                                    .path("/")
-                                    .name("testName")
-                                    .value("saveFromResponse")
-                                    .httpOnly()
-                                    .secure();
-                    cookies.add(b.build());
-                    cookieStore.put(url.host(), cookies);
-                    Log.e(TAG, "saveFromResponse: " + cookies.toString());
-                }
-
-                @Override
-                public List<Cookie> loadForRequest(HttpUrl url) {
-                    List<Cookie> cookies = cookieStore.get(url.host());
-                    if (cookies == null) {
-                        cookies = new ArrayList<>();
-                    }
-                    Cookie.Builder b =
-                            new Cookie.Builder()
-                                    .domain("zhihu.com")
-                                    .path("/")
-                                    .name("testName")
-                                    .value("loadForRequest");
-//                            .httpOnly()
-//                            .secure()
-                    cookies.add(b.build());
-                    Log.e(TAG, "loadForRequest: " + cookies.toString());
-                    return cookies;
-                }
-            };
-
-            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                @Override
-                public void log(String message) {
-                    Log.e(TAG, "log: " + message);
-                }
-            });
-            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-            // TODO: 2017/1/4 缓存不刷新数据的节奏？
+            CookieJar cookieJar = initCookies();
             userApi = new Retrofit.Builder()
                     .baseUrl(API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(new OkHttpClient.Builder()
-//                            .cookieJar(cookieJar)
+                            .cookieJar(cookieJar)
                             .cache(cache)
                             .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
                             .addInterceptor(new CacheControlInterceptor())
@@ -122,6 +74,49 @@ public class BaseDataManager {
             return userApi.create(clazz);
         }
         return userApi.create(clazz);
+    }
+
+    private static CookieJar initCookies() {
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        // TODO: 2017/1/5 cookie是显示在header里面的吗
+        return new CookieJar() {
+            private final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+
+            @Override
+            public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                Cookie.Builder b =
+                        new Cookie.Builder()
+                                .domain("zhihu.com")
+                                .path("/")
+                                .name("testName")
+                                .value("saveFromResponse")
+                                .httpOnly()
+                                .secure();
+                cookies.add(b.build());
+                cookieStore.put(url.host(), cookies);
+                Log.e(TAG, "saveFromResponse: " + cookies.toString());
+            }
+
+            @Override
+            public List<Cookie> loadForRequest(HttpUrl url) {
+                List<Cookie> cookies = cookieStore.get(url.host());
+                if (cookies == null) {
+                    cookies = new ArrayList<>();
+                }
+                Cookie.Builder b =
+                        new Cookie.Builder()
+                                .domain("zhihu.com")
+                                .path("/")
+                                .name("testName")
+                                .value("loadForRequest");
+//                            .httpOnly()
+//                            .secure()
+                cookies.add(b.build());
+                Log.e(TAG, "loadForRequest: " + cookies.toString());
+                return cookies;
+            }
+        };
     }
 
     public static DailyApiService getDailyApiService() {
@@ -151,8 +146,8 @@ public class BaseDataManager {
                 .map(result -> {
                     R data = result.getData();
                     int code = result.getCode();
-                    if (code != 200) {
-                        new BaseException(code, "发生错误了！！"+result.getMsg());
+                    if (code != Result.CODE_SUCCESS) {
+                        throw new BaseException(code, "发生错误了！！" + result.getMsg());
                     }
                     return data;
                 })
@@ -166,8 +161,8 @@ public class BaseDataManager {
                 .map(result -> {
                     R data = result.getData();
                     int code = result.getCode();
-                    if (code != 200) {
-                        new BaseException(code, "发生错误了！！");
+                    if (code != Result.CODE_SUCCESS) {
+                        throw new BaseException(code, "发生错误了！！");
                     }
                     return data;
                 })
@@ -181,7 +176,7 @@ public class BaseDataManager {
                 .map(result -> {
                     R data = result.getData();
                     int code = result.getCode();
-                    if (code != 200) {
+                    if (code != Result.CODE_SUCCESS) {
                         throw new BaseException(code, "发生错误了！！");
                     }
                     return data;

@@ -82,13 +82,15 @@ public class ListPresenterImpl extends BasePresenterImpl implements ListPresente
     public void onLoading() {
         mView.showToast("开始加载！");
         if (!isLoading) {
+//                Subscription listSubscribe = BaseDataManager.handleService(BaseDataManager.getDailyApiService().getList("https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json"), dailyStories -> {
             Subscription listSubscribe = BaseDataManager.handleNormalService(BaseDataManager.getDailyApiService().getLatestDailyStories(), dailyStories -> {
                 mView.onLoad(dailyStories);
                 mView.isLoading(false);
                 isLoading = false;
             }, throwable -> {
                 ErrorUtil.handleError(mView, throwable, true, false);
-                isLoadingMore = false;
+                mView.isLoading(false);
+                isLoading = false;
             }, () -> {
                 mView.isLoading(true);
                 isLoading = true;

@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lovejjfg.zhifou.base.Utils;
 import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.Person;
+import com.lovejjfg.zhifou.data.RequestUtils;
 
 import junit.framework.Assert;
 
@@ -20,6 +21,13 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Joe on 2016/12/21.
@@ -98,9 +106,15 @@ public class Test1 {
 
     @Test
     public void testBaseModel() throws Exception {
-        // https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json
-        BaseDataManager.handleService(BaseDataManager.getDailyApiService().getList("https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json")
-                , dailyStories -> System.out.println(dailyStories.toString()), throwable -> System.out.println(throwable.toString()));
+//        final CountDownLatch signal = new CountDownLatch(1);
+//        // https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json
+//        BaseDataManager.handleService(BaseDataManager.getDailyApiService().getList("https://raw.githubusercontent.com/lovejjfg/ZhiFou_Demo/master/BaseModel.json")
+//                , dailyStories -> {System.out.println(dailyStories.toString());
+//                    signal.countDown();
+//                }, throwable -> {System.out.println(throwable.toString());
+//                    signal.countDown();
+//                });
+//        signal.await();
 
     }
 

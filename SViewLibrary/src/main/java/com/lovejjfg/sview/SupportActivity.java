@@ -11,6 +11,7 @@ import android.view.View;
 import com.lovejjfg.sview.utils.FragmentsUtil;
 import com.lovejjfg.sview.utils.KeyBoardUtil;
 import com.lovejjfg.sview.utils.ShakeHelper;
+import com.lovejjfg.sview.utils.ToastUtil;
 
 import java.util.List;
 
@@ -110,12 +111,12 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
 
     @Override
     public void showToast(String toast) {
-
+        ToastUtil.showToast(this, toast);
     }
 
     @Override
     public void showToast(int StringId) {
-
+        ToastUtil.showToast(this, getString(StringId));
     }
 
     @Override
@@ -152,7 +153,6 @@ public abstract class SupportActivity extends AppCompatActivity implements ISupp
             for (Fragment fragment : topFragments) {
                 if (fragment instanceof SupportFragment) {
                     ((SupportFragment) fragment).finishSelf();
-                    // TODO: 2017/2/8 如果多个Fragment可见的时候相关处理
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

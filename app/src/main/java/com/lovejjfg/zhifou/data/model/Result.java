@@ -6,6 +6,7 @@ package com.lovejjfg.zhifou.data.model;
  */
 
 public class Result<T> {
+    public static final int CODE_SUCCESS = 200;
     private int code =-1;
     private String msg;
     private T data;
