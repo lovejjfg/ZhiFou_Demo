@@ -3,9 +3,9 @@ package com.lovejjfg.zhifou.view;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lovejjfg.zhifou.base.Utils;
-import com.lovejjfg.zhifou.data.BaseDataManager;
 import com.lovejjfg.zhifou.data.Person;
-import com.lovejjfg.zhifou.data.RequestUtils;
+import com.lovejjfg.zhifou.util.Base64Utils;
+import com.lovejjfg.zhifou.util.RSAUtils;
 
 import junit.framework.Assert;
 
@@ -18,16 +18,10 @@ import org.robolectric.annotation.Config;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Joe on 2016/12/21.
@@ -36,6 +30,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = 23, manifest = Config.NONE)
 public class Test1 {
+
+
+    private static String PUCLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB";
+    private static String HASH = "d0597c3485befc30";
 
 
     @Before
@@ -131,6 +129,21 @@ public class Test1 {
                 return true;
             }
         });
+    }
+
+    public String initPubKey(String paramString) {
+        return paramString.replaceFirst("-----BEGIN PUBLIC KEY-----\n", "").replace("\n-----END PUBLIC KEY-----\n", "");
+    }
+
+    @Test
+    public void testRSA() throws Exception {
+        String s1 = initPubKey(PUCLIC_KEY);
+        System.out.println("公钥：" + s1);
+        PublicKey publicKey = RSAUtils.loadPublicKey(PUCLIC_KEY);
+//        PublicKey publicKey = RSAUtils.loadPublicKey("xxxxxxx");
+        byte[] bytes = RSAUtils.encryptData((HASH + "886520").getBytes(), publicKey);
+        String encode = Base64Utils.encode(bytes);
+        System.out.println("最后加密结果：" + encode);
     }
 
 
