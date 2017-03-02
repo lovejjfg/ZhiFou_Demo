@@ -1,6 +1,5 @@
 package com.lovejjfg.zhifou.base;
 
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.widget.TextView;
 

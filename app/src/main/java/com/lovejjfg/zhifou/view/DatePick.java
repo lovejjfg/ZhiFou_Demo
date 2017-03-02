@@ -2,7 +2,6 @@ package com.lovejjfg.zhifou.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.DatePicker;
 
@@ -32,7 +31,7 @@ public class DatePick extends SupportActivity {
         if (mDatePicker != null) {
             mDatePicker.init(year, month, day, (view, year1, monthOfYear, dayOfMonth) -> {
                 int chooseMonth = monthOfYear + 1;
-                int chooseDay= dayOfMonth + 1;
+                int chooseDay = dayOfMonth + 1;
                 Log.e("截止：", year1 + "年" + +chooseMonth + "月" + dayOfMonth + "日");
                 String date = String.format("%d%2d%2d", year1, chooseMonth, chooseDay).replace(" ", "0");
                 String showDate = String.format("%d%2d%2d", year1, chooseMonth, dayOfMonth).replace(" ", "0");
@@ -42,7 +41,7 @@ public class DatePick extends SupportActivity {
                     i.putExtra(Constants.SHOW_DATE, showDate);
                     setResult(200, i);
                     if (isFirst) {
-                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date,showDate);
+                        JumpUtils.jumpToSpecifiedDate(DatePick.this, date, showDate);
                     }
                     finishAfterTransition();
                     Log.e("DATE-->", String.format("%d-%2d-%2d", year1, chooseMonth, dayOfMonth).replace(" ", "0"));

@@ -3,7 +3,6 @@ package com.lovejjfg.zhifou.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -12,9 +11,7 @@ import android.widget.ImageView;
 
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
-import com.lovejjfg.sview.utils.ToastUtil;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.base.BaseActivity;
 import com.lovejjfg.zhifou.constant.Constants;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.SpecifiedDateImpl;

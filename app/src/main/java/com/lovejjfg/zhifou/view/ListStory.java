@@ -26,16 +26,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.BDNotifyListener;
-import com.baidu.location.LocationClient;
 import com.lovejjfg.powerrecycle.DefaultAnimator;
 import com.lovejjfg.powerrecycle.SwipeRefreshRecycleView;
 import com.lovejjfg.sview.SupportActivity;
-import com.lovejjfg.sview.utils.ShakeHelper;
 import com.lovejjfg.zhifou.R;
-import com.lovejjfg.zhifou.base.App;
 import com.lovejjfg.zhifou.data.Person;
 import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.presenters.ListPresenter;
@@ -44,7 +38,6 @@ import com.lovejjfg.zhifou.ui.recycleview.OnItemClickListener;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
 import com.lovejjfg.zhifou.ui.recycleview.holder.DateViewHolder;
 import com.lovejjfg.zhifou.util.JumpUtils;
-import com.lovejjfg.zhifou.util.UIUtils;
 import com.lovejjfg.zhifou.util.logger.Logger;
 
 import java.util.ArrayList;
@@ -73,6 +66,10 @@ public class ListStory extends SupportActivity
         try {
             Person person = Person.class.getConstructor(String.class, String.class).newInstance("zhangsan", "xxxxx");
             Log.e("TAG", "onCreate: " + person);
+
+//            String cpuInfo = HMTInfoTools.getDeviceID(this);
+//            Log.e(TAG, "cpuInfo: " + cpuInfo);
+//            showToast(cpuInfo);
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e);
 //            Person p = new Person("error", "zhijie");

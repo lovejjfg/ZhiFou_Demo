@@ -20,9 +20,7 @@ package com.lovejjfg.zhifou.presenters;
 
 import android.os.Bundle;
 
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.ui.recycleview.StoriesRecycleAdapter;
-import com.lovejjfg.zhifou.view.IBaseView;
 import com.lovejjfg.zhifou.view.LoadingView;
 
 import java.util.List;

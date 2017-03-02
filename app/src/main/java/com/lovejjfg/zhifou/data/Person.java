@@ -7,6 +7,7 @@ public class Person {
     private String name;
     private String birthday;
 
+    //    @Keep
     public Person(String birthday, String name) {
         this.birthday = birthday;
         this.name = name;

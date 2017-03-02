@@ -4,8 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.antfortune.freeline.FreelineCore;
-import com.baidu.location.LocationClient;
 import com.lovejjfg.sview.utils.ToastUtil;
+import com.lovejjfg.zhifou.BuildConfig;
 import com.lovejjfg.zhifou.util.NetWorkUtils;
 import com.squareup.leakcanary.LeakCanary;
 

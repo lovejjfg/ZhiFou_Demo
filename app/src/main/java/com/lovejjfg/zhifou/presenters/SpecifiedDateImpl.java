@@ -6,15 +6,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.lovejjfg.zhifou.data.BaseDataManager;
-import com.lovejjfg.zhifou.data.model.DailyStories;
 import com.lovejjfg.zhifou.util.ErrorUtil;
 import com.lovejjfg.zhifou.view.SpecifiedDateView;
 
-import retrofit2.adapter.rxjava.HttpException;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by zhangjun on 2016-03-19.

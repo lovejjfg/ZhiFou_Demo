@@ -20,7 +20,6 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,13 +51,13 @@ public class BaseDataManager {
         if (userApi == null) {
             int cacheSize = 10 * 1024 * 1024;// 10 MiB
             Cache cache = new Cache(App.CacheDirectory, cacheSize);
-            CookieJar cookieJar = initCookies();
+//            CookieJar cookieJar = initCookies();
             userApi = new Retrofit.Builder()
                     .baseUrl(API)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(new OkHttpClient.Builder()
-                            .cookieJar(cookieJar)
+//                            .cookieJar(cookieJar)
                             .cache(cache)
                             .addInterceptor(chain -> chain.proceed(RequestUtils.createJustJsonRequest(chain.request())))
                             .addInterceptor(new CacheControlInterceptor())
