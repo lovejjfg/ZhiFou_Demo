@@ -32,9 +32,9 @@
 -allowaccessmodification
 
 #将文件来源重命名为“SourceFile”字符串
--renamesourcefileattribute Unknown
+#-renamesourcefileattribute Unknown
 #保留行号
--keepattributes SourceFile,LineNumberTable
+#-keepattributes SourceFile,LineNumberTable
 
 #保持所有实现 Serializable 接口的类成员
 -keepclassmembers class * implements java.io.Serializable {
@@ -81,14 +81,16 @@
 #retrofit
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
-# Platform used when running on RoboVM on iOS. Will not be used at runtime.
--dontnote retrofit2.Platform$IOS$MainThreadExecutor
 # Platform used when running on Java 8 VMs. Will not be used at runtime.
 -dontwarn retrofit2.Platform$Java8
 # Retain generic type information for use by reflection by converters and adapters.
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+# keep anotation
+-keepclasseswithmembers class * {
+    @retrofit2.http.* <methods>;
+}
 
 
 # RxJava
@@ -122,6 +124,10 @@
 #alipay
 -dontwarn com.alipay.**
 -keep class com.alipay.** { *; }
+
+# SView 如果需要所有方法都保留，那么需要加‘{*; }’ 不然的话未使用的方法将会被删除
+#-keep class com.lovejjfg.sview.utils.ToastUtil{ *; }
+-keep class com.lovejjfg.sview.utils.ShakeHelper
 
 
 ##EventBus
@@ -160,4 +166,10 @@
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
+
+
+# 如果是反射创建的对象要保证其相关构造方法不被删除
+#-keepclassmembers class * extends com.ejupay.sdk.base.IBasePresenter {
+#     <init>(...);
+#}
 

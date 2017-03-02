@@ -69,14 +69,17 @@ android {
             shrinkResources true
             minifyEnabled true
             debuggable true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            buildConfigField "boolean", "IS_DEBUG", "false"
         }
         debug {
             applicationIdSuffix ".debug"
+            shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            buildConfigField "boolean", "IS_DEBUG", "true"
         }
     }
     compileOptions {
@@ -96,7 +99,7 @@ android {
 
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+//    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
@@ -115,6 +118,8 @@ dependencies {
     compile project(':circlepoint')
     compile project(':SViewLibrary')
     compile 'com.lovejjfg.powerrecycle:powerrecycle:1.0.0'
+
+//    compile 'com.hmt.tool.library:utils:1.0.2.2'
 
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
