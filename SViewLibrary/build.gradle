@@ -17,8 +17,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug{
-            minifyEnabled true
+        debug {
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -31,5 +31,17 @@ dependencies {
     androidTestCompile "com.android.support:support-annotations:${SUPPORT_V7_VERSION}"
     compile "com.android.support:appcompat-v7:${SUPPORT_V7_VERSION}"
     testCompile 'junit:junit:4.12'
+
+}
+
+task makeJar(type: proguard.gradle.ProGuardTask, dependsOn: "build") {
+
+    delete 'build/outputs/jar/supporView.jar'//删除之前编译混淆jar包
+
+    injars 'build/intermediates/bundles/release/classes.jar'//项目编译但未混淆的jar
+
+    outjars 'build/outputs/jar/supporView.jar'//混淆后的jar路径
+
+    configuration 'proguard-rules.pro'// 混淆配置文件
 
 }

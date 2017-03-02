@@ -20,6 +20,13 @@ public class ToastUtil {
         showToast(context, msg, Toast.LENGTH_SHORT);
     }
 
+    public static void showToast(Context context, String msg, String duration) {
+        initToast(context);
+        TOAST.setText(msg);
+        TOAST.setDuration(Toast.LENGTH_SHORT);
+        TOAST.show();
+    }
+
     public static void showToast(Context context, String msg, int duration) {
         initToast(context);
         TOAST.setText(msg);
