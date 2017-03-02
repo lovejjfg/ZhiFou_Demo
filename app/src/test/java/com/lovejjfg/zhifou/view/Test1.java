@@ -1,27 +1,49 @@
 package com.lovejjfg.zhifou.view;
 
+import android.os.SystemClock;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lovejjfg.zhifou.base.Utils;
 import com.lovejjfg.zhifou.data.Person;
-import com.lovejjfg.zhifou.util.Base64Utils;
 import com.lovejjfg.zhifou.util.RSAUtils;
 
 import junit.framework.Assert;
 
+import org.codehaus.plexus.util.Base64;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.security.KeyPair;
+import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import okhttp3.Call;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by Joe on 2016/12/21.
@@ -136,14 +158,122 @@ public class Test1 {
     }
 
     @Test
+    public void testRSAPair() throws Exception {
+        KeyPair keyPair = RSAUtils.generateRSAKeyPair(1024);
+        String priFormat = keyPair.getPrivate().getFormat();
+        System.out.println(priFormat);
+        String pubFormat = keyPair.getPublic().getEncoded().toString();
+        System.out.println(pubFormat);
+    }
+
+    @Test
     public void testRSA() throws Exception {
+        KeyPair keyPair = RSAUtils.generateRSAKeyPair(1024);
+        KeyPair keyPair2 = RSAUtils.generateRSAKeyPair(1024);
         String s1 = initPubKey(PUCLIC_KEY);
-        System.out.println("公钥：" + s1);
-        PublicKey publicKey = RSAUtils.loadPublicKey(PUCLIC_KEY);
+        PublicKey publicKey = keyPair.getPublic();// RSAUtils.loadPublicKey("X.509");
+        PrivateKey privateKey = keyPair.getPrivate();// RSAUtils.loadPrivateKey("PKCS#8");
 //        PublicKey publicKey = RSAUtils.loadPublicKey("xxxxxxx");
         byte[] bytes = RSAUtils.encryptData((HASH + "886520").getBytes(), publicKey);
-        String encode = Base64Utils.encode(bytes);
-        System.out.println("最后加密结果：" + encode);
+//        String encode = Base64Utils.encode(bytes);
+        bytes = Base64.encodeBase64(bytes);
+        System.out.println("最后加密结果：" + new String(bytes));
+//        String decode = URLDecoder.decode("%E5%8F%B9%E6%9C%8D", "UTF-8");
+//        System.out.println("decode::" + decode);
+        byte[] decryptData = RSAUtils.decryptData(Base64.decodeBase64(bytes), privateKey);
+        System.out.println("最后解密结果：" + new String(decryptData));
+
+    }
+
+    @Test
+    public void testDownload() throws Exception {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://raw.githubusercontent.com/lovejjfg/screenshort/master/loading.png")
+                .build();
+        Call call = client.newCall(request);
+        Response execute = call.execute();
+        ResponseBody body = execute.body();
+        InputStream inputStream = body.byteStream();
+        File file = new File("E:\\loading.png");
+        if (file.exists() && file.length() > 0) {
+            long skip = file.length();
+            System.out.println("文件的length:" + skip);
+            long skip1 = inputStream.skip(skip);
+            System.out.println("跳过字节：" + skip1);
+
+        }
+        FileOutputStream outputStream = new FileOutputStream(file);
+        byte[] buffer = new byte[1024];
+        int read = -1;
+        while ((read = inputStream.read(buffer, 0, buffer.length)) != -1) {
+            System.out.println("读取了:" + read);
+            SystemClock.sleep(1000);
+            outputStream.write(buffer, 0, read);
+//            call.cancel();
+        }
+        outputStream.close();
+        inputStream.close();
+    }
+
+    @Test
+    public void testDownload2() throws Exception {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .header("RANGE", "bytes=0-999")
+//                .header("RANGE", "bytes=1000")
+                .url("https://raw.githubusercontent.com/lovejjfg/screenshort/master/Blog2.gif")
+                .build();
+        Call call = client.newCall(request);
+        File file = new File("E:\\Blog2.gif");
+        Response execute = call.execute();
+        long timeMillis = System.currentTimeMillis();
+//        ResponseBody body = execute.body();
+//        long contentLength = body.contentLength();
+//        int length = body.bytes().length;
+//        System.out.printf("contentLength:%d%n", contentLength);
+//        System.out.printf("body.bytes().length:%d%n", length);
+        save(file, execute, 0);
+//        save(file, execute, 1000);
+        long l = System.currentTimeMillis() - timeMillis;
+        System.out.println("一共用时：毫秒::" + l);
+
+    }
+
+    private void save(File destination, Response response, long startsPoint) {
+        ResponseBody body = response.body();
+        InputStream in = body.byteStream();
+        long contentLength = body.contentLength();
+        System.out.printf("contentLength:%d%n", contentLength);
+        FileChannel channelOut = null;
+        // 随机访问文件，可以指定断点续传的起始位置
+        RandomAccessFile randomAccessFile = null;
+        try {
+            randomAccessFile = new RandomAccessFile(destination, "rwd");
+            //Chanel NIO中的用法，由于RandomAccessFile没有使用缓存策略，直接使用会使得下载速度变慢，亲测缓存下载3.3秒的文件，用普通的RandomAccessFile需要20多秒。
+            channelOut = randomAccessFile.getChannel();
+            // 内存映射，直接使用RandomAccessFile，是用其seek方法指定下载的起始位置，使用缓存下载，在这里指定下载位置。
+            MappedByteBuffer mappedBuffer = channelOut.map(FileChannel.MapMode.READ_WRITE, startsPoint, body.contentLength());
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                mappedBuffer.put(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+                if (channelOut != null) {
+                    channelOut.close();
+                }
+                if (randomAccessFile != null) {
+                    randomAccessFile.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
